@@ -1,3 +1,5 @@
+import { Detail } from "@/features/vehicles/components/Detail";
+
 export function VehicleDetailPage() {
-  return <div>VehicleDetailPage</div>;
+  return <Detail />;
 }
