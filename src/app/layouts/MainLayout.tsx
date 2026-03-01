@@ -7,11 +7,11 @@ export function MainLayout() {
   return (
     <SidebarProvider>
       <Sidebar />
-      <SidebarInset>
+      <SidebarInset className="flex h-screen min-h-0 flex-col">
         <Header />
-        <main className="p-4">
+        <div className="flex-1 overflow-auto p-4">
           <Outlet />
-        </main>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

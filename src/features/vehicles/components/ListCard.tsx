@@ -5,24 +5,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/primitives/card";
-import type { Product } from "../types";
+import type { Vehicle } from "../types";
 
-type Props = {
-  product: Product;
-};
+type ListCardProps = { vehicle: Pick<Vehicle, "title" | "body"> };
 
-const ListItem: React.FC<Props> = ({ product }) => {
+export function ListCard({ vehicle }: ListCardProps) {
+  const { title, body } = vehicle;
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{product.title}</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>-</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>{product.body}</p>
+        <p>{body}</p>
       </CardContent>
     </Card>
   );
-};
-
-export default ListItem;
+}
