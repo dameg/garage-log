@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/shared/ui/primitives/card";
 import type { Vehicle } from "../types";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import { Button } from "@/shared/ui/primitives/button";
 import { Badge } from "@/shared/ui/primitives/badge";
 
