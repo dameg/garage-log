@@ -5,7 +5,7 @@ import {
 } from "../domain/vehicle.repository";
 import { CreateVehicleUseCase } from "../application/create-vehicle.usecase";
 import { ListVehiclesUseCase } from "../application/list-vehicles.usecase";
-import type { CreateVehicleInput } from "../application/dto/create-vehicle.dto";
+import { CreateVehicleRequest } from "./dto/create-vehicle.request";
 
 @Controller("vehicles")
 export class VehiclesController {
@@ -18,7 +18,7 @@ export class VehiclesController {
   }
 
   @Post()
-  create(@Body() body: CreateVehicleInput) {
+  create(@Body() body: CreateVehicleRequest) {
     return this.createUC.execute(body);
   }
 
