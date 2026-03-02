@@ -1,27 +1,44 @@
+import "dotenv/config";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { Test } from "@nestjs/testing";
+import { INestApplication } from "@nestjs/common";
 import request from "supertest";
 import { AppModule } from "../app.module";
-import { VehiclesTestModule } from "../modules/vehicles/vehicles.test.module";
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-describe("Vehicles (e2e - in memory)", () => {
-  let app: any;
+console.log("DB E2E DATABASE_URL =", process.env.DATABASE_URL);
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is missing for DB e2e tests");
+}
+
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }),
+});
+
+describe("Vehicles (e2e - db)", () => {
+  let app: INestApplication;
 
   beforeAll(async () => {
+    await prisma.vehicle.deleteMany();
+
     const moduleRef = await Test.createTestingModule({
-      imports: [VehiclesTestModule],
+      imports: [AppModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
+
     app.setGlobalPrefix("api");
     await app.init();
   });
 
   afterAll(async () => {
-    await app.close();
+    if (app) await app.close();
+    await prisma.$disconnect();
   });
 
-  it("POST then GET vehicles", async () => {
+  it("POST /api/vehicles persists in DB", async () => {
     await request(app.getHttpServer())
       .post("/api/vehicles")
       .send({

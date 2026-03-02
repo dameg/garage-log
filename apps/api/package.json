@@ -7,7 +7,8 @@
     "build": "nest build",
     "start": "node dist/main.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:db": "vitest src/e2e/vehicles.db.e2e.test.ts"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.16",

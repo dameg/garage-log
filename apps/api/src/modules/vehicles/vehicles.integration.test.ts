@@ -1,13 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { Test } from "@nestjs/testing";
 
-import { VehiclesModule } from "./vehicles.module";
+import { VehiclesTestModule } from "./vehicles.test.module";
 import { VehiclesController } from "./presentation/vehicles.controller";
 
 describe("Vehicles (integration)", () => {
   it("creates and lists vehicles via controller (no HTTP)", async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [VehiclesModule],
+      imports: [VehiclesTestModule],
     }).compile();
 
     const controller = moduleRef.get(VehiclesController);
