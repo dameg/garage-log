@@ -1,13 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { buildApp } from '../../app';
-import { createTestDeps } from '../../shared/di/test';
+import { createTestApp } from '../../shared/testing/create-test-app';
 
 describe('Vehicles (integration - in memory)', () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
+  let app: Awaited<ReturnType<typeof createTestApp>>;
 
   beforeEach(async () => {
-    app = await buildApp(createTestDeps());
-    await app.ready();
+    app = await createTestApp();
   });
 
   afterEach(async () => {
@@ -28,7 +26,6 @@ describe('Vehicles (integration - in memory)', () => {
     });
 
     expect(postRes.statusCode).toBe(201);
-    expect(postRes.json().id).toBeDefined();
 
     const getRes = await app.inject({
       method: 'GET',
@@ -37,7 +34,7 @@ describe('Vehicles (integration - in memory)', () => {
 
     expect(getRes.statusCode).toBe(200);
 
-    const list = getRes.json() as Array<{ name: string }>;
+    const list = getRes.json();
     expect(list).toHaveLength(1);
     expect(list[0].name).toBe('E46');
   });

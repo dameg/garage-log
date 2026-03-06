@@ -1,8 +1,9 @@
-import type { VehicleRepository } from "../domain/vehicle.repository";
+import type { VehicleRepository } from '../domain/vehicle.repository';
 
 export class ListVehiclesUseCase {
-  constructor(private repo: VehicleRepository) {}
-  execute() {
+  constructor(private readonly repo: VehicleRepository) {}
+
+  async execute() {
     return this.repo.findAll();
   }
 }

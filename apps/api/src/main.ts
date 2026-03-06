@@ -1,43 +1,29 @@
-import "reflect-metadata";
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { ConfigService } from "@nestjs/config";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { ValidationPipe } from "@nestjs/common";
+import 'dotenv/config';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const config = app.get(ConfigService);
+import { env } from './shared/config';
+import { buildApp } from './app';
+import { closePrisma } from './shared/db/prisma';
 
-  const host = config.get<string>("HOST") || "localhost";
-  const port = config.get<number>("PORT") || 3000;
+async function start() {
+  const app = await buildApp();
 
-  app.enableCors({
-    origin: config.get<string>("FRONTEND_URL"),
-  });
+  try {
+    await app.listen({ port: env.PORT, host: env.HOST });
+  } catch (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
 
-  app.setGlobalPrefix("api");
+  const shutdown = async (signal: string) => {
+    app.log.info(`Received ${signal}, shutting down...`);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+    await app.close();
+    await closePrisma();
+    process.exit(0);
+  };
 
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle("Garage Log API")
-    .setDescription("Fleet management showcase project")
-    .setVersion("1.0")
-    .addServer(`http://${host}:${port}/api`)
-    .build();
-
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup("docs", app, document);
-
-  await app.listen(port);
-  console.log(`API running on http://${host}:${port}/api`);
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
 }
 
-bootstrap();
+start();
