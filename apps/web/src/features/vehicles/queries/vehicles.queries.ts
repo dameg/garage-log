@@ -1,6 +1,6 @@
-import { queryOptions } from "@tanstack/react-query";
-import { getVehicles, getVehicle } from "../api";
-import { vehiclesKeys } from "./vehicles.keys";
+import { queryOptions } from '@tanstack/react-query';
+import { getVehicles, getVehicle } from '../api';
+import { vehiclesKeys } from './vehicles.keys';
 
 export const vehiclesQueries = {
   list: () =>

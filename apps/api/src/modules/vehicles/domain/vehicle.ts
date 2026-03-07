@@ -1,3 +1,4 @@
+import { normalizeRequiredString } from '../../../shared/domain/normalize-required-string';
 import { DomainError } from '../../../shared/errors/domain-error';
 
 export type VehicleId = string;
@@ -20,16 +21,6 @@ export type UpdatableVehicleFields = Pick<Vehicle, 'name' | 'brand' | 'model' | 
 
 export type UpdateVehiclePatch = Partial<UpdatableVehicleFields>;
 
-function normalizeString(label: string, value: string): string {
-  const v = value.trim();
-
-  if (!v) {
-    throw new DomainError(`${label} cannot be empty`);
-  }
-
-  return v;
-}
-
 function assertYear(year: number) {
   if (!Number.isInteger(year) || year < 1886) {
     throw new DomainError('Invalid year');
@@ -43,9 +34,9 @@ function assertMileage(mileage: number) {
 }
 
 export function createVehicle(props: CreateVehicleProps): Vehicle {
-  const name = normalizeString('Vehicle name', props.name);
-  const brand = normalizeString('Vehicle brand', props.brand);
-  const model = normalizeString('Vehicle model', props.model);
+  const name = normalizeRequiredString('Vehicle name', props.name);
+  const brand = normalizeRequiredString('Vehicle brand', props.brand);
+  const model = normalizeRequiredString('Vehicle model', props.model);
 
   assertYear(props.year);
   assertMileage(props.mileage);
@@ -65,15 +56,15 @@ export function updateVehicle(vehicle: Vehicle, patch: UpdateVehiclePatch): Vehi
   const next: Vehicle = { ...vehicle, ...patch };
 
   if (patch.name !== undefined) {
-    next.name = normalizeString('Vehicle name', patch.name);
+    next.name = normalizeRequiredString('Vehicle name', patch.name);
   }
 
   if (patch.brand !== undefined) {
-    next.brand = normalizeString('Vehicle brand', patch.brand);
+    next.brand = normalizeRequiredString('Vehicle brand', patch.brand);
   }
 
   if (patch.model !== undefined) {
-    next.model = normalizeString('Vehicle model', patch.model);
+    next.model = normalizeRequiredString('Vehicle model', patch.model);
   }
 
   assertYear(next.year);

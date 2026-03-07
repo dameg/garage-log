@@ -1,4 +1,4 @@
-import type { UpdatableVehicleFields, UpdateVehiclePatch, Vehicle } from '../../domain/vehicle';
+import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';
 import type { VehicleRepository } from '../../domain/vehicle.repository';
 import type { PrismaClient } from '@prisma/client';
 
