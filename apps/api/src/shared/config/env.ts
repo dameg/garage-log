@@ -20,6 +20,8 @@ const EnvSchema = z.object({
     ),
 
   DATABASE_URL: z.string().url().optional(),
+  COOKIE_SECRET: z.string().min(1),
+  JWT_SECRET: z.string().min(1),
 });
 
 export type Env = z.infer<typeof EnvSchema>;

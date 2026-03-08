@@ -6,6 +6,8 @@ import { diPlugin } from './shared/di/di.plugin';
 import { createProdDeps } from './shared/di/prod';
 import type { Deps } from './shared/di/types';
 import { ZodError } from 'zod';
+import cookie from '@fastify/cookie';
+import jwt from '@fastify/jwt';
 
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
@@ -29,6 +31,18 @@ export async function buildApp(deps?: Deps) {
     return reply.code(500).send({
       error: 'Internal Server Error',
     });
+  });
+
+  await app.register(cookie, {
+    secret: env.COOKIE_SECRET,
+  });
+
+  await app.register(jwt, {
+    secret: env.JWT_SECRET,
+    cookie: {
+      cookieName: 'access_token',
+      signed: false,
+    },
   });
 
   await app.register(diPlugin, {

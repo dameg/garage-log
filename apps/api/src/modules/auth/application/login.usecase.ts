@@ -5,7 +5,7 @@ import { normalizeEmail, type User } from '../domain/user';
 import type { UserRepository } from '../domain/user.repository';
 import type { LoginUserInput } from './dto/login.dto';
 
-export class LoginUseCase {
+export class LoginUserUseCase {
   constructor(private readonly repo: UserRepository) {}
 
   async execute(input: LoginUserInput): Promise<User> {
