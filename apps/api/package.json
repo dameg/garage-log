@@ -6,7 +6,7 @@
     "dev": "tsx watch src/main.ts",
     "start": "node src/main.ts",
     "test": "vitest run",
-    "test:db": "dotenv -e .env.e2e -- vitest run --config vitest.e2e.config.ts"
+    "test:db": "dotenv -e .env.test -- vitest run --config vitest.e2e.config.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",

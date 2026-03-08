@@ -4,8 +4,8 @@ import { Vehicle } from '../domain/vehicle';
 export class GetVehicleUseCase {
   constructor(private readonly repo: VehicleRepository) {}
 
-  async execute({ id }: { id: string }): Promise<Vehicle> {
-    const vehicle = await this.repo.findById(id);
+  async execute({ id, ownerId }: { id: string; ownerId: string }): Promise<Vehicle> {
+    const vehicle = await this.repo.findByIdForOwner(id, ownerId);
     if (!vehicle) {
       throw new NotFoundError('Vehicle', id);
     }

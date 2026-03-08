@@ -9,24 +9,30 @@ export class InMemoryVehicleRepository implements VehicleRepository {
     return vehicle;
   }
 
-  async findAll(): Promise<Vehicle[]> {
-    return [...this.data];
+  async findAllByOwnerId(ownerId: string): Promise<Vehicle[]> {
+    return this.data.filter((vehicle) => vehicle.ownerId === ownerId);
   }
 
-  async findById(id: string): Promise<Vehicle | null> {
-    return this.data.find((vehicle) => vehicle.id === id) || null;
+  async findByIdForOwner(id: string, ownerId: string): Promise<Vehicle | null> {
+    return this.data.find((vehicle) => vehicle.id === id && vehicle.ownerId === ownerId) || null;
   }
 
-  async deleteById(id: string): Promise<boolean> {
+  async deleteByIdForOwner(id: string, ownerId: string): Promise<boolean> {
     const prevLength = this.data.length;
 
-    this.data = this.data.filter((vehicle) => vehicle.id !== id);
+    this.data = this.data.filter((vehicle) => !(vehicle.id === id && vehicle.ownerId === ownerId));
 
     return this.data.length < prevLength;
   }
 
-  async updateById(id: string, data: UpdatableVehicleFields): Promise<Vehicle | null> {
-    const index = this.data.findIndex((vehicle) => vehicle.id === id);
+  async updateByIdForOwner(
+    id: string,
+    ownerId: string,
+    data: UpdatableVehicleFields,
+  ): Promise<Vehicle | null> {
+    const index = this.data.findIndex(
+      (vehicle) => vehicle.id === id && vehicle.ownerId === ownerId,
+    );
 
     if (index === -1) {
       return null;

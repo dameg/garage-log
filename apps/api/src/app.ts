@@ -8,6 +8,9 @@ import type { Deps } from './shared/di/types';
 import { ZodError } from 'zod';
 import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
+import { NotFoundError } from './shared/errors/not-found-error';
+import { ConflictError } from './shared/errors/conflict-error';
+import { authModule } from './modules/auth/auth.module';
 
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
@@ -23,6 +26,20 @@ export async function buildApp(deps?: Deps) {
           path: i.path.join('.'),
           message: i.message,
         })),
+      });
+    }
+
+    if (err instanceof NotFoundError) {
+      return reply.code(404).send({
+        error: 'Not Found',
+        message: err.message,
+      });
+    }
+
+    if (err instanceof ConflictError) {
+      return reply.code(409).send({
+        error: 'Conflict',
+        message: err.message,
       });
     }
 
@@ -61,6 +78,7 @@ export async function buildApp(deps?: Deps) {
 
   await app.register(
     async (api) => {
+      await api.register(authModule);
       await api.register(vehiclesModule);
     },
     { prefix: '/api' },

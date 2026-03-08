@@ -17,7 +17,7 @@ export class UpdateVehicleUseCase {
   constructor(private readonly repo: VehicleRepository) {}
 
   async execute(input: UpdateVehicleInput): Promise<Vehicle> {
-    const existing = await this.repo.findById(input.id);
+    const existing = await this.repo.findByIdForOwner(input.id, input.ownerId);
 
     if (!existing) {
       throw new NotFoundError('Vehicle', input.id);
@@ -25,7 +25,11 @@ export class UpdateVehicleUseCase {
 
     const next = updateVehicle(existing, input.patch);
 
-    const updated = await this.repo.updateById(input.id, toUpdatableFields(next));
+    const updated = await this.repo.updateByIdForOwner(
+      input.id,
+      input.ownerId,
+      toUpdatableFields(next),
+    );
 
     if (!updated) {
       throw new NotFoundError('Vehicle', input.id);

@@ -19,7 +19,7 @@ const EnvSchema = z.object({
         .filter(Boolean),
     ),
 
-  DATABASE_URL: z.string().url().optional(),
+  DATABASE_URL: z.url().optional(),
   COOKIE_SECRET: z.string().min(1),
   JWT_SECRET: z.string().min(1),
 });

@@ -14,46 +14,38 @@ export async function vehiclesRoutes(app: FastifyInstance) {
   } = createVehiclesServices(app);
 
   app.post('/', async (req, reply) => {
-    const parsed = createVehicleHttpSchema.safeParse(req.body);
+    const body = createVehicleHttpSchema.parse(req.body);
 
-    if (!parsed.success) {
-      return reply.code(400).send({
-        message: 'Invalid request body',
-        issues: parsed.error.issues,
-      });
-    }
-    const created = await createVehicleUseCase.execute(parsed.data);
+    const created = await createVehicleUseCase.execute({ ...body, ownerId: req.user.sub });
+
     return reply.code(201).send(created);
   });
 
-  app.get('/', listVehiclesUseCase.execute);
+  app.get('/', async (req) => listVehiclesUseCase.execute({ ownerId: req.user.sub }));
 
   app.get('/:id', async (req) => {
     const params = vehicleIdParamsSchema.parse(req.params);
-    return getVehicleUseCase.execute(params);
+
+    return getVehicleUseCase.execute({ ...params, ownerId: req.user.sub });
   });
 
   app.delete('/:id', async (req, reply) => {
     const params = vehicleIdParamsSchema.parse(req.params);
-    await deleteVehicleUseCase.execute(params);
+
+    await deleteVehicleUseCase.execute({ ...params, ownerId: req.user.sub });
+
     return reply.code(204).send();
   });
 
   app.patch('/:id', async (req, reply) => {
     const params = vehicleIdParamsSchema.parse(req.params);
 
-    const parsed = updateVehicleHttpSchema.safeParse(req.body);
-
-    if (!parsed.success) {
-      return reply.code(400).send({
-        message: 'Invalid request body',
-        issues: parsed.error.issues,
-      });
-    }
+    const body = updateVehicleHttpSchema.parse(req.body);
 
     const updated = await updateVehicleUseCase.execute({
       id: params.id,
-      patch: parsed.data,
+      ownerId: req.user.sub,
+      patch: body,
     });
 
     return reply.code(200).send(updated);

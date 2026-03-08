@@ -11,6 +11,7 @@ export type Vehicle = {
   year: number;
   mileage: number;
   createdAt: Date;
+  ownerId: string;
 };
 
 export type CreateVehicleProps = Omit<Vehicle, 'createdAt'> & {
@@ -41,8 +42,13 @@ export function createVehicle(props: CreateVehicleProps): Vehicle {
   assertYear(props.year);
   assertMileage(props.mileage);
 
+  if (!props.ownerId) {
+    throw new DomainError('Vehicle ownerId is required');
+  }
+
   return {
     id: props.id,
+    ownerId: props.ownerId,
     name,
     brand,
     model,

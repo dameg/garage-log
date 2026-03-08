@@ -1,6 +1,5 @@
 import type { FastifyInstance } from 'fastify';
 
-import { env } from '../../../../shared/config';
 import { requireAuth } from '../../../../shared/auth/require-auth';
 import { createAuthServices } from '../../auth.factory';
 import { registerUserHttpSchema } from '../validation/register-user.schema';
