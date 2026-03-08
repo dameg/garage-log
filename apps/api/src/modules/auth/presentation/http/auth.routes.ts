@@ -5,6 +5,7 @@ import { requireAuth } from '../../../../shared/auth/require-auth';
 import { createAuthServices } from '../../auth.factory';
 import { registerUserHttpSchema } from '../validation/register-user.schema';
 import { loginUserHttpSchema } from '../validation/login-user.schema';
+import { clearAuthCookie, setAuthCookie } from '../../../../shared/auth/auth-cookies';
 
 export async function authRoutes(app: FastifyInstance) {
   const { registerUserUseCase, loginUserUseCase } = createAuthServices(app);
@@ -26,12 +27,7 @@ export async function authRoutes(app: FastifyInstance) {
       email: user.email,
     });
 
-    reply.setCookie('access_token', token, {
-      httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
+    setAuthCookie(reply, token);
 
     return reply.code(201).send({
       user: {
@@ -58,12 +54,7 @@ export async function authRoutes(app: FastifyInstance) {
       email: user.email,
     });
 
-    reply.setCookie('access_token', token, {
-      httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
+    setAuthCookie(reply, token);
 
     return reply.code(200).send({
       user: {
@@ -91,9 +82,7 @@ export async function authRoutes(app: FastifyInstance) {
   });
 
   app.post('/logout', async (_req, reply) => {
-    reply.clearCookie('access_token', {
-      path: '/',
-    });
+    clearAuthCookie(reply);
 
     return reply.code(204).send();
   });
