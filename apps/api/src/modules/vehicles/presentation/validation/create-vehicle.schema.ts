@@ -8,4 +8,4 @@ export const createVehicleHttpSchema = z.object({
   mileage: z.number().int(),
 });
 
-export type CreateVehicleHttpBody = z.infer<typeof createVehicleHttpSchema>;
+export type CreateVehicleBody = z.infer<typeof createVehicleHttpSchema>;

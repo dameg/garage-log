@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { NotFoundError } from '../../../shared/errors/not-found-error';
+import { VehicleDomainBuilder } from '../../../test/builders/vehicle.domain.builder';
+import { InMemoryVehicleRepository } from '../../../test/doubles/in-memory/in-memory-vehicle.repository';
 import { createVehicle } from '../domain/vehicle';
-import { InMemoryVehicleRepository } from '../infrastructure/in-memory-vehicle.repository';
 import { DeleteVehicleUseCase } from './delete-vehicle.usecase';
 
 describe('DeleteVehicleUseCase', () => {
@@ -10,48 +11,50 @@ describe('DeleteVehicleUseCase', () => {
     const repo = new InMemoryVehicleRepository();
     const useCase = new DeleteVehicleUseCase(repo);
 
-    await repo.create(
-      createVehicle({
-        id: 'v-1',
-        ownerId: 'user-1',
-        name: 'E46',
-        brand: 'BMW',
-        model: '330i',
-        year: 2002,
-        mileage: 250000,
-      }),
+    const vehicle = createVehicle(
+      new VehicleDomainBuilder().withId('v-1').withOwnerId('user-1').build(),
     );
 
-    await useCase.execute({
-      id: 'v-1',
-      ownerId: 'user-1',
-    });
+    await repo.create(vehicle);
+
+    await expect(
+      useCase.execute({
+        id: 'v-1',
+        ownerId: 'user-1',
+      }),
+    ).resolves.toBeUndefined();
 
     const found = await repo.findByIdForOwner('v-1', 'user-1');
     expect(found).toBeNull();
   });
 
-  it('throws not found when vehicle belongs to different owner', async () => {
+  it('throws when vehicle does not exist', async () => {
     const repo = new InMemoryVehicleRepository();
     const useCase = new DeleteVehicleUseCase(repo);
 
-    await repo.create(
-      createVehicle({
-        id: 'v-1',
+    await expect(
+      useCase.execute({
+        id: 'missing',
         ownerId: 'user-1',
-        name: 'E46',
-        brand: 'BMW',
-        model: '330i',
-        year: 2002,
-        mileage: 250000,
       }),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('throws when vehicle belongs to another owner', async () => {
+    const repo = new InMemoryVehicleRepository();
+    const useCase = new DeleteVehicleUseCase(repo);
+
+    const vehicle = createVehicle(
+      new VehicleDomainBuilder().withId('v-1').withOwnerId('user-1').build(),
     );
+
+    await repo.create(vehicle);
 
     await expect(
       useCase.execute({
         id: 'v-1',
         ownerId: 'user-2',
       }),
-    ).rejects.toBeInstanceOf(NotFoundError);
+    ).rejects.toThrow(NotFoundError);
   });
 });

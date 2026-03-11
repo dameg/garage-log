@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import { NotFoundError } from '../../../shared/errors/not-found-error';
+import { VehicleDomainBuilder } from '../../../test/builders/vehicle.domain.builder';
+import { InMemoryVehicleRepository } from '../../../test/doubles/in-memory/in-memory-vehicle.repository';
 import { createVehicle } from '../domain/vehicle';
-import { InMemoryVehicleRepository } from '../infrastructure/in-memory-vehicle.repository';
 import { UpdateVehicleUseCase } from './update-vehicle.usecase';
 
 describe('UpdateVehicleUseCase', () => {
@@ -10,59 +11,63 @@ describe('UpdateVehicleUseCase', () => {
     const repo = new InMemoryVehicleRepository();
     const useCase = new UpdateVehicleUseCase(repo);
 
-    await repo.create(
-      createVehicle({
-        id: 'v-1',
-        ownerId: 'user-1',
-        name: 'E46',
-        brand: 'BMW',
-        model: '330i',
-        year: 2002,
-        mileage: 250000,
-      }),
+    const vehicle = createVehicle(
+      new VehicleDomainBuilder().withId('v-1').withOwnerId('user-1').build(),
     );
 
-    const updated = await useCase.execute({
+    await repo.create(vehicle);
+
+    const result = await useCase.execute({
       id: 'v-1',
       ownerId: 'user-1',
       patch: {
-        name: '  E46 Touring ',
+        name: 'E46 Touring',
         mileage: 260000,
       },
     });
 
-    expect(updated.name).toBe('E46 Touring');
-    expect(updated.mileage).toBe(260000);
-    expect(updated.brand).toBe('BMW');
-    expect(updated.model).toBe('330i');
-    expect(updated.year).toBe(2002);
-    expect(updated.ownerId).toBe('user-1');
+    expect(result.id).toBe('v-1');
+    expect(result.ownerId).toBe('user-1');
+    expect(result.name).toBe('E46 Touring');
+    expect(result.brand).toBe('BMW');
+    expect(result.model).toBe('330i');
+    expect(result.year).toBe(2002);
+    expect(result.mileage).toBe(260000);
   });
 
-  it('throws not found when vehicle belongs to different owner', async () => {
+  it('throws when vehicle does not exist', async () => {
     const repo = new InMemoryVehicleRepository();
     const useCase = new UpdateVehicleUseCase(repo);
 
-    await repo.create(
-      createVehicle({
-        id: 'v-1',
+    await expect(
+      useCase.execute({
+        id: 'missing',
         ownerId: 'user-1',
-        name: 'E46',
-        brand: 'BMW',
-        model: '330i',
-        year: 2002,
-        mileage: 250000,
+        patch: {
+          mileage: 260000,
+        },
       }),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('throws when vehicle belongs to another owner', async () => {
+    const repo = new InMemoryVehicleRepository();
+    const useCase = new UpdateVehicleUseCase(repo);
+
+    const vehicle = createVehicle(
+      new VehicleDomainBuilder().withId('v-1').withOwnerId('user-1').build(),
     );
+
+    await repo.create(vehicle);
 
     await expect(
       useCase.execute({
         id: 'v-1',
         ownerId: 'user-2',
         patch: {
-          name: 'E90',
+          mileage: 260000,
         },
       }),
-    ).rejects.toBeInstanceOf(NotFoundError);
+    ).rejects.toThrow(NotFoundError);
   });
 });

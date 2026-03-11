@@ -1,6 +1,10 @@
+import { PaginatedResult } from '../../domain/paginated-result';
 import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';
+import { VehicleListQuery } from '../../domain/vehicle-list.query';
 import type { VehicleRepository } from '../../domain/vehicle.repository';
 import type { PrismaClient } from '@prisma/client';
+import { buildVehicleWhere } from './build-vehicle-where';
+import { toDomainVehicle } from './mappers/to-domain-vehicle';
 
 export class PrismaVehicleRepository implements VehicleRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -19,20 +23,42 @@ export class PrismaVehicleRepository implements VehicleRepository {
       },
     });
 
-    return created;
+    return toDomainVehicle(created);
   }
 
-  async findAllByOwnerId(ownerId: string): Promise<Vehicle[]> {
-    return this.prisma.vehicle.findMany({
-      where: { ownerId },
-      orderBy: { createdAt: 'desc' },
-    });
+  async findManyByOwner(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
+    const where = buildVehicleWhere(query);
+    const skip = (query.page - 1) * query.limit;
+    const take = query.limit;
+
+    const [rows, total] = await Promise.all([
+      this.prisma.vehicle.findMany({
+        where,
+        skip,
+        take,
+        orderBy: {
+          [query.sort.field]: query.sort.direction,
+        },
+      }),
+      this.prisma.vehicle.count({
+        where,
+      }),
+    ]);
+
+    return {
+      data: rows.map(toDomainVehicle),
+      total,
+      page: query.page,
+      limit: query.limit,
+    };
   }
 
   async findByIdForOwner(id: string, ownerId: string): Promise<Vehicle | null> {
-    return this.prisma.vehicle.findFirst({
+    const row = await this.prisma.vehicle.findFirst({
       where: { id, ownerId },
     });
+
+    return row ? toDomainVehicle(row) : null;
   }
 
   async deleteByIdForOwner(id: string, ownerId: string): Promise<boolean> {
@@ -57,8 +83,10 @@ export class PrismaVehicleRepository implements VehicleRepository {
       return null;
     }
 
-    return this.prisma.vehicle.findFirst({
+    const row = await this.prisma.vehicle.findFirst({
       where: { id, ownerId },
     });
+
+    return row ? toDomainVehicle(row) : null;
   }
 }

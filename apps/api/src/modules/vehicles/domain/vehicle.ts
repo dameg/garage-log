@@ -5,13 +5,13 @@ export type VehicleId = string;
 
 export type Vehicle = {
   id: VehicleId;
+  ownerId: string;
   name: string;
   brand: string;
   model: string;
   year: number;
   mileage: number;
   createdAt: Date;
-  ownerId: string;
 };
 
 export type CreateVehicleProps = Omit<Vehicle, 'createdAt'> & {

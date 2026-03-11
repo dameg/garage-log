@@ -20,5 +20,8 @@ export async function registerAndGetCookie(app: FastifyInstance, email = 'test@t
     throw new Error('No access_token cookie returned');
   }
 
-  return `${cookie.name}=${cookie.value}`;
+  return {
+    email,
+    cookie: `${cookie.name}=${cookie.value}`,
+  };
 }

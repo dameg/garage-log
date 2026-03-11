@@ -1,26 +1,18 @@
 import { describe, expect, it } from 'vitest';
-
 import { NotFoundError } from '../../../shared/errors/not-found-error';
 import { createVehicle } from '../domain/vehicle';
-import { InMemoryVehicleRepository } from '../infrastructure/in-memory-vehicle.repository';
 import { GetVehicleUseCase } from './get-vehicle.usecase';
+import { VehicleDomainBuilder } from '../../../test/builders/vehicle.domain.builder';
+import { InMemoryVehicleRepository } from '../../../test/doubles/in-memory/in-memory-vehicle.repository';
 
 describe('GetVehicleUseCase', () => {
   it('returns vehicle for owner', async () => {
     const repo = new InMemoryVehicleRepository();
     const useCase = new GetVehicleUseCase(repo);
+    const input = new VehicleDomainBuilder().withId('v-1').withOwnerId('user-1').build();
+    const vehicle = createVehicle(input);
 
-    await repo.create(
-      createVehicle({
-        id: 'v-1',
-        ownerId: 'user-1',
-        name: 'E46',
-        brand: 'BMW',
-        model: '330i',
-        year: 2002,
-        mileage: 250000,
-      }),
-    );
+    await repo.create(vehicle);
 
     const result = await useCase.execute({
       id: 'v-1',
@@ -31,27 +23,33 @@ describe('GetVehicleUseCase', () => {
     expect(result.ownerId).toBe('user-1');
   });
 
-  it('throws not found when vehicle belongs to different owner', async () => {
+  it('throws when vehicle does not exist', async () => {
     const repo = new InMemoryVehicleRepository();
     const useCase = new GetVehicleUseCase(repo);
 
-    await repo.create(
-      createVehicle({
-        id: 'v-1',
-        ownerId: 'user-1',
-        name: 'E46',
-        brand: 'BMW',
-        model: '330i',
-        year: 2002,
-        mileage: 250000,
+    await expect(
+      useCase.execute({
+        id: 'missing-1',
+        ownerId: 'missing-2',
       }),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('throws when vehicle belongs to another owner', async () => {
+    const repo = new InMemoryVehicleRepository();
+    const useCase = new GetVehicleUseCase(repo);
+
+    const vehicle = createVehicle(
+      new VehicleDomainBuilder().withId('v-1').withOwnerId('user-1').build(),
     );
+
+    await repo.create(vehicle);
 
     await expect(
       useCase.execute({
         id: 'v-1',
         ownerId: 'user-2',
       }),
-    ).rejects.toBeInstanceOf(NotFoundError);
+    ).rejects.toThrow(NotFoundError);
   });
 });

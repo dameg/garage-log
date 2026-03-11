@@ -3,11 +3,12 @@ import { createVehicleHttpSchema } from '../validation/create-vehicle.schema';
 import { createVehiclesServices } from '../../vehicles.factory';
 import { vehicleIdParamsSchema } from '../validation/vehice-id.schema';
 import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
+import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
 
 export async function vehiclesRoutes(app: FastifyInstance) {
   const {
     createVehicleUseCase,
-    listVehiclesUseCase,
+    listVehicleUseCase,
     getVehicleUseCase,
     deleteVehicleUseCase,
     updateVehicleUseCase,
@@ -21,7 +22,11 @@ export async function vehiclesRoutes(app: FastifyInstance) {
     return reply.code(201).send(created);
   });
 
-  app.get('/', async (req) => listVehiclesUseCase.execute({ ownerId: req.user.sub }));
+  app.get('/', async (req) => {
+    const query = listVehiclesQuerySchema.parse(req.query);
+
+    return listVehicleUseCase.execute({ ...query, ownerId: req.user.sub });
+  });
 
   app.get('/:id', async (req) => {
     const params = vehicleIdParamsSchema.parse(req.params);

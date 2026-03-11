@@ -11,6 +11,7 @@ import jwt from '@fastify/jwt';
 import { NotFoundError } from './shared/errors/not-found-error';
 import { ConflictError } from './shared/errors/conflict-error';
 import { authModule } from './modules/auth/auth.module';
+import { UnauthorizedError } from './shared/errors/unauthorized-error';
 
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
@@ -39,6 +40,13 @@ export async function buildApp(deps?: Deps) {
     if (err instanceof ConflictError) {
       return reply.code(409).send({
         error: 'Conflict',
+        message: err.message,
+      });
+    }
+
+    if (err instanceof UnauthorizedError) {
+      return reply.code(401).send({
+        error: 'Unauthorized',
         message: err.message,
       });
     }

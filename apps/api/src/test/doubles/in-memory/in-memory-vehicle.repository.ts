@@ -1,5 +1,9 @@
-import type { UpdatableVehicleFields, Vehicle } from '../domain/vehicle';
-import type { VehicleRepository } from '../domain/vehicle.repository';
+import { VehicleRepository } from '../../../modules/vehicles/domain/vehicle.repository';
+import { UpdatableVehicleFields, Vehicle } from '../../../modules/vehicles/domain/vehicle';
+import { VehicleListQuery } from '../../../modules/vehicles/domain/vehicle-list.query';
+import { PaginatedResult } from '../../../modules/vehicles/domain/paginated-result';
+import { matchesVehicleFilters } from './matches-vehicle-filters';
+import { sortVehicles } from './sort-vehicles';
 
 export class InMemoryVehicleRepository implements VehicleRepository {
   private data: Vehicle[] = [];
@@ -9,8 +13,21 @@ export class InMemoryVehicleRepository implements VehicleRepository {
     return vehicle;
   }
 
-  async findAllByOwnerId(ownerId: string): Promise<Vehicle[]> {
-    return this.data.filter((vehicle) => vehicle.ownerId === ownerId);
+  async findManyByOwner(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
+    const filtered = this.data.filter((vehicle) => matchesVehicleFilters(vehicle, query));
+
+    const sorted = sortVehicles(filtered, query);
+
+    const total = sorted.length;
+    const start = (query.page - 1) * query.limit;
+    const end = start + query.limit;
+
+    return {
+      data: sorted.slice(start, end),
+      total,
+      page: query.page,
+      limit: query.limit,
+    };
   }
 
   async findByIdForOwner(id: string, ownerId: string): Promise<Vehicle | null> {
