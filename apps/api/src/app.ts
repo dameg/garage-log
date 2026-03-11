@@ -13,7 +13,6 @@ import { ConflictError } from './shared/errors/conflict-error';
 import { authModule } from './modules/auth/auth.module';
 import { UnauthorizedError } from './shared/errors/unauthorized-error';
 import { registerSwagger } from './shared/http/plugins/swagger';
-
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
     logger: env.NODE_ENV === 'test' ? false : { level: env.LOG_LEVEL },

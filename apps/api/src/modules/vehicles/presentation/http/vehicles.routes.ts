@@ -5,6 +5,8 @@ import { vehicleIdParamsSchema } from '../validation/vehice-id.schema';
 import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
 import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
 
+import z from 'zod';
+
 export async function vehiclesRoutes(app: FastifyInstance) {
   const {
     createVehicleUseCase,
@@ -21,6 +23,9 @@ export async function vehiclesRoutes(app: FastifyInstance) {
         tags: ['vehicles'],
         summary: 'Create vehicle',
         description: 'Creates a new vehicle',
+        body: z.toJSONSchema(createVehicleHttpSchema, {
+          target: 'draft-07',
+        }),
       },
     },
     async (req, reply) => {
