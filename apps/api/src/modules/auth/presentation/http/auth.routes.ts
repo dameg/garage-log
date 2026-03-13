@@ -37,6 +37,7 @@ export async function authRoutes(app: FastifyInstance) {
   });
 
   app.post('/login', async (req, reply) => {
+    console.log('LOGIN BODY', req.body);
     const parsed = loginUserHttpSchema.safeParse(req.body);
 
     if (!parsed.success) {

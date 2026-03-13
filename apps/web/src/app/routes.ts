@@ -1,13 +1,21 @@
 export const routes = {
+  login: {
+    path: '/login',
+    build: () => '/login',
+  },
+  register: {
+    path: '/register',
+    build: () => '/register',
+  },
   dashboard: {
-    path: "/",
-    build: () => "/",
+    path: '/',
+    build: () => '/',
   },
   vehicles: {
-    path: "/vehicles",
-    build: () => "/vehicles",
+    path: '/vehicles',
+    build: () => '/vehicles',
     detail: {
-      path: "/vehicles/:id",
+      path: '/vehicles/:id',
       build: (id: string) => `/vehicles/${id}`,
     },
   },
