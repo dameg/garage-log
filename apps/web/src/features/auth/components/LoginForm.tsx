@@ -1,4 +1,4 @@
-import { Anchor, Button, Group, PasswordInput, TextInput, Title, Text } from '@mantine/core';
+import { Anchor, Button, PasswordInput, TextInput, Title, Text } from '@mantine/core';
 import classes from './AuthForm.module.css';
 import { useLogin } from '../hooks/useLogin';
 import { useForm } from '@mantine/form';
@@ -9,6 +9,7 @@ import { routes } from '@/app/routes';
 
 export function LoginForm() {
   const loginMutation = useLogin();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -44,11 +45,11 @@ export function LoginForm() {
         {...form.getInputProps('password')}
       />
 
-      <Group justify="end" mt="lg">
+      {/* <Group justify="end" mt="lg">
         <Anchor component="button" size="sm">
           Forgot password?
         </Anchor>
-      </Group>
+      </Group> */}
 
       <Button fullWidth mt="xl" radius="md" type="submit">
         Sign in

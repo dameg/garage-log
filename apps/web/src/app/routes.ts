@@ -7,10 +7,6 @@ export const routes = {
     path: '/register',
     build: () => '/register',
   },
-  dashboard: {
-    path: '/',
-    build: () => '/',
-  },
   vehicles: {
     path: '/vehicles',
     build: () => '/vehicles',

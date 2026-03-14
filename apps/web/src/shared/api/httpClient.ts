@@ -1,19 +1,22 @@
 import { ApiError } from './apiError';
 
-export async function http<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
-  const res = await fetch(input, {
+export async function http<T>(path: string, init?: RequestInit): Promise<T> {
+  const hasBody = init?.body != null;
+
+  const res = await fetch(`${import.meta.env.VITE_API_URL}${path}`, {
+    credentials: 'include',
+    ...init,
     headers: {
-      'Content-Type': 'application/json',
+      ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
       ...(init?.headers ?? {}),
     },
-    ...init,
   });
 
   const data = await res.json().catch(() => null);
 
   if (!res.ok) {
-    throw new ApiError(data?.message ?? 'Request failed', res.status, data);
+    throw new ApiError(data?.message ?? res.statusText ?? 'Request failed', res.status, data);
   }
 
-  return data;
+  return data as T;
 }

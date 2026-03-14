@@ -1,18 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authMutations } from '../queries/auth.mutations';
 import { useNavigate } from 'react-router-dom';
+import { authMutations } from '../queries/auth.mutations';
 import { authKeys } from '../queries/auth.keys';
 import { routes } from '@/app/routes';
 
-export function useLogin() {
+export function useLogout() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
   return useMutation({
-    ...authMutations.login(),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: authKeys.me() });
-      navigate(routes.vehicles.build(), { replace: true });
+    ...authMutations.logout(),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: authKeys.all });
+      navigate(routes.login.build(), { replace: true });
     },
   });
 }
