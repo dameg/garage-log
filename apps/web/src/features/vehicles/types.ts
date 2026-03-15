@@ -1,5 +1,27 @@
+import type { PaginatedResult } from '@/shared/api';
+import type { SortParams } from '@/shared/types';
+
 export type Vehicle = {
   id: string;
-  title: string;
-  body: string;
+  ownerId: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: number;
+  mileage: number;
+  createdAt: Date;
+};
+
+export type VehiclesResponse = PaginatedResult<Vehicle>;
+
+export type VehiclesSortBy = 'createdAt' | 'name' | 'brand' | 'model' | 'year' | 'mileage';
+
+export type VehiclesListParams = SortParams<VehiclesSortBy> & {
+  search?: string;
+  mileageFrom?: number;
+  mileageTo?: number;
+  yearFrom?: number;
+  yearTo?: number;
+  page: number;
+  limit: number;
 };

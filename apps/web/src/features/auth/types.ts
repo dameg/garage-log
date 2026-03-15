@@ -1,4 +1,4 @@
-import z from 'zod';
+import { z } from 'zod';
 
 export const loginSchema = z.object({
   email: z.email('Invalid email'),
@@ -8,10 +8,11 @@ export const loginSchema = z.object({
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = LoginInput;
 
-export type User = {
+export type AuthUser = {
   id: string;
   email: string;
-  createdAt: string;
 };
 
-export type LoginResponse = User;
+export type AuthResponse = {
+  user: AuthUser;
+};

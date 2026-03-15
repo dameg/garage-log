@@ -9,7 +9,10 @@ export function MainLayout() {
       navbar={{ width: 300, breakpoint: 'sm' }}
       style={{ minHeight: '100dvh' }}
     >
-      <AppShell.Navbar p="md" style={{ borderRight: '1px solid var(--mantine-color-dark-4)' }}>
+      <AppShell.Navbar
+        p="md"
+        style={{ borderRight: '1px solid var(--mantine-color-default-border)' }}
+      >
         <Navbar />
       </AppShell.Navbar>
 

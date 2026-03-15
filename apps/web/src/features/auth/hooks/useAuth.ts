@@ -5,8 +5,8 @@ export function useAuth() {
   const query = useQuery(authQueries.me());
 
   return {
-    user: query.data,
-    isAuthenticated: !!query.data,
+    user: query.data?.user ?? null,
     isLoading: query.isLoading,
+    isAuthenticated: !!query.data?.user,
   };
 }

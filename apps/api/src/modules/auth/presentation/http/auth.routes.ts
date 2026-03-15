@@ -10,16 +10,9 @@ export async function authRoutes(app: FastifyInstance) {
   const { registerUserUseCase, loginUserUseCase } = createAuthServices(app);
 
   app.post('/register', async (req, reply) => {
-    const parsed = registerUserHttpSchema.safeParse(req.body);
+    const body = registerUserHttpSchema.parse(req.body);
 
-    if (!parsed.success) {
-      return reply.code(400).send({
-        message: 'Invalid request body',
-        issues: parsed.error.issues,
-      });
-    }
-
-    const user = await registerUserUseCase.execute(parsed.data);
+    const user = await registerUserUseCase.execute(body);
 
     const token = await reply.jwtSign({
       sub: user.id,
@@ -37,17 +30,9 @@ export async function authRoutes(app: FastifyInstance) {
   });
 
   app.post('/login', async (req, reply) => {
-    console.log('LOGIN BODY', req.body);
-    const parsed = loginUserHttpSchema.safeParse(req.body);
+    const body = loginUserHttpSchema.parse(req.body);
 
-    if (!parsed.success) {
-      return reply.code(400).send({
-        message: 'Invalid request body',
-        issues: parsed.error.issues,
-      });
-    }
-
-    const user = await loginUserUseCase.execute(parsed.data);
+    const user = await loginUserUseCase.execute(body);
 
     const token = await reply.jwtSign({
       sub: user.id,

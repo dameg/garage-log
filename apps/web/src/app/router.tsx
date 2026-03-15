@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AuthLayout, MainLayout } from '@/app/layouts';
 import { VehiclesPage } from '@/pages/Vehicles';
-import { VehicleDetailPage } from '@/pages/Vehicles/detail';
+
 import { routes } from './routes';
 
 import { LoginPage } from '@/pages/Login';
@@ -37,10 +37,10 @@ export const router = createBrowserRouter([
             path: routes.vehicles.path,
             element: <VehiclesPage />,
           },
-          {
-            path: routes.vehicles.detail.path,
-            element: <VehicleDetailPage />,
-          },
+          // {
+          //   path: routes.vehicles.detail.path,
+          //   element: <VehicleDetailPage />,
+          // },
         ],
       },
     ],

@@ -6,7 +6,8 @@
     "dev": "tsx watch src/main.ts",
     "start": "node src/main.ts",
     "test": "vitest run",
-    "test:db": "dotenv -e .env.test -- vitest run --config vitest.e2e.config.ts"
+    "test:db": "dotenv -e .env.test -- vitest run --config vitest.e2e.config.ts",
+    "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
@@ -22,8 +23,10 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^25.3.5",
+    "@types/pg": "^8.18.0",
     "dotenv-cli": "^11.0.0",
     "prisma": "^7.4.2",
     "tsx": "^4.21.0",

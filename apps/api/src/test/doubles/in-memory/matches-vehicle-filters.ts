@@ -9,7 +9,7 @@ export function matchesVehicleFilters(vehicle: Vehicle, query: VehicleListQuery)
   if (filters?.search) {
     const q = filters.search.toLowerCase();
 
-    const searchable = [vehicle.name, vehicle.model, vehicle.brand].map((v) => v.toLowerCase());
+    const searchable = [vehicle.model, vehicle.brand].map((v) => v.toLowerCase());
 
     if (!searchable.some((field) => field.includes(q))) {
       return false;

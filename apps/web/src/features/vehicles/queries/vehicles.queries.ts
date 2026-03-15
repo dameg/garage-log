@@ -1,12 +1,14 @@
 import { queryOptions } from '@tanstack/react-query';
 import { getVehicles, getVehicle } from '../api';
 import { vehiclesKeys } from './vehicles.keys';
+import type { VehiclesListParams } from '../types';
 
 export const vehiclesQueries = {
-  list: () =>
+  list: (params: VehiclesListParams) =>
     queryOptions({
-      queryKey: vehiclesKeys.list(),
-      queryFn: getVehicles,
+      queryKey: vehiclesKeys.list(params),
+      queryFn: () => getVehicles(params),
+      placeholderData: (previousData) => previousData,
       staleTime: 5 * 60_000,
       refetchOnWindowFocus: true,
     }),
