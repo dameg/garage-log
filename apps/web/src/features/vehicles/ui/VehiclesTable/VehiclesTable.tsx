@@ -4,6 +4,7 @@ import {
   Group,
   Loader,
   NumberInput,
+  Pagination,
   ScrollArea,
   Select,
   Stack,
@@ -11,12 +12,16 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-
 import { columns } from './columns';
 import { useVehicles } from '../../hooks/useVehicles';
 import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
 import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSearchParams';
 import { useVehiclesSearch } from '../../hooks/useVehiclesSearch';
+import { Skeleton } from '@mantine/core';
+import { useMemo } from 'react';
+import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
+
+const PAGE_SIZE_OPTIONS = ['10', '20', '50', '100'];
 
 export function VehiclesTable() {
   const {
@@ -32,15 +37,25 @@ export function VehiclesTable() {
 
   const { searchInput, onSearchChange, resetSearch } = useVehiclesSearch(filters.search, setSearch);
 
-  const params = {
-    ...tableParams,
-    ...filters,
-  };
+  const params = useMemo(
+    () => ({
+      ...tableParams,
+      ...filters,
+    }),
+    [tableParams, filters],
+  );
+
   const query = useVehicles(params);
 
   const data = query.data?.data ?? [];
   const totalItems = query.data?.total ?? 0;
   const totalPages = Math.ceil(totalItems / pagination.pageSize);
+
+  usePrefetchVehiclesTablePage({
+    params,
+    pageIndex: pagination.pageIndex,
+    totalPages,
+  });
 
   const table = useReactTable({
     data,
@@ -57,6 +72,20 @@ export function VehiclesTable() {
     enableSortingRemoval: false,
     pageCount: totalPages,
   });
+
+  const skeletonRows = useMemo(
+    () =>
+      Array.from({ length: pagination.pageSize }).map((_, rowIndex) => (
+        <Table.Tr key={`skeleton-${rowIndex}`}>
+          {columns.map((_, colIndex) => (
+            <Table.Td key={`skeleton-${rowIndex}-${colIndex}`}>
+              <Skeleton height={18} radius="sm" />
+            </Table.Td>
+          ))}
+        </Table.Tr>
+      )),
+    [pagination.pageSize],
+  );
 
   if (query.isLoading && !query.data) {
     return <Loader />;
@@ -139,9 +168,10 @@ export function VehiclesTable() {
               </Table.Tr>
             ))}
           </Table.Thead>
-
           <Table.Tbody>
-            {table.getRowModel().rows.length === 0 ? (
+            {query.isFetching ? (
+              skeletonRows
+            ) : table.getRowModel().rows.length === 0 ? (
               <Table.Tr>
                 <Table.Td colSpan={columns.length}>
                   <Text ta="center" c="dimmed">
@@ -165,43 +195,42 @@ export function VehiclesTable() {
       </ScrollArea>
 
       <Group justify="space-between" mt="md">
-        <Text size="sm">
-          Page {pagination.pageIndex + 1} of {Math.max(totalPages, 1)}
-        </Text>
-        <Select
-          size="xs"
-          w={80}
-          value={String(pagination.pageSize)}
-          onChange={(value) => setPagination((prev) => ({ ...prev, pageSize: Number(value) }))}
-          data={['10', '20', '50']}
-        />
+        <Group justify="space-between" mt="md" align="center">
+          <Group gap="md">
+            <Text size="sm" c="dimmed">
+              {totalItems} vehicles
+            </Text>
 
-        <Group gap="xs">
-          <Button
-            variant="default"
-            onClick={() =>
+            <Select
+              size="xs"
+              w={80}
+              value={String(pagination.pageSize)}
+              data={PAGE_SIZE_OPTIONS}
+              onChange={(value) => {
+                if (!value) return;
+
+                setPagination({
+                  pageIndex: 0,
+                  pageSize: Number(value),
+                });
+              }}
+            />
+          </Group>
+
+          <Pagination
+            value={pagination.pageIndex + 1}
+            onChange={(page) =>
               setPagination((prev) => ({
                 ...prev,
-                pageIndex: Math.max(prev.pageIndex - 1, 0),
+                pageIndex: page - 1,
               }))
             }
-            disabled={pagination.pageIndex === 0 || query.isFetching}
-          >
-            Prev
-          </Button>
-
-          <Button
-            variant="default"
-            onClick={() =>
-              setPagination((prev) => ({
-                ...prev,
-                pageIndex: prev.pageIndex + 1,
-              }))
-            }
-            disabled={pagination.pageIndex + 1 >= totalPages || query.isFetching}
-          >
-            Next
-          </Button>
+            total={Math.max(totalPages, 1)}
+            siblings={1}
+            boundaries={1}
+            withEdges
+            disabled={query.isFetching}
+          />
         </Group>
       </Group>
     </Stack>
