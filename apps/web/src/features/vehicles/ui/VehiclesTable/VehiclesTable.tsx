@@ -5,6 +5,7 @@ import {
   Loader,
   NumberInput,
   ScrollArea,
+  Select,
   Stack,
   Table,
   Text,
@@ -167,6 +168,13 @@ export function VehiclesTable() {
         <Text size="sm">
           Page {pagination.pageIndex + 1} of {Math.max(totalPages, 1)}
         </Text>
+        <Select
+          size="xs"
+          w={80}
+          value={String(pagination.pageSize)}
+          onChange={(value) => setPagination((prev) => ({ ...prev, pageSize: Number(value) }))}
+          data={['10', '20', '50']}
+        />
 
         <Group gap="xs">
           <Button

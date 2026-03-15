@@ -32,7 +32,6 @@ export const useVehiclesTableSearchParams = () => {
     },
   ]);
 
-  // Table State -> URL Sync
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams);
 
@@ -48,13 +47,6 @@ export const useVehiclesTableSearchParams = () => {
   }, [pagination, sorting, setSearchParams, searchParams]);
 
   const params: VehiclesListParams = {
-    search: searchParams.get('search') || undefined,
-    mileageFrom: searchParams.get('mileageFrom')
-      ? Number(searchParams.get('mileageFrom'))
-      : undefined,
-    mileageTo: searchParams.get('mileageTo') ? Number(searchParams.get('mileageTo')) : undefined,
-    yearFrom: searchParams.get('yearFrom') ? Number(searchParams.get('yearFrom')) : undefined,
-    yearTo: searchParams.get('yearTo') ? Number(searchParams.get('yearTo')) : undefined,
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     sortBy: (sorting[0]?.id as VehiclesSortBy | undefined) ?? DEFAULT_SORT_BY,
