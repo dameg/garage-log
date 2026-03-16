@@ -1,5 +1,6 @@
 import type { PaginatedResult } from '@/shared/api';
 import type { SortParams } from '@/shared/types';
+import { z } from 'zod';
 
 export type Vehicle = {
   id: string;
@@ -24,4 +25,24 @@ export type VehiclesListParams = SortParams<VehiclesSortBy> & {
   yearTo?: number;
   page: number;
   limit: number;
+};
+
+export const vehicleSchema = z.object({
+  vin: z.string().min(1),
+  brand: z.string().min(1),
+  model: z.string().min(1),
+  year: z.number().int(),
+  mileage: z.number().int(),
+});
+
+export type CreateVehicleInput = z.infer<typeof vehicleSchema>;
+
+export type UpdateVehicleInput = { id: string } & CreateVehicleInput;
+
+export type VehicleFormValues = {
+  vin: string;
+  brand: string;
+  model: string;
+  year: number | undefined;
+  mileage: number | undefined;
 };

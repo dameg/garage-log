@@ -1,71 +1,51 @@
-import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import {
-  Button,
-  Group,
-  Loader,
-  NumberInput,
-  Pagination,
-  ScrollArea,
-  Select,
-  Stack,
-  Table,
-  Text,
-  TextInput,
-} from '@mantine/core';
-import { createColumns } from './columns';
-import { useVehicles } from '../../hooks/useVehicles';
-import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
-import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSearchParams';
-import { useVehiclesSearch } from '../../hooks/useVehiclesSearch';
-import { Skeleton } from '@mantine/core';
 import { useMemo } from 'react';
-import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  type OnChangeFn,
+  type PaginationState,
+  type SortingState,
+} from '@tanstack/react-table';
+import { Group, Pagination, ScrollArea, Select, Skeleton, Table, Text } from '@mantine/core';
+
+import { createColumns } from './columns';
+import type { Vehicle } from '../../types';
 
 const PAGE_SIZE_OPTIONS = ['10', '20', '50', '100'];
 
-export function VehiclesTable() {
-  const {
-    params: tableParams,
-    pagination,
-    sorting,
-    setPagination,
-    setSorting,
-  } = useVehiclesTableSearchParams();
+type Props = {
+  data: Vehicle[];
+  totalItems: number;
+  totalPages: number;
+  pagination: PaginationState;
+  sorting: SortingState;
+  setPagination: OnChangeFn<PaginationState>;
+  setSorting: OnChangeFn<SortingState>;
+  isFetching: boolean;
+  onEdit?: (vehicle: Vehicle) => void;
+  onDelete?: (vehicle: Vehicle) => void;
+};
 
-  const { filters, setSearch, setYearFrom, setYearTo, setMileageFrom, setMileageTo, resetFilters } =
-    useVehiclesFiltersSearchParams();
-
-  const { searchInput, onSearchChange, resetSearch } = useVehiclesSearch(filters.search, setSearch);
-
-  const params = useMemo(
-    () => ({
-      ...tableParams,
-      ...filters,
-    }),
-    [tableParams, filters],
-  );
-
-  const query = useVehicles(params);
-
-  const data = query.data?.data ?? [];
-  const totalItems = query.data?.total ?? 0;
-  const totalPages = Math.ceil(totalItems / pagination.pageSize);
-
-  usePrefetchVehiclesTablePage({
-    params,
-    pageIndex: pagination.pageIndex,
-    totalPages,
-  });
-
+export function VehiclesTable({
+  data,
+  totalItems,
+  totalPages,
+  pagination,
+  sorting,
+  setPagination,
+  setSorting,
+  isFetching,
+  onEdit,
+  onDelete,
+}: Props) {
   const columns = useMemo(
-    () => createColumns(),
-    //   {
-    //   onEdit: (id) => navigate(`/vehicles/${id}/edit`),
-    //   onDelete: (id) => {
-    //     console.log('delete vehicle', id);
-    //   },
-    // }
-    [],
+    () =>
+      createColumns({
+        onEdit,
+        onDelete,
+      }),
+    [onEdit, onDelete],
   );
 
   const table = useReactTable({
@@ -98,61 +78,8 @@ export function VehiclesTable() {
     [pagination.pageSize, columns],
   );
 
-  if (query.isLoading && !query.data) {
-    return <Loader />;
-  }
-
-  if (query.isError) {
-    return <Text c="red">Failed to load vehicles</Text>;
-  }
-
   return (
-    <Stack>
-      <Group align="end">
-        <TextInput
-          label="Search"
-          placeholder="Search by VIN, Brand, Model..."
-          value={searchInput}
-          onChange={(event) => onSearchChange(event.currentTarget.value)}
-        />
-        <NumberInput
-          label="Year from"
-          placeholder="e.g. 2010"
-          value={filters.yearFrom}
-          onChange={(value) => setYearFrom(typeof value === 'number' ? value : undefined)}
-        />
-
-        <NumberInput
-          label="Year to"
-          placeholder="e.g. 2020"
-          value={filters.yearTo}
-          onChange={(value) => setYearTo(typeof value === 'number' ? value : undefined)}
-        />
-
-        <NumberInput
-          label="Mileage from"
-          placeholder="e.g. 50000"
-          value={filters.mileageFrom}
-          onChange={(value) => setMileageFrom(typeof value === 'number' ? value : undefined)}
-        />
-
-        <NumberInput
-          label="Mileage to"
-          placeholder="e.g. 150000"
-          value={filters.mileageTo}
-          onChange={(value) => setMileageTo(typeof value === 'number' ? value : undefined)}
-        />
-
-        <Button
-          variant="default"
-          onClick={() => {
-            resetSearch();
-            resetFilters();
-          }}
-        >
-          Reset
-        </Button>
-      </Group>
+    <>
       <ScrollArea>
         <Table striped highlightOnHover>
           <Table.Thead>
@@ -179,8 +106,9 @@ export function VehiclesTable() {
               </Table.Tr>
             ))}
           </Table.Thead>
+
           <Table.Tbody>
-            {query.isFetching ? (
+            {isFetching ? (
               skeletonRows
             ) : table.getRowModel().rows.length === 0 ? (
               <Table.Tr>
@@ -205,45 +133,43 @@ export function VehiclesTable() {
         </Table>
       </ScrollArea>
 
-      <Group justify="space-between" mt="md">
-        <Group justify="space-between" mt="md" align="center">
-          <Group gap="md">
-            <Text size="sm" c="dimmed">
-              {totalItems} vehicles
-            </Text>
+      <Group justify="space-between" mt="md" align="center">
+        <Group gap="md">
+          <Text size="sm" c="dimmed">
+            {totalItems} vehicles
+          </Text>
 
-            <Select
-              size="xs"
-              w={80}
-              value={String(pagination.pageSize)}
-              data={PAGE_SIZE_OPTIONS}
-              onChange={(value) => {
-                if (!value) return;
+          <Select
+            size="xs"
+            w={80}
+            value={String(pagination.pageSize)}
+            data={PAGE_SIZE_OPTIONS}
+            onChange={(value) => {
+              if (!value) return;
 
-                setPagination({
-                  pageIndex: 0,
-                  pageSize: Number(value),
-                });
-              }}
-            />
-          </Group>
-
-          <Pagination
-            value={pagination.pageIndex + 1}
-            onChange={(page) =>
-              setPagination((prev) => ({
-                ...prev,
-                pageIndex: page - 1,
-              }))
-            }
-            total={Math.max(totalPages, 1)}
-            siblings={1}
-            boundaries={1}
-            withEdges
-            disabled={query.isFetching}
+              setPagination({
+                pageIndex: 0,
+                pageSize: Number(value),
+              });
+            }}
           />
         </Group>
+
+        <Pagination
+          value={pagination.pageIndex + 1}
+          onChange={(page) =>
+            setPagination((prev) => ({
+              ...prev,
+              pageIndex: page - 1,
+            }))
+          }
+          total={Math.max(totalPages, 1)}
+          siblings={1}
+          boundaries={1}
+          withEdges
+          disabled={isFetching}
+        />
       </Group>
-    </Stack>
+    </>
   );
 }

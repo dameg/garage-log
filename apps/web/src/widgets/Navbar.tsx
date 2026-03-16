@@ -1,4 +1,4 @@
-import { Group, Stack, Text } from '@mantine/core';
+import { Group, Stack, Title } from '@mantine/core';
 
 import classes from './Navbar.module.css';
 import { navigation } from '@/app/config';
@@ -13,11 +13,11 @@ export function Navbar() {
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
         <Group className={classes.header}>
-          <Text fw={700}>
+          <Title order={3}>
             <span>
               Garage<span className={classes.logoText}>Log</span>
             </span>
-          </Text>
+          </Title>
         </Group>
         <Stack gap="xs">
           {navigation.map((item) => {

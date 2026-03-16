@@ -45,12 +45,6 @@ export function LoginForm() {
         {...form.getInputProps('password')}
       />
 
-      {/* <Group justify="end" mt="lg">
-        <Anchor component="button" size="sm">
-          Forgot password?
-        </Anchor>
-      </Group> */}
-
       <Button fullWidth mt="xl" radius="md" type="submit">
         Sign in
       </Button>

@@ -1,5 +1,11 @@
 import { http } from '@/shared/api/httpClient';
-import type { Vehicle, VehiclesListParams, VehiclesResponse } from './types';
+import type {
+  CreateVehicleInput,
+  UpdateVehicleInput,
+  Vehicle,
+  VehiclesListParams,
+  VehiclesResponse,
+} from './types';
 
 export function getVehicles(params: VehiclesListParams) {
   const searchParams = new URLSearchParams();
@@ -25,4 +31,18 @@ export async function getVehicle(id: string): Promise<Vehicle> {
     response.json(),
   );
   return res;
+}
+
+export async function createVehicle(payload: CreateVehicleInput) {
+  return http<VehiclesResponse>('/vehicles', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateVehicle(payload: UpdateVehicleInput) {
+  return http(`/vehicles/${payload.id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
 }

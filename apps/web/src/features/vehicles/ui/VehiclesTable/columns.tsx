@@ -1,30 +1,26 @@
+import { ActionIcon, Group } from '@mantine/core';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Vehicle } from '../../types';
-import { IconPencil, IconTrash } from '@tabler/icons-react';
-import { Group } from '@mantine/core';
 
-export function createColumns(): ColumnDef<Vehicle>[] {
+type Props = {
+  onEdit?: (vehicle: Vehicle) => void;
+  onDelete?: (vehicle: Vehicle) => void;
+};
+
+export function createColumns({ onEdit, onDelete }: Props = {}): ColumnDef<Vehicle>[] {
   return [
-    {
-      accessorKey: 'vin',
-      header: 'VIN',
-      cell: (info) => info.getValue(),
-      enableSorting: false,
-    },
     {
       accessorKey: 'brand',
       header: 'Brand',
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: 'model',
       header: 'Model',
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: 'year',
       header: 'Year',
-      cell: (info) => info.getValue(),
     },
     {
       accessorKey: 'mileage',
@@ -38,23 +34,32 @@ export function createColumns(): ColumnDef<Vehicle>[] {
     },
     {
       id: 'actions',
-      enableSorting: false,
-      enableColumnFilter: false,
       header: '',
-      cell: () => {
-        // const vehicle = row.original;
+      enableSorting: false,
+      cell: ({ row }) => (
+        <Group gap="xs" wrap="nowrap">
+          <ActionIcon
+            variant="subtle"
+            onClick={(event) => {
+              event.stopPropagation();
+              onEdit?.(row.original);
+            }}
+          >
+            <IconEdit size={16} />
+          </ActionIcon>
 
-        return (
-          <Group>
-            <button>
-              <IconPencil size={16} />
-            </button>
-            <button>
-              <IconTrash size={16} />
-            </button>
-          </Group>
-        );
-      },
+          <ActionIcon
+            variant="subtle"
+            color="red"
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete?.(row.original);
+            }}
+          >
+            <IconTrash size={16} />
+          </ActionIcon>
+        </Group>
+      ),
     },
   ];
 }

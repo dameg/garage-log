@@ -1,4 +1,4 @@
-import { Loader } from '@mantine/core';
+import { Center, Loader } from '@mantine/core';
 import { useVehicle } from '../../hooks';
 import { Text } from '@mantine/core';
 
@@ -6,7 +6,11 @@ export function VehicleDetail({ id }: { id: string }) {
   const { data, isLoading, isError } = useVehicle(id);
 
   if (isLoading && !data) {
-    return <Loader />;
+    return (
+      <Center mih="100vh">
+        <Loader />
+      </Center>
+    );
   }
 
   if (isError) {

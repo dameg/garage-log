@@ -1,3 +1,3 @@
-export * from './ui/VehiclesList';
-export * from './ui/VehicleDetail';
+export * from './views/VehiclesList';
+export * from './views/VehicleDetail';
 export * from './hooks';
