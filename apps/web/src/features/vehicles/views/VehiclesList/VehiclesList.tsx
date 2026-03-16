@@ -23,6 +23,7 @@ export function VehiclesList() {
   const [formState, setFormState] = useState<VehicleFormState>({
     mode: 'closed',
   });
+
   const openCreateModal = () => {
     setFormState({ mode: 'create' });
   };
@@ -33,25 +34,6 @@ export function VehiclesList() {
 
   const closeFormModal = () => {
     setFormState({ mode: 'closed' });
-  };
-
-  const createVehicleMutation = useCreateVehicle();
-  const updateVehicleMutation = useUpdateVehicle();
-
-  const handleSubmitVehicle = async (values: CreateVehicleInput) => {
-    if (formState.mode === 'create') {
-      await createVehicleMutation.mutateAsync(values);
-      closeFormModal();
-      return;
-    }
-
-    if (formState.mode === 'edit' && formState.vehicle) {
-      await updateVehicleMutation.mutateAsync({
-        id: formState.vehicle.id,
-        payload: values,
-      });
-      closeFormModal();
-    }
   };
 
   const {
@@ -74,6 +56,25 @@ export function VehiclesList() {
     }),
     [tableParams, filters],
   );
+
+  const createVehicleMutation = useCreateVehicle(params);
+  const updateVehicleMutation = useUpdateVehicle(params);
+
+  const handleSubmitVehicle = async (values: CreateVehicleInput) => {
+    if (formState.mode === 'create') {
+      await createVehicleMutation.mutateAsync(values);
+      closeFormModal();
+      return;
+    }
+
+    if (formState.mode === 'edit' && formState.vehicle) {
+      await updateVehicleMutation.mutateAsync({
+        id: formState.vehicle.id,
+        payload: values,
+      });
+      closeFormModal();
+    }
+  };
 
   const query = useVehicles(params);
 
