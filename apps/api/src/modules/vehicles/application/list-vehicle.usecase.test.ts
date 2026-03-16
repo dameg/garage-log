@@ -42,7 +42,11 @@ describe('ListVehicleUseCase', () => {
 
   it('returns vehicles from repository', async () => {
     const vehicle = createVehicle(
-      new VehicleDomainBuilder().withId('v-1').withOwnerId('user-1').withName('E46').build(),
+      new VehicleDomainBuilder()
+        .withId('v-1')
+        .withOwnerId('user-1')
+        .withVin('7PB4MVCXD3PR45211')
+        .build(),
     );
 
     const repo = new SpyVehicleRepository({

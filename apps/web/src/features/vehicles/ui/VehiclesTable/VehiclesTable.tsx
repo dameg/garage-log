@@ -12,7 +12,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { columns } from './columns';
+import { createColumns } from './columns';
 import { useVehicles } from '../../hooks/useVehicles';
 import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
 import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSearchParams';
@@ -57,6 +57,17 @@ export function VehiclesTable() {
     totalPages,
   });
 
+  const columns = useMemo(
+    () => createColumns(),
+    //   {
+    //   onEdit: (id) => navigate(`/vehicles/${id}/edit`),
+    //   onDelete: (id) => {
+    //     console.log('delete vehicle', id);
+    //   },
+    // }
+    [],
+  );
+
   const table = useReactTable({
     data,
     columns,
@@ -84,7 +95,7 @@ export function VehiclesTable() {
           ))}
         </Table.Tr>
       )),
-    [pagination.pageSize],
+    [pagination.pageSize, columns],
   );
 
   if (query.isLoading && !query.data) {
@@ -100,7 +111,7 @@ export function VehiclesTable() {
       <Group align="end">
         <TextInput
           label="Search"
-          placeholder="Search by name, brand, model..."
+          placeholder="Search by VIN, Brand, Model..."
           value={searchInput}
           onChange={(event) => onSearchChange(event.currentTarget.value)}
         />
@@ -143,7 +154,7 @@ export function VehiclesTable() {
         </Button>
       </Group>
       <ScrollArea>
-        <Table striped highlightOnHover withTableBorder>
+        <Table striped highlightOnHover>
           <Table.Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Tr key={headerGroup.id}>

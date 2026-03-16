@@ -2,15 +2,15 @@ import { CreateVehicleBody } from '../../modules/vehicles/presentation/validatio
 
 export class VehicleHttpBuilder {
   private data: CreateVehicleBody = {
-    name: 'E46',
+    vin: '7PB4MVCXD3PR45211',
     brand: 'BMW',
     model: '330i',
     year: 2002,
     mileage: 250000,
   };
 
-  withName(name: string) {
-    this.data.name = name;
+  withVin(vin: string) {
+    this.data.vin = vin;
     return this;
   }
 

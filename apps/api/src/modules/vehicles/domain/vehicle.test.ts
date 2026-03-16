@@ -6,21 +6,21 @@ import { DomainError } from '../../../shared/errors/domain-error';
 describe('createVehicle (domain)', () => {
   it('creates a vehicle and trims string fields', () => {
     const input = new VehicleDomainBuilder()
-      .withName(' E46 ')
+      .withVin('7PB4MVCXD3PR45211')
       .withBrand(' BMW ')
       .withModel('  330i ')
       .build();
     const vehicle = createVehicle(input);
 
-    expect(vehicle.name).toBe('E46');
+    expect(vehicle.vin).toBe('7PB4MVCXD3PR45211');
     expect(vehicle.brand).toBe('BMW');
     expect(vehicle.model).toBe('330i');
     expect(vehicle.year).toBe(2002);
     expect(vehicle.mileage).toBe(250000);
   });
 
-  it('rejects empty name after trim', () => {
-    const input = new VehicleDomainBuilder().withName('   ').build();
+  it('rejects empty vin after trim', () => {
+    const input = new VehicleDomainBuilder().withVin('   ').build();
 
     expect(() => createVehicle(input)).toThrow(DomainError);
   });
@@ -66,7 +66,7 @@ describe('updateVehicle (domain)', () => {
 
     expect(updated.id).toBe(vehicle.id);
     expect(updated.ownerId).toBe(vehicle.ownerId);
-    expect(updated.name).toBe('E46');
+    expect(updated.vin).toBe('7PB4MVCXD3PR45211');
     expect(updated.brand).toBe('BMW');
     expect(updated.model).toBe('330i');
     expect(updated.year).toBe(2002);
@@ -78,7 +78,7 @@ describe('updateVehicle (domain)', () => {
     const vehicle = createVehicle(input);
 
     const updated = updateVehicle(vehicle, {
-      name: 'E46 Touring',
+      vin: '4ALGYGW1H1YP26659',
     });
 
     expect(updated.id).toBe(vehicle.id);
@@ -91,23 +91,23 @@ describe('updateVehicle (domain)', () => {
     const vehicle = createVehicle(input);
 
     const updated = updateVehicle(vehicle, {
-      name: '  E46 Touring  ',
+      vin: '  7PB4MVCXD3PR45211  ',
       brand: '  BMW  ',
       model: '  330Ci  ',
     });
 
-    expect(updated.name).toBe('E46 Touring');
+    expect(updated.vin).toBe('7PB4MVCXD3PR45211');
     expect(updated.brand).toBe('BMW');
     expect(updated.model).toBe('330Ci');
   });
 
-  it('rejects empty updated name after trim', () => {
+  it('rejects empty updated vin after trim', () => {
     const input = new VehicleDomainBuilder().build();
     const vehicle = createVehicle(input);
 
     expect(() =>
       updateVehicle(vehicle, {
-        name: '   ',
+        vin: '   ',
       }),
     ).toThrow(DomainError);
   });

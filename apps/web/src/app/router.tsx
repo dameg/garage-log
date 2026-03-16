@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AuthLayout, MainLayout } from '@/app/layouts';
-import { VehiclesPage } from '@/pages/Vehicles';
+import { VehicleDetailPage, VehiclesPage } from '@/pages/Vehicles';
 
 import { routes } from './routes';
 
@@ -37,10 +37,10 @@ export const router = createBrowserRouter([
             path: routes.vehicles.path,
             element: <VehiclesPage />,
           },
-          // {
-          //   path: routes.vehicles.detail.path,
-          //   element: <VehicleDetailPage />,
-          // },
+          {
+            path: routes.vehicles.detail.path,
+            element: <VehicleDetailPage />,
+          },
         ],
       },
     ],

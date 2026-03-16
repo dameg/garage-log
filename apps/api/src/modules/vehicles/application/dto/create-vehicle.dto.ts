@@ -1,6 +1,6 @@
 export type CreateVehicleInput = {
   ownerId: string;
-  name: string;
+  vin: string;
   brand: string;
   model: string;
   year: number;

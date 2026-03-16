@@ -5,7 +5,7 @@ export function toDomainVehicle(row: PrismaVehicle): Vehicle {
   return {
     id: row.id,
     ownerId: row.ownerId,
-    name: row.name,
+    vin: row.vin,
     brand: row.brand,
     model: row.model,
     year: row.year,

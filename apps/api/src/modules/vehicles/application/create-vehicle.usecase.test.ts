@@ -10,7 +10,7 @@ describe('CreateVehicleUseCase', () => {
 
     const result = await useCase.execute({
       ownerId: 'user-1',
-      name: 'E46',
+      vin: '7PB4MVCXD3PR45211',
       brand: 'BMW',
       model: '330i',
       year: 2002,
@@ -19,7 +19,7 @@ describe('CreateVehicleUseCase', () => {
 
     expect(result.id).toBeDefined();
     expect(result.ownerId).toBe('user-1');
-    expect(result.name).toBe('E46');
+    expect(result.vin).toBe('7PB4MVCXD3PR45211');
     expect(result.brand).toBe('BMW');
     expect(result.model).toBe('330i');
     expect(result.year).toBe(2002);

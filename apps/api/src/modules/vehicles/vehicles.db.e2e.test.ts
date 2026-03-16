@@ -42,7 +42,7 @@ describe('Vehicles (db e2e)', () => {
       expect.objectContaining({
         id: expect.any(String),
         ownerId: expect.any(String),
-        name: 'E46',
+        vin: '7PB4MVCXD3PR45211',
         brand: 'BMW',
         model: '330i',
         year: 2002,
@@ -61,7 +61,7 @@ describe('Vehicles (db e2e)', () => {
     expect(list.page).toBe(1);
     expect(list.limit).toBe(10);
     expect(list.data[0].id).toBe(created.id);
-    expect(list.data[0].name).toBe('E46');
+    expect(list.data[0].vin).toBe('7PB4MVCXD3PR45211');
   });
 
   it('returns vehicle by id for owner', async () => {
@@ -78,7 +78,7 @@ describe('Vehicles (db e2e)', () => {
       expect.objectContaining({
         id: created.id,
         ownerId: created.ownerId,
-        name: 'E46',
+        vin: '7PB4MVCXD3PR45211',
       }),
     );
   });
@@ -91,7 +91,7 @@ describe('Vehicles (db e2e)', () => {
     const created = createRes.json();
 
     const patchRes = await updateVehicle(app, user.cookie, created.id, {
-      name: 'E46 Touring',
+      vin: '4ALGYGW1H1YP26659',
       mileage: 260000,
     });
 
@@ -100,7 +100,7 @@ describe('Vehicles (db e2e)', () => {
       expect.objectContaining({
         id: created.id,
         ownerId: created.ownerId,
-        name: 'E46 Touring',
+        vin: '4ALGYGW1H1YP26659',
         mileage: 260000,
       }),
     );
@@ -124,11 +124,7 @@ describe('Vehicles (db e2e)', () => {
   it('returns 400 for invalid create body', async () => {
     const user = await registerAndGetCookie(app, 'user5@test.com');
 
-    const res = await createVehicle(
-      app,
-      user.cookie,
-      new VehicleHttpBuilder().withName('').build(),
-    );
+    const res = await createVehicle(app, user.cookie, new VehicleHttpBuilder().withVin('').build());
 
     expect(res.statusCode).toBe(400);
   });
@@ -168,7 +164,7 @@ describe('Vehicles (db e2e)', () => {
     const owner = await registerAndGetCookie(app, 'owner@test.com');
     const stranger = await registerAndGetCookie(app, 'stranger@test.com');
 
-    await createVehicle(app, owner.cookie, new VehicleHttpBuilder().withName('E30').build());
+    await createVehicle(app, owner.cookie, new VehicleHttpBuilder().withModel('340i').build());
 
     const listRes = await listVehicles(app, stranger.cookie);
 
@@ -199,7 +195,7 @@ describe('Vehicles (db e2e)', () => {
     const created = createRes.json();
 
     const patchRes = await updateVehicle(app, stranger.cookie, created.id, {
-      name: 'Hacked',
+      vin: 'Hacked',
     });
 
     expect(patchRes.statusCode).toBe(404);

@@ -14,7 +14,7 @@ datasource db {
 
 model Vehicle {
   id        String   @id
-  name      String
+  vin       String
   brand     String
   model     String
   year      Int

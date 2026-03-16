@@ -14,7 +14,7 @@ export class PrismaVehicleRepository implements VehicleRepository {
       data: {
         id: vehicle.id,
         ownerId: vehicle.ownerId,
-        name: vehicle.name,
+        vin: vehicle.vin,
         brand: vehicle.brand,
         model: vehicle.model,
         year: vehicle.year,

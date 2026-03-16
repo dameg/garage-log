@@ -8,6 +8,12 @@ export function buildVehicleWhere(query: VehicleListQuery) {
     ...(filters?.search && {
       OR: [
         {
+          vin: {
+            contains: filters.search,
+            mode: 'insensitive' as const,
+          },
+        },
+        {
           model: {
             contains: filters.search,
             mode: 'insensitive' as const,

@@ -35,7 +35,7 @@ describe('Vehicles (integration - in memory)', () => {
       expect.objectContaining({
         id: expect.any(String),
         ownerId: expect.any(String),
-        name: 'E46',
+        vin: '7PB4MVCXD3PR45211',
         brand: 'BMW',
         model: '330i',
         year: 2002,
@@ -54,7 +54,7 @@ describe('Vehicles (integration - in memory)', () => {
     expect(list.page).toBe(1);
     expect(list.limit).toBe(10);
     expect(list.data[0].id).toBe(created.id);
-    expect(list.data[0].name).toBe('E46');
+    expect(list.data[0].vin).toBe('7PB4MVCXD3PR45211');
   });
 
   it('returns vehicle by id', async () => {
@@ -70,7 +70,7 @@ describe('Vehicles (integration - in memory)', () => {
     expect(getRes.json()).toEqual(
       expect.objectContaining({
         id: created.id,
-        name: 'E46',
+        vin: '7PB4MVCXD3PR45211',
       }),
     );
   });
@@ -84,7 +84,7 @@ describe('Vehicles (integration - in memory)', () => {
 
     const patchRes = await updateVehicle(app, user.cookie, created.id, {
       mileage: 260000,
-      name: 'E46 Touring',
+      vin: '4ALGYGW1H1YP26659',
     });
 
     expect(patchRes.statusCode).toBe(200);
@@ -92,7 +92,7 @@ describe('Vehicles (integration - in memory)', () => {
       expect.objectContaining({
         id: created.id,
         mileage: 260000,
-        name: 'E46 Touring',
+        vin: '4ALGYGW1H1YP26659',
       }),
     );
   });
@@ -105,7 +105,7 @@ describe('Vehicles (integration - in memory)', () => {
     const created = createRes.json();
 
     const patchRes = await updateVehicle(app, stranger.cookie, created.id, {
-      name: 'Hacked',
+      vin: 'Hacked',
     });
 
     expect(patchRes.statusCode).toBe(404);
@@ -141,11 +141,7 @@ describe('Vehicles (integration - in memory)', () => {
   it('returns 400 for invalid create body', async () => {
     const user = await registerAndGetCookie(app);
 
-    const res = await createVehicle(
-      app,
-      user.cookie,
-      new VehicleHttpBuilder().withName('').build(),
-    );
+    const res = await createVehicle(app, user.cookie, new VehicleHttpBuilder().withVin('').build());
 
     expect(res.statusCode).toBe(400);
   });
@@ -185,7 +181,7 @@ describe('Vehicles (integration - in memory)', () => {
     const owner = await registerAndGetCookie(app, 'owner@test.com');
     const stranger = await registerAndGetCookie(app, 'stranger@test.com');
 
-    await createVehicle(app, owner.cookie, new VehicleHttpBuilder().withName('E30').build());
+    await createVehicle(app, owner.cookie, new VehicleHttpBuilder().withModel('340i').build());
 
     const listRes = await listVehicles(app, stranger.cookie);
 

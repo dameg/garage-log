@@ -6,7 +6,7 @@ export function MainLayout() {
   return (
     <AppShell
       padding="md"
-      navbar={{ width: 300, breakpoint: 'sm' }}
+      navbar={{ width: 250, breakpoint: 'sm' }}
       style={{ minHeight: '100dvh' }}
     >
       <AppShell.Navbar

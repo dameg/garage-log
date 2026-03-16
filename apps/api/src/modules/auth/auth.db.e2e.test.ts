@@ -96,7 +96,7 @@ describe('Auth (db e2e)', () => {
       url: '/api/auth/login',
       payload: {
         email: 'missing@test.com',
-        password: 'wrong',
+        password: 'wrong-password',
       },
     });
 

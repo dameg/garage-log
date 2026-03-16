@@ -1,5 +1,5 @@
-import { VehicleList } from '@/features/vehicles';
+import { VehiclesList } from '@/features/vehicles';
 
 export function VehiclesPage() {
-  return <VehicleList />;
+  return <VehiclesList />;
 }

@@ -21,14 +21,14 @@ describe('UpdateVehicleUseCase', () => {
       id: 'v-1',
       ownerId: 'user-1',
       patch: {
-        name: 'E46 Touring',
+        vin: '4ALGYGW1H1YP26659',
         mileage: 260000,
       },
     });
 
     expect(result.id).toBe('v-1');
     expect(result.ownerId).toBe('user-1');
-    expect(result.name).toBe('E46 Touring');
+    expect(result.vin).toBe('4ALGYGW1H1YP26659');
     expect(result.brand).toBe('BMW');
     expect(result.model).toBe('330i');
     expect(result.year).toBe(2002);

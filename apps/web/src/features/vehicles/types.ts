@@ -4,7 +4,7 @@ import type { SortParams } from '@/shared/types';
 export type Vehicle = {
   id: string;
   ownerId: string;
-  name: string;
+  vin: string;
   brand: string;
   model: string;
   year: number;
@@ -14,7 +14,7 @@ export type Vehicle = {
 
 export type VehiclesResponse = PaginatedResult<Vehicle>;
 
-export type VehiclesSortBy = 'createdAt' | 'name' | 'brand' | 'model' | 'year' | 'mileage';
+export type VehiclesSortBy = 'createdAt' | 'vin' | 'brand' | 'model' | 'year' | 'mileage';
 
 export type VehiclesListParams = SortParams<VehiclesSortBy> & {
   search?: string;

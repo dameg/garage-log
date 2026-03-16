@@ -15,7 +15,21 @@ import { UnauthorizedError } from './shared/errors/unauthorized-error';
 
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
-    logger: env.NODE_ENV === 'test' ? false : { level: env.LOG_LEVEL },
+    logger:
+      env.NODE_ENV === 'test'
+        ? false
+        : {
+            level: env.LOG_LEVEL,
+            transport: {
+              target: 'pino-pretty',
+              options: {
+                translateTime: 'HH:MM:ss',
+                ignore: 'pid,hostname',
+                colorize: true,
+                singleLine: false,
+              },
+            },
+          },
   });
 
   app.setErrorHandler((err, req, reply) => {

@@ -6,7 +6,7 @@ export type VehicleId = string;
 export type Vehicle = {
   id: VehicleId;
   ownerId: string;
-  name: string;
+  vin: string;
   brand: string;
   model: string;
   year: number;
@@ -18,7 +18,7 @@ export type CreateVehicleProps = Omit<Vehicle, 'createdAt'> & {
   createdAt?: Date;
 };
 
-export type UpdatableVehicleFields = Pick<Vehicle, 'name' | 'brand' | 'model' | 'year' | 'mileage'>;
+export type UpdatableVehicleFields = Pick<Vehicle, 'vin' | 'brand' | 'model' | 'year' | 'mileage'>;
 
 export type UpdateVehiclePatch = Partial<UpdatableVehicleFields>;
 
@@ -35,7 +35,7 @@ function assertMileage(mileage: number) {
 }
 
 export function createVehicle(props: CreateVehicleProps): Vehicle {
-  const name = normalizeRequiredString('Vehicle name', props.name);
+  const vin = normalizeRequiredString('Vehicle vin', props.vin);
   const brand = normalizeRequiredString('Vehicle brand', props.brand);
   const model = normalizeRequiredString('Vehicle model', props.model);
 
@@ -49,7 +49,7 @@ export function createVehicle(props: CreateVehicleProps): Vehicle {
   return {
     id: props.id,
     ownerId: props.ownerId,
-    name,
+    vin,
     brand,
     model,
     year: props.year,
@@ -61,8 +61,8 @@ export function createVehicle(props: CreateVehicleProps): Vehicle {
 export function updateVehicle(vehicle: Vehicle, patch: UpdateVehiclePatch): Vehicle {
   const next: Vehicle = { ...vehicle, ...patch };
 
-  if (patch.name !== undefined) {
-    next.name = normalizeRequiredString('Vehicle name', patch.name);
+  if (patch.vin !== undefined) {
+    next.vin = normalizeRequiredString('Vehicle vin', patch.vin);
   }
 
   if (patch.brand !== undefined) {

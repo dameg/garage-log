@@ -5,7 +5,7 @@ export class VehicleDomainBuilder {
   private data: CreateVehicleProps = {
     id: randomUUID(),
     ownerId: randomUUID(),
-    name: 'E46',
+    vin: '7PB4MVCXD3PR45211',
     brand: 'BMW',
     model: '330i',
     year: 2002,
@@ -23,8 +23,8 @@ export class VehicleDomainBuilder {
     return this;
   }
 
-  withName(name: string) {
-    this.data.name = name;
+  withVin(vin: string) {
+    this.data.vin = vin;
     return this;
   }
 

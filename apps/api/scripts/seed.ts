@@ -63,14 +63,14 @@ async function main() {
 
   const vehicles = [];
 
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 7000; i++) {
     const owner = faker.helpers.arrayElement(users);
 
     vehicles.push({
       id: randomUUID(),
       brand: faker.vehicle.manufacturer(),
       model: faker.vehicle.model(),
-      name: faker.vehicle.vin(),
+      vin: faker.vehicle.vin(),
       year: faker.number.int({ min: 1995, max: 2024 }),
       mileage: faker.number.int({ min: 0, max: 250000 }),
       ownerId: owner.id,

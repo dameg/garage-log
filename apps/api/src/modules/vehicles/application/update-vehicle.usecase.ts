@@ -5,7 +5,7 @@ import { UpdateVehicleInput } from './dto/update-vehicle.dto';
 
 function toUpdatableFields(vehicle: Vehicle): UpdatableVehicleFields {
   return {
-    name: vehicle.name,
+    vin: vehicle.vin,
     brand: vehicle.brand,
     model: vehicle.model,
     year: vehicle.year,

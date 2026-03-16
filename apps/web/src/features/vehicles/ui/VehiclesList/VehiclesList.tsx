@@ -1,5 +1,5 @@
 import { VehiclesTable } from '../VehiclesTable';
 
-export function VehicleList() {
+export function VehiclesList() {
   return <VehiclesTable />;
 }
