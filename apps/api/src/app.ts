@@ -93,6 +93,7 @@ export async function buildApp(deps?: Deps) {
       if (!origin) return cb(null, true);
       cb(null, env.FRONTEND_URLS.includes(origin));
     },
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
 

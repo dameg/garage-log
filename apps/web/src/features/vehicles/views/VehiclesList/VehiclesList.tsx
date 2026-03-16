@@ -9,7 +9,7 @@ import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSe
 import { useVehiclesSearch } from '../../hooks/useVehiclesSearch';
 import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
 import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
-import type { Vehicle, VehicleInput } from '../../types';
+import type { CreateVehicleInput, Vehicle } from '../../types';
 import { VehicleForm } from '../../ui/VehicleForm';
 import { useCreateVehicle } from '../../hooks/useCreateVehicle';
 import { useUpdateVehicle } from '../../hooks/useUpdateVehicle';
@@ -38,7 +38,7 @@ export function VehiclesList() {
   const createVehicleMutation = useCreateVehicle();
   const updateVehicleMutation = useUpdateVehicle();
 
-  const handleSubmitVehicle = async (values: VehicleInput) => {
+  const handleSubmitVehicle = async (values: CreateVehicleInput) => {
     if (formState.mode === 'create') {
       await createVehicleMutation.mutateAsync(values);
       closeFormModal();
@@ -46,7 +46,10 @@ export function VehiclesList() {
     }
 
     if (formState.mode === 'edit' && formState.vehicle) {
-      await updateVehicleMutation.mutateAsync({ id: formState.vehicle.id, ...values });
+      await updateVehicleMutation.mutateAsync({
+        id: formState.vehicle.id,
+        payload: values,
+      });
       closeFormModal();
     }
   };
@@ -146,6 +149,7 @@ export function VehiclesList() {
         centered
       >
         <VehicleForm
+          key={formState.mode === 'edit' ? formState.vehicle.id : 'create-vehicle'}
           mode={formState.mode === 'closed' ? 'create' : formState.mode}
           vehicle={formState.mode === 'edit' ? formState.vehicle : null}
           isSubmitting={createVehicleMutation.isPending || updateVehicleMutation.isPending}

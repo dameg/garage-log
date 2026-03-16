@@ -1,14 +1,14 @@
 import { Button, NumberInput, TextInput, Stack, Group } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
-import { vehicleSchema, type Vehicle, type VehicleFormValues } from '../../types';
+import { createVehicleSchema, type CreateVehicleInput, type Vehicle } from '../../types';
 
-type Props = {
-  mode: 'create' | 'edit';
-  vehicle: Vehicle | null;
-  isSubmitting: boolean;
-  onClose: () => void;
-  onSubmit: (values: VehicleFormValues) => void;
+type VehicleFormValues = {
+  vin: string;
+  brand: string;
+  model: string;
+  year: number | undefined;
+  mileage: number | undefined;
 };
 
 const EMPTY_VALUES: VehicleFormValues = {
@@ -19,26 +19,40 @@ const EMPTY_VALUES: VehicleFormValues = {
   mileage: undefined,
 };
 
+function getInitialValues(vehicle: Vehicle | null): VehicleFormValues {
+  if (!vehicle) {
+    return EMPTY_VALUES;
+  }
+
+  return {
+    vin: vehicle.vin,
+    brand: vehicle.brand,
+    model: vehicle.model,
+    year: vehicle.year,
+    mileage: vehicle.mileage,
+  };
+}
+
+type Props = {
+  mode: 'create' | 'edit';
+  vehicle: Vehicle | null;
+  isSubmitting: boolean;
+  onClose: () => void;
+  onSubmit: (values: CreateVehicleInput) => void;
+};
+
 export function VehicleForm({ mode, vehicle, isSubmitting, onSubmit, onClose }: Props) {
-  console.log(vehicle);
   const form = useForm<VehicleFormValues>({
-    initialValues:
-      mode === 'create'
-        ? EMPTY_VALUES
-        : vehicle
-          ? {
-              vin: vehicle.vin,
-              brand: vehicle.brand,
-              model: vehicle.model,
-              year: vehicle.year,
-              mileage: vehicle.mileage,
-            }
-          : EMPTY_VALUES,
-    validate: zod4Resolver(vehicleSchema),
+    initialValues: mode === 'create' ? EMPTY_VALUES : getInitialValues(vehicle),
+    validate: zod4Resolver(createVehicleSchema),
   });
 
   return (
-    <form onSubmit={form.onSubmit(onSubmit)}>
+    <form
+      onSubmit={form.onSubmit((values) => {
+        onSubmit(createVehicleSchema.parse(values));
+      })}
+    >
       <Stack>
         <TextInput
           label="VIN"

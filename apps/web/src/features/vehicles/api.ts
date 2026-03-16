@@ -34,14 +34,14 @@ export async function getVehicle(id: string): Promise<Vehicle> {
 }
 
 export async function createVehicle(payload: CreateVehicleInput) {
-  return http<VehiclesResponse>('/vehicles', {
+  return http<Vehicle>('/vehicles', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
 }
 
-export async function updateVehicle(payload: UpdateVehicleInput) {
-  return http(`/vehicles/${payload.id}`, {
+export async function updateVehicle({ id, payload }: UpdateVehicleInput) {
+  return http<Vehicle>(`/vehicles/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(payload),
   });

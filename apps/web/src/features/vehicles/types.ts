@@ -27,7 +27,7 @@ export type VehiclesListParams = SortParams<VehiclesSortBy> & {
   limit: number;
 };
 
-export const vehicleSchema = z.object({
+export const createVehicleSchema = z.object({
   vin: z.string().min(1),
   brand: z.string().min(1),
   model: z.string().min(1),
@@ -35,14 +35,9 @@ export const vehicleSchema = z.object({
   mileage: z.number().int(),
 });
 
-export type CreateVehicleInput = z.infer<typeof vehicleSchema>;
+export type CreateVehicleInput = z.infer<typeof createVehicleSchema>;
 
-export type UpdateVehicleInput = { id: string } & CreateVehicleInput;
-
-export type VehicleFormValues = {
-  vin: string;
-  brand: string;
-  model: string;
-  year: number | undefined;
-  mileage: number | undefined;
+export type UpdateVehicleInput = {
+  id: Vehicle['id'];
+  payload: CreateVehicleInput;
 };
