@@ -1,8 +1,8 @@
 import type { PaginationState, SortingState } from '@tanstack/react-table';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { SortDirection } from '@/shared/types/sorting';
 import type { VehiclesListParams, VehiclesSortBy } from '../types';
-import { useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;

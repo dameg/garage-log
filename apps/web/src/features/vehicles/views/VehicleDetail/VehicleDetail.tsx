@@ -1,6 +1,5 @@
-import { Center, Loader } from '@mantine/core';
-import { useVehicle } from '../../hooks';
-import { Text } from '@mantine/core';
+import { Center, Loader, Text } from '@mantine/core';
+import { useVehicle } from '../../hooks/useVehicle';
 
 export function VehicleDetail({ id }: { id: string }) {
   const { data, isLoading, isError } = useVehicle(id);

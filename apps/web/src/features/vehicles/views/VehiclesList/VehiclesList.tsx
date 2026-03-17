@@ -1,25 +1,29 @@
 import { useMemo, useState } from 'react';
 import { Button, Center, Divider, Group, Loader, Modal, Text, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
+
+import { useCreateVehicle } from '../../hooks/useCreateVehicle';
+import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
+import { useUpdateVehicle } from '../../hooks/useUpdateVehicle';
+import { useVehicles } from '../../hooks/useVehicles';
+import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSearchParams';
+import { useVehiclesTextSearch } from '../../hooks/useVehiclesTextSearch';
+import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
+import type { CreateVehicleInput, Vehicle, VehicleRangeFilters } from '../../types';
+import { VehicleForm } from '../../ui/VehicleForm';
 import { VehiclesFilters } from '../../ui/VehiclesFilters';
 import { VehiclesTable } from '../../ui/VehiclesTable';
-
-import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
-import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
-import type { CreateVehicleInput, Vehicle } from '../../types';
-import { VehicleForm } from '../../ui/VehicleForm';
-import {
-  useCreateVehicle,
-  useUpdateVehicle,
-  useVehiclesTextSearch,
-  useVehiclesFiltersSearchParams,
-  useVehicles,
-} from '../../hooks/';
 
 type VehicleFormState =
   | { mode: 'closed' }
   | { mode: 'create' }
   | { mode: 'edit'; vehicle: Vehicle };
+
+function getVehicleFiltersFormKey(filters: VehicleRangeFilters) {
+  return [filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo]
+    .map((value) => value ?? '')
+    .join(':');
+}
 
 export function VehiclesList() {
   const [formState, setFormState] = useState<VehicleFormState>({
@@ -70,6 +74,7 @@ export function VehiclesList() {
     }),
     [filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo],
   );
+  const filtersFormKey = getVehicleFiltersFormKey(filterInitialValues);
 
   const createVehicleMutation = useCreateVehicle(params);
   const updateVehicleMutation = useUpdateVehicle(params);
@@ -133,13 +138,11 @@ export function VehiclesList() {
       <Divider my="md" />
 
       <VehiclesFilters
-        key={`${filterInitialValues.yearFrom ?? ''}:${filterInitialValues.yearTo ?? ''}:${filterInitialValues.mileageFrom ?? ''}:${filterInitialValues.mileageTo ?? ''}`}
+        key={filtersFormKey}
         searchInput={searchInput}
         onSearchChange={onSearchChange}
         initialValues={filterInitialValues}
-        onSubmit={(values) => {
-          setRangeFilters(values);
-        }}
+        onSubmit={setRangeFilters}
         onReset={() => {
           resetSearch();
           resetFilters();

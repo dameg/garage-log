@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { vehiclesQueries } from '../queries/vehicles.queries';
 import type { VehiclesListParams } from '../types';
+import { vehiclesQueries } from '../queries/vehicles.queries';
 
-export const useVehicles = (params: VehiclesListParams) => {
+export function useVehicles(params: VehiclesListParams) {
   return useQuery(vehiclesQueries.list(params));
-};
+}

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -8,6 +8,10 @@ export function useVehiclesTextSearch(
 ) {
   const [searchInput, setSearchInput] = useState(initialValue);
   const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    setSearchInput(initialValue);
+  }, [initialValue]);
 
   const onSearchChange = (value: string) => {
     setSearchInput(value);

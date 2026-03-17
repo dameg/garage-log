@@ -63,6 +63,7 @@ export function VehiclesFilters({
           />
 
           <Button
+            type="button"
             variant="default"
             onClick={() => {
               form.reset();

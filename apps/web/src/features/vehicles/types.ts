@@ -10,7 +10,7 @@ export type Vehicle = {
   model: string;
   year: number;
   mileage: number;
-  createdAt: Date;
+  createdAt: string;
 };
 
 export type VehiclesResponse = PaginatedResult<Vehicle>;
