@@ -11,6 +11,11 @@ type Props = {
 export function createColumns({ onEdit, onDelete }: Props = {}): ColumnDef<Vehicle>[] {
   return [
     {
+      accessorKey: 'vin',
+      header: 'VIN',
+      enableSorting: false,
+    },
+    {
       accessorKey: 'brand',
       header: 'Brand',
     },
