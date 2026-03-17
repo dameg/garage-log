@@ -1,4 +1,4 @@
-import { Button, Divider, Group, NumberInput, TextInput } from '@mantine/core';
+import { Button, Divider, Group, NumberInput, SimpleGrid, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import {
@@ -28,54 +28,66 @@ export function VehiclesFilters({
   });
 
   return (
-    <>
-      <TextInput
-        label="Search"
-        placeholder="Search by VIN, Brand, Model..."
-        value={searchInput}
-        onChange={(event) => onSearchChange(event.currentTarget.value)}
-      />
-      <Divider my="md" />
-      <form
-        onSubmit={form.onSubmit((values) => {
-          onSubmit(vehicleRangeFiltersSchema.parse(values));
-        })}
-      >
-        <Group align="end" wrap="wrap">
-          <NumberInput
-            label="Year from"
-            placeholder="e.g. 2010"
-            {...form.getInputProps('yearFrom')}
-          />
+    <Stack gap="md">
+      <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="xl" verticalSpacing="md">
+        <TextInput
+          label="Search"
+          placeholder="Search by VIN, Brand, Model..."
+          value={searchInput}
+          onChange={(event) => onSearchChange(event.currentTarget.value)}
+        />
 
-          <NumberInput label="Year to" placeholder="e.g. 2020" {...form.getInputProps('yearTo')} />
+        <form
+          onSubmit={form.onSubmit((values) => {
+            onSubmit(vehicleRangeFiltersSchema.parse(values));
+          })}
+        >
+          <Stack gap="md">
+            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md" verticalSpacing="md">
+              <NumberInput
+                label="Year from"
+                placeholder="e.g. 2010"
+                {...form.getInputProps('yearFrom')}
+              />
 
-          <NumberInput
-            label="Mileage from"
-            placeholder="e.g. 50000"
-            {...form.getInputProps('mileageFrom')}
-          />
+              <NumberInput
+                label="Year to"
+                placeholder="e.g. 2020"
+                {...form.getInputProps('yearTo')}
+              />
 
-          <NumberInput
-            label="Mileage to"
-            placeholder="e.g. 150000"
-            {...form.getInputProps('mileageTo')}
-          />
+              <NumberInput
+                label="Mileage from"
+                placeholder="e.g. 50000"
+                {...form.getInputProps('mileageFrom')}
+              />
 
-          <Button
-            type="button"
-            variant="default"
-            onClick={() => {
-              form.reset();
-              onReset();
-            }}
-          >
-            Reset
-          </Button>
+              <NumberInput
+                label="Mileage to"
+                placeholder="e.g. 150000"
+                {...form.getInputProps('mileageTo')}
+              />
+            </SimpleGrid>
 
-          <Button type="submit">Filter</Button>
-        </Group>
-      </form>
-    </>
+            <Group justify="flex-end">
+              <Button
+                type="button"
+                variant="default"
+                onClick={() => {
+                  form.reset();
+                  onReset();
+                }}
+              >
+                Reset
+              </Button>
+
+              <Button type="submit">Filter</Button>
+            </Group>
+          </Stack>
+        </form>
+      </SimpleGrid>
+
+      <Divider />
+    </Stack>
   );
 }
