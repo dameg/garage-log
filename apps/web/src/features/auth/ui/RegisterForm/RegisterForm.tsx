@@ -1,9 +1,9 @@
 import { Anchor, Button, PasswordInput, TextInput, Title, Text } from '@mantine/core';
-import classes from './AuthForm.module.css';
-import { useLogin } from '../hooks/useLogin';
+import { classes } from '../AuthForm';
+import { useLogin } from '../../hooks/useLogin';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
-import { loginSchema } from '../types';
+import { loginSchema } from '../../types';
 import { Link } from 'react-router-dom';
 import { routes } from '@/app/routes';
 

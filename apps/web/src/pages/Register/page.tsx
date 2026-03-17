@@ -1,5 +1,5 @@
-import { RegisterForm } from '@/features/auth';
+import { Register } from '@/features/auth';
 
 export function RegisterPage() {
-  return <RegisterForm />;
+  return <Register />;
 }
