@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { Loader, Center } from '@mantine/core';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import { routes } from '@/app/routes';
 
 export function PublicOnlyRoute() {

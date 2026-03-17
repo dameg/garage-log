@@ -27,6 +27,28 @@ export type VehiclesListParams = SortParams<VehiclesSortBy> & {
   limit: number;
 };
 
+export const vehicleRangeFiltersSchema = z.object({
+  yearFrom: z
+    .union([z.literal(''), z.number().int().min(1886, 'Year must be at least 1886')])
+    .optional()
+    .transform((value) => (value === '' ? undefined : value)),
+  yearTo: z
+    .union([z.literal(''), z.number().int().min(1886, 'Year must be at least 1886')])
+    .optional()
+    .transform((value) => (value === '' ? undefined : value)),
+  mileageFrom: z
+    .union([z.literal(''), z.number().int().min(0, 'Mileage cannot be negative')])
+    .optional()
+    .transform((value) => (value === '' ? undefined : value)),
+  mileageTo: z
+    .union([z.literal(''), z.number().int().min(0, 'Mileage cannot be negative')])
+    .optional()
+    .transform((value) => (value === '' ? undefined : value)),
+});
+
+export type VehicleRangeFilters = z.output<typeof vehicleRangeFiltersSchema>;
+export type VehicleRangeFiltersFormValues = z.input<typeof vehicleRangeFiltersSchema>;
+
 export const createVehicleSchema = z.object({
   vin: z.string().min(1),
   brand: z.string().min(1),

@@ -1,4 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
+import type { VehicleRangeFilters } from '../types';
 
 const EMPTY = '';
 
@@ -29,63 +30,25 @@ export function useVehiclesFiltersSearchParams() {
     }
 
     nextParams.set('page', '1');
-
     setSearchParams(nextParams, { replace: true });
   };
 
-  const setYearFrom = (value?: number) => {
+  const setRangeFilters = ({ yearFrom, yearTo, mileageFrom, mileageTo }: VehicleRangeFilters) => {
     const nextParams = new URLSearchParams(searchParams);
 
-    if (value != null) {
-      nextParams.set('yearFrom', String(value));
-    } else {
-      nextParams.delete('yearFrom');
-    }
+    if (yearFrom != null) nextParams.set('yearFrom', String(yearFrom));
+    else nextParams.delete('yearFrom');
+
+    if (yearTo != null) nextParams.set('yearTo', String(yearTo));
+    else nextParams.delete('yearTo');
+
+    if (mileageFrom != null) nextParams.set('mileageFrom', String(mileageFrom));
+    else nextParams.delete('mileageFrom');
+
+    if (mileageTo != null) nextParams.set('mileageTo', String(mileageTo));
+    else nextParams.delete('mileageTo');
 
     nextParams.set('page', '1');
-
-    setSearchParams(nextParams, { replace: true });
-  };
-
-  const setYearTo = (value?: number) => {
-    const nextParams = new URLSearchParams(searchParams);
-
-    if (value != null) {
-      nextParams.set('yearTo', String(value));
-    } else {
-      nextParams.delete('yearTo');
-    }
-
-    nextParams.set('page', '1');
-
-    setSearchParams(nextParams, { replace: true });
-  };
-
-  const setMileageFrom = (value?: number) => {
-    const nextParams = new URLSearchParams(searchParams);
-
-    if (value != null) {
-      nextParams.set('mileageFrom', String(value));
-    } else {
-      nextParams.delete('mileageFrom');
-    }
-
-    nextParams.set('page', '1');
-
-    setSearchParams(nextParams, { replace: true });
-  };
-
-  const setMileageTo = (value?: number) => {
-    const nextParams = new URLSearchParams(searchParams);
-
-    if (value != null) {
-      nextParams.set('mileageTo', String(value));
-    } else {
-      nextParams.delete('mileageTo');
-    }
-
-    nextParams.set('page', '1');
-
     setSearchParams(nextParams, { replace: true });
   };
 
@@ -97,7 +60,6 @@ export function useVehiclesFiltersSearchParams() {
     nextParams.delete('yearTo');
     nextParams.delete('mileageFrom');
     nextParams.delete('mileageTo');
-
     nextParams.set('page', '1');
 
     setSearchParams(nextParams, { replace: true });
@@ -112,10 +74,7 @@ export function useVehiclesFiltersSearchParams() {
       mileageTo,
     },
     setSearch,
-    setYearFrom,
-    setYearTo,
-    setMileageFrom,
-    setMileageTo,
+    setRangeFilters,
     resetFilters,
   };
 }

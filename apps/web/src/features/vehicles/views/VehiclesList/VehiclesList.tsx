@@ -1,18 +1,20 @@
 import { useMemo, useState } from 'react';
 import { Button, Center, Divider, Group, Loader, Modal, Text, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-
 import { VehiclesFilters } from '../../ui/VehiclesFilters';
 import { VehiclesTable } from '../../ui/VehiclesTable';
-import { useVehicles } from '../../hooks/useVehicles';
-import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSearchParams';
-import { useVehiclesSearch } from '../../hooks/useVehiclesSearch';
+
 import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
 import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
 import type { CreateVehicleInput, Vehicle } from '../../types';
 import { VehicleForm } from '../../ui/VehicleForm';
-import { useCreateVehicle } from '../../hooks/useCreateVehicle';
-import { useUpdateVehicle } from '../../hooks/useUpdateVehicle';
+import {
+  useCreateVehicle,
+  useUpdateVehicle,
+  useVehiclesTextSearch,
+  useVehiclesFiltersSearchParams,
+  useVehicles,
+} from '../../hooks/';
 
 type VehicleFormState =
   | { mode: 'closed' }
@@ -44,10 +46,12 @@ export function VehiclesList() {
     setSorting,
   } = useVehiclesTableSearchParams();
 
-  const { filters, setSearch, setYearFrom, setYearTo, setMileageFrom, setMileageTo, resetFilters } =
-    useVehiclesFiltersSearchParams();
+  const { filters, setSearch, setRangeFilters, resetFilters } = useVehiclesFiltersSearchParams();
 
-  const { searchInput, onSearchChange, resetSearch } = useVehiclesSearch(filters.search, setSearch);
+  const { searchInput, onSearchChange, resetSearch } = useVehiclesTextSearch(
+    filters.search,
+    setSearch,
+  );
 
   const params = useMemo(
     () => ({
@@ -57,8 +61,25 @@ export function VehiclesList() {
     [tableParams, filters],
   );
 
+  const filterInitialValues = useMemo(
+    () => ({
+      yearFrom: filters.yearFrom,
+      yearTo: filters.yearTo,
+      mileageFrom: filters.mileageFrom,
+      mileageTo: filters.mileageTo,
+    }),
+    [filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo],
+  );
+
   const createVehicleMutation = useCreateVehicle(params);
   const updateVehicleMutation = useUpdateVehicle(params);
+  const isFormModalOpen = formState.mode !== 'closed';
+  const formModalTitle =
+    formState.mode === 'create'
+      ? 'Create vehicle'
+      : formState.mode === 'edit'
+        ? 'Edit vehicle'
+        : undefined;
 
   const handleSubmitVehicle = async (values: CreateVehicleInput) => {
     if (formState.mode === 'create') {
@@ -112,16 +133,13 @@ export function VehiclesList() {
       <Divider my="md" />
 
       <VehiclesFilters
+        key={`${filterInitialValues.yearFrom ?? ''}:${filterInitialValues.yearTo ?? ''}:${filterInitialValues.mileageFrom ?? ''}:${filterInitialValues.mileageTo ?? ''}`}
         searchInput={searchInput}
         onSearchChange={onSearchChange}
-        yearFrom={filters.yearFrom}
-        yearTo={filters.yearTo}
-        mileageFrom={filters.mileageFrom}
-        mileageTo={filters.mileageTo}
-        onYearFromChange={setYearFrom}
-        onYearToChange={setYearTo}
-        onMileageFromChange={setMileageFrom}
-        onMileageToChange={setMileageTo}
+        initialValues={filterInitialValues}
+        onSubmit={(values) => {
+          setRangeFilters(values);
+        }}
         onReset={() => {
           resetSearch();
           resetFilters();
@@ -144,19 +162,21 @@ export function VehiclesList() {
       />
 
       <Modal
-        opened={formState.mode !== 'closed'}
+        opened={isFormModalOpen}
         onClose={closeFormModal}
-        title={formState.mode === 'create' ? 'Create vehicle' : 'Edit vehicle'}
+        title={formModalTitle}
         centered
       >
-        <VehicleForm
-          key={formState.mode === 'edit' ? formState.vehicle.id : 'create-vehicle'}
-          mode={formState.mode === 'closed' ? 'create' : formState.mode}
-          vehicle={formState.mode === 'edit' ? formState.vehicle : null}
-          isSubmitting={createVehicleMutation.isPending || updateVehicleMutation.isPending}
-          onSubmit={handleSubmitVehicle}
-          onClose={closeFormModal}
-        />
+        {isFormModalOpen ? (
+          <VehicleForm
+            key={formState.mode === 'edit' ? formState.vehicle.id : 'create-vehicle'}
+            mode={formState.mode}
+            vehicle={formState.mode === 'edit' ? formState.vehicle : null}
+            isSubmitting={createVehicleMutation.isPending || updateVehicleMutation.isPending}
+            onSubmit={handleSubmitVehicle}
+            onClose={closeFormModal}
+          />
+        ) : null}
       </Modal>
     </>
   );
