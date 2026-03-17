@@ -1,11 +1,12 @@
 import { Anchor, Button, PasswordInput, TextInput, Title, Text } from '@mantine/core';
-import { classes } from '../AuthForm';
-import { useLogin } from '../../hooks/useLogin';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
-import { loginSchema } from '../../types';
 import { Link } from 'react-router-dom';
+
 import { routes } from '@/app/routes';
+import { useLogin } from '../../hooks/useLogin';
+import { loginSchema } from '../../types';
+import { classes } from '../AuthForm';
 
 export function LoginForm() {
   const loginMutation = useLogin();
@@ -17,6 +18,7 @@ export function LoginForm() {
     },
     validate: zod4Resolver(loginSchema),
   });
+
   return (
     <form onSubmit={form.onSubmit((values) => loginMutation.mutate(values))}>
       <Title ta="center" className={classes.title}>

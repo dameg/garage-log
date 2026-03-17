@@ -1,2 +1,2 @@
-export * from './views/VehiclesList';
-export * from './views/VehicleDetail';
+export * from './views/VehiclesList/VehiclesList';
+export * from './views/VehicleDetail/VehicleDetail';

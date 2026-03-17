@@ -1,14 +1,16 @@
 import { Anchor, Button, PasswordInput, TextInput, Title, Text } from '@mantine/core';
-import { classes } from '../AuthForm';
-import { useLogin } from '../../hooks/useLogin';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
-import { loginSchema } from '../../types';
 import { Link } from 'react-router-dom';
+
 import { routes } from '@/app/routes';
+import { useRegister } from '../../hooks/useRegister';
+import { loginSchema } from '../../types';
+import { classes } from '../AuthForm';
 
 export function RegisterForm() {
-  const loginMutation = useLogin();
+  const registerMutation = useRegister();
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -16,8 +18,9 @@ export function RegisterForm() {
     },
     validate: zod4Resolver(loginSchema),
   });
+
   return (
-    <form onSubmit={form.onSubmit((values) => loginMutation.mutate(values))}>
+    <form onSubmit={form.onSubmit((values) => registerMutation.mutate(values))}>
       <Title ta="center" className={classes.title}>
         Register
       </Title>
