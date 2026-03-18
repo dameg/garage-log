@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { ListVehicleUseCase } from './list-vehicle.usecase';
+import { ListVehiclesUseCase } from './list-vehicles.usecase';
 import { SpyVehicleRepository } from '../../../test/doubles/in-memory/spy-vehicle.repository';
 import { createVehicle } from '../domain/vehicle';
 import { VehicleDomainBuilder } from '../../../test/builders/vehicle.domain.builder';
 
-describe('ListVehicleUseCase', () => {
+describe('ListVehiclesUseCase', () => {
   it('maps input into repository query', async () => {
     const repo = new SpyVehicleRepository();
-    const useCase = new ListVehicleUseCase(repo);
+    const useCase = new ListVehiclesUseCase(repo);
 
     await useCase.execute({
       ownerId: 'user-1',
@@ -56,7 +56,7 @@ describe('ListVehicleUseCase', () => {
       limit: 10,
     });
 
-    const useCase = new ListVehicleUseCase(repo);
+    const useCase = new ListVehiclesUseCase(repo);
 
     const result = await useCase.execute({
       ownerId: 'user-1',
@@ -81,7 +81,7 @@ describe('ListVehicleUseCase', () => {
 
   it('passes empty optional filters as undefined', async () => {
     const repo = new SpyVehicleRepository();
-    const useCase = new ListVehicleUseCase(repo as any);
+    const useCase = new ListVehiclesUseCase(repo as any);
 
     await useCase.execute({
       ownerId: 'user-1',

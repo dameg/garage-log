@@ -2,7 +2,7 @@ import { VehicleListQuery } from '../domain/vehicle-list.query';
 import type { VehicleRepository } from '../domain/vehicle.repository';
 import { ListVehiclesInput } from './dto/list-vehicles.dto';
 
-export class ListVehicleUseCase {
+export class ListVehiclesUseCase {
   constructor(private readonly repo: VehicleRepository) {}
 
   async execute(input: ListVehiclesInput) {
