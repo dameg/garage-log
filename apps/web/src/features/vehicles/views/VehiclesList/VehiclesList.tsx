@@ -183,7 +183,15 @@ export function VehiclesList() {
         onEdit={openEditModal}
       />
 
-      <Modal opened={isEditorModalOpen} onClose={closeModal} title={editorModalTitle} centered>
+      <Modal
+        opened={isEditorModalOpen}
+        onClose={closeModal}
+        title={editorModalTitle}
+        centered
+        withCloseButton={false}
+        closeOnClickOutside={!(createVehicleMutation.isPending || updateVehicleMutation.isPending)}
+        closeOnEscape={!(createVehicleMutation.isPending || updateVehicleMutation.isPending)}
+      >
         {isEditorModalOpen ? (
           <VehicleForm
             key={modalState.mode === 'edit' ? modalState.vehicle.id : 'create-vehicle'}
@@ -201,6 +209,7 @@ export function VehiclesList() {
         onClose={closeModal}
         title="Delete vehicle"
         centered
+        withCloseButton={false}
         closeOnClickOutside={!deleteVehicleMutation.isPending}
         closeOnEscape={!deleteVehicleMutation.isPending}
       >

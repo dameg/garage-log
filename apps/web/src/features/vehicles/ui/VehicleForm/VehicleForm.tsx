@@ -65,7 +65,7 @@ export function VehicleForm({ mode, vehicle, isSubmitting, onSubmit, onClose }: 
         <NumberInput label="Mileage" placeholder="e.g. 245000" {...form.getInputProps('mileage')} />
 
         <Group justify="flex-end">
-          <Button variant="default" onClick={onClose}>
+          <Button variant="default" onClick={onClose} disabled={isSubmitting}>
             Cancel
           </Button>
 
