@@ -1,5 +1,5 @@
 import { mutationOptions } from '@tanstack/react-query';
-import { createVehicle, updateVehicle } from '../api';
+import { createVehicle, deleteVehicle, updateVehicle } from '../api';
 
 export const vehiclesMutations = {
   createVehicle: () =>
@@ -9,5 +9,9 @@ export const vehiclesMutations = {
   updateVehicle: () =>
     mutationOptions({
       mutationFn: updateVehicle,
+    }),
+  deleteVehicle: () =>
+    mutationOptions({
+      mutationFn: deleteVehicle,
     }),
 };

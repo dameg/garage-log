@@ -13,11 +13,13 @@ import type { CreateVehicleInput, Vehicle, VehicleRangeFilters } from '../../typ
 import { VehicleForm } from '../../ui/VehicleForm';
 import { VehiclesFilters } from '../../ui/VehiclesFilters';
 import { VehiclesTable } from '../../ui/VehiclesTable';
+import { useDeleteVehicle } from '../../hooks/useDeleteVehicle';
 
-type VehicleFormState =
+type VehicleModalState =
   | { mode: 'closed' }
   | { mode: 'create' }
-  | { mode: 'edit'; vehicle: Vehicle };
+  | { mode: 'edit'; vehicle: Vehicle }
+  | { mode: 'delete'; vehicle: Vehicle };
 
 function getVehicleFiltersFormKey(filters: VehicleRangeFilters) {
   return [filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo]
@@ -26,20 +28,24 @@ function getVehicleFiltersFormKey(filters: VehicleRangeFilters) {
 }
 
 export function VehiclesList() {
-  const [formState, setFormState] = useState<VehicleFormState>({
+  const [modalState, setModalState] = useState<VehicleModalState>({
     mode: 'closed',
   });
 
   const openCreateModal = () => {
-    setFormState({ mode: 'create' });
+    setModalState({ mode: 'create' });
   };
 
   const openEditModal = (vehicle: Vehicle) => {
-    setFormState({ mode: 'edit', vehicle });
+    setModalState({ mode: 'edit', vehicle });
   };
 
-  const closeFormModal = () => {
-    setFormState({ mode: 'closed' });
+  const openDeleteModal = (vehicle: Vehicle) => {
+    setModalState({ mode: 'delete', vehicle });
+  };
+
+  const closeModal = () => {
+    setModalState({ mode: 'closed' });
   };
 
   const {
@@ -78,28 +84,41 @@ export function VehiclesList() {
 
   const createVehicleMutation = useCreateVehicle(params);
   const updateVehicleMutation = useUpdateVehicle(params);
-  const isFormModalOpen = formState.mode !== 'closed';
-  const formModalTitle =
-    formState.mode === 'create'
+  const deleteVehicleMutation = useDeleteVehicle(params);
+
+  const isEditorModalOpen = modalState.mode == 'edit' || modalState.mode == 'create';
+
+  const editorModalTitle =
+    modalState.mode === 'create'
       ? 'Create vehicle'
-      : formState.mode === 'edit'
+      : modalState.mode === 'edit'
         ? 'Edit vehicle'
         : undefined;
 
+  const isDeleteModalOpen = modalState.mode === 'delete';
+  const deleteTarget = modalState.mode === 'delete' ? modalState.vehicle : null;
+
   const handleSubmitVehicle = async (values: CreateVehicleInput) => {
-    if (formState.mode === 'create') {
+    if (modalState.mode === 'create') {
       await createVehicleMutation.mutateAsync(values);
-      closeFormModal();
+      closeModal();
       return;
     }
 
-    if (formState.mode === 'edit' && formState.vehicle) {
+    if (modalState.mode === 'edit' && modalState.vehicle) {
       await updateVehicleMutation.mutateAsync({
-        id: formState.vehicle.id,
+        id: modalState.vehicle.id,
         payload: values,
       });
-      closeFormModal();
+      closeModal();
     }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteTarget) return;
+
+    await deleteVehicleMutation.mutateAsync(deleteTarget.id);
+    closeModal();
   };
 
   const query = useVehicles(params);
@@ -160,25 +179,51 @@ export function VehiclesList() {
         setPagination={setPagination}
         setSorting={setSorting}
         isFetching={query.isFetching}
-        onDelete={() => console.log('Delete')}
+        onDelete={openDeleteModal}
         onEdit={openEditModal}
       />
 
-      <Modal
-        opened={isFormModalOpen}
-        onClose={closeFormModal}
-        title={formModalTitle}
-        centered
-      >
-        {isFormModalOpen ? (
+      <Modal opened={isEditorModalOpen} onClose={closeModal} title={editorModalTitle} centered>
+        {isEditorModalOpen ? (
           <VehicleForm
-            key={formState.mode === 'edit' ? formState.vehicle.id : 'create-vehicle'}
-            mode={formState.mode}
-            vehicle={formState.mode === 'edit' ? formState.vehicle : null}
+            key={modalState.mode === 'edit' ? modalState.vehicle.id : 'create-vehicle'}
+            mode={modalState.mode}
+            vehicle={modalState.mode === 'edit' ? modalState.vehicle : null}
             isSubmitting={createVehicleMutation.isPending || updateVehicleMutation.isPending}
             onSubmit={handleSubmitVehicle}
-            onClose={closeFormModal}
+            onClose={closeModal}
           />
+        ) : null}
+      </Modal>
+
+      <Modal
+        opened={isDeleteModalOpen}
+        onClose={closeModal}
+        title="Delete vehicle"
+        centered
+        closeOnClickOutside={!deleteVehicleMutation.isPending}
+        closeOnEscape={!deleteVehicleMutation.isPending}
+      >
+        {isDeleteModalOpen && deleteTarget ? (
+          <>
+            <Text>{`Delete ${deleteTarget.brand} ${deleteTarget.model} (VIN: ${deleteTarget.vin})?`}</Text>
+            <Group mt="md">
+              <Button
+                variant="outline"
+                onClick={closeModal}
+                disabled={deleteVehicleMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                color="red"
+                loading={deleteVehicleMutation.isPending}
+                onClick={handleConfirmDelete}
+              >
+                Delete
+              </Button>
+            </Group>
+          </>
         ) : null}
       </Modal>
     </>

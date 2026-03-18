@@ -46,3 +46,9 @@ export async function updateVehicle({ id, payload }: UpdateVehicleInput) {
     body: JSON.stringify(payload),
   });
 }
+
+export async function deleteVehicle(id: string) {
+  return http<void>(`/vehicles/${id}`, {
+    method: 'DELETE',
+  });
+}
