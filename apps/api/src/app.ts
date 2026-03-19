@@ -12,6 +12,7 @@ import { NotFoundError } from './shared/errors/not-found-error';
 import { ConflictError } from './shared/errors/conflict-error';
 import { authModule } from './modules/auth/auth.module';
 import { UnauthorizedError } from './shared/errors/unauthorized-error';
+import { closePrisma } from './shared/db/prisma';
 
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
@@ -97,7 +98,19 @@ export async function buildApp(deps?: Deps) {
     credentials: true,
   });
 
-  app.get('/health', async () => ({ ok: true }));
+  app.get('/health', async () => {
+    const redis = await app.deps.redisService.ping();
+
+    return {
+      ok: true,
+      redis,
+    };
+  });
+
+  app.addHook('onClose', async () => {
+    await app.deps.redisService.quit();
+    await closePrisma();
+  });
 
   await app.register(
     async (api) => {

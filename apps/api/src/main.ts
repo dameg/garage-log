@@ -18,7 +18,7 @@ async function start() {
     app.log.info(`Received ${signal}, shutting down...`);
 
     await app.close();
-    await closePrisma();
+
     process.exit(0);
   };
 
