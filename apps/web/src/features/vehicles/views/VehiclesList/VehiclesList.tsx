@@ -154,7 +154,7 @@ export function VehiclesList() {
         </Button>
       </Group>
 
-      <Divider my="md" />
+      <Divider mb="md" />
 
       <VehiclesFilters
         key={filtersFormKey}
@@ -167,8 +167,6 @@ export function VehiclesList() {
           resetFilters();
         }}
       />
-
-      <Divider my="md" />
 
       <VehiclesTable
         data={data}

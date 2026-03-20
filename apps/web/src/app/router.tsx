@@ -6,9 +6,13 @@ import { routes } from './routes';
 
 import { LoginPage } from '@/pages/Login';
 import { RegisterPage } from '@/pages/Register';
-import { ProtectedRoute, PublicOnlyRoute } from '@/features/auth';
+import { ProtectedRoute, PublicOnlyRoute, RootRedirect } from '@/features/auth';
 
 export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootRedirect />,
+  },
   {
     element: <PublicOnlyRoute />,
     children: [

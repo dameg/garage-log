@@ -1,8 +1,15 @@
 {
   "private": true,
   "scripts": {
+    "dev": "pnpm --parallel --stream --filter api --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev:api:seed": "pnpm db:up && pnpm --filter api seed",
+    "dev:web": "pnpm --filter web dev",
+    "dev:full": "pnpm db:up && pnpm dev",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f",
+    "dev:reset": "pnpm db:down && pnpm db:up && pnpm dev",
     "format": "prettier . --write"
   },
   "devDependencies": {

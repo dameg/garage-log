@@ -1,4 +1,4 @@
-import { Button, Divider, Group, NumberInput, SimpleGrid, Stack, TextInput } from '@mantine/core';
+import { Button, Group, NumberInput, SimpleGrid, Stack, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import {
@@ -29,65 +29,95 @@ export function VehiclesFilters({
 
   return (
     <Stack gap="md">
-      <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="xl" verticalSpacing="md">
-        <TextInput
-          label="Search"
-          placeholder="Search by VIN, Brand, Model..."
-          value={searchInput}
-          onChange={(event) => onSearchChange(event.currentTarget.value)}
-        />
+      <TextInput
+        label="Search"
+        name="search"
+        autoComplete="off"
+        placeholder="Search by VIN, brand, model…"
+        value={searchInput}
+        onChange={(event) => onSearchChange(event.currentTarget.value)}
+      />
 
-        <form
-          onSubmit={form.onSubmit((values) => {
-            onSubmit(vehicleRangeFiltersSchema.parse(values));
-          })}
-        >
-          <Stack gap="md">
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md" verticalSpacing="md">
+      <form
+        onSubmit={form.onSubmit((values) => {
+          onSubmit(vehicleRangeFiltersSchema.parse(values));
+        })}
+      >
+        <Stack gap="md">
+          <Stack gap="xs">
+            <Text size="sm" fw={500}>
+              Year
+            </Text>
+
+            <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="md">
               <NumberInput
-                label="Year from"
-                placeholder="e.g. 2010"
+                label="From"
+                name="yearFrom"
+                autoComplete="off"
+                inputMode="numeric"
+                placeholder="2010"
+                hideControls
                 {...form.getInputProps('yearFrom')}
               />
 
               <NumberInput
-                label="Year to"
-                placeholder="e.g. 2020"
+                label="To"
+                name="yearTo"
+                autoComplete="off"
+                inputMode="numeric"
+                placeholder="2020"
+                hideControls
                 {...form.getInputProps('yearTo')}
               />
+            </SimpleGrid>
+          </Stack>
 
+          <Stack gap="xs">
+            <Text size="sm" fw={500}>
+              Mileage
+            </Text>
+
+            <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="md">
               <NumberInput
-                label="Mileage from"
-                placeholder="e.g. 50000"
+                label="From"
+                name="mileageFrom"
+                autoComplete="off"
+                inputMode="numeric"
+                placeholder="50 000"
+                thousandSeparator=" "
+                hideControls
                 {...form.getInputProps('mileageFrom')}
               />
 
               <NumberInput
-                label="Mileage to"
-                placeholder="e.g. 150000"
+                label="To"
+                name="mileageTo"
+                autoComplete="off"
+                inputMode="numeric"
+                placeholder="150 000"
+                thousandSeparator=" "
+                hideControls
                 {...form.getInputProps('mileageTo')}
               />
             </SimpleGrid>
-
-            <Group justify="flex-end">
-              <Button
-                type="button"
-                variant="default"
-                onClick={() => {
-                  form.reset();
-                  onReset();
-                }}
-              >
-                Reset
-              </Button>
-
-              <Button type="submit">Filter</Button>
-            </Group>
           </Stack>
-        </form>
-      </SimpleGrid>
 
-      <Divider />
+          <Group justify="flex-end">
+            <Button
+              type="button"
+              variant="default"
+              onClick={() => {
+                form.reset();
+                onReset();
+              }}
+            >
+              Reset
+            </Button>
+
+            <Button type="submit">Apply filters</Button>
+          </Group>
+        </Stack>
+      </form>
     </Stack>
   );
 }
