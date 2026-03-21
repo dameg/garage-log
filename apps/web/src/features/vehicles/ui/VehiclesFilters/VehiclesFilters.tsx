@@ -34,6 +34,7 @@ export function VehiclesFilters({
         name="search"
         autoComplete="off"
         placeholder="Search by VIN, brand, model…"
+        w={{ base: '100%', sm: 'calc(50% - var(--mantine-spacing-md) / 2)' }}
         value={searchInput}
         onChange={(event) => onSearchChange(event.currentTarget.value)}
       />

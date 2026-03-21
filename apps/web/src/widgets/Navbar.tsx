@@ -13,6 +13,7 @@ import { NavLink } from 'react-router-dom';
 
 import { navigation } from '@/app/config';
 import { useLogout } from '@/features/auth/hooks/useLogout';
+import { ColorSchemeToggle } from './ColorSchemeToggle';
 
 type Props = {
   onNavigate?: () => void;
@@ -104,6 +105,10 @@ export function Navbar({ onNavigate }: Props) {
       </Box>
 
       <Box pt="md" mt="md" style={{ borderTop: '1px solid var(--mantine-color-default-border)' }}>
+        <Box mb="xs">
+          <ColorSchemeToggle showLabel={showLabels} />
+        </Box>
+
         <Tooltip label="Logout" position="right" disabled={showLabels}>
           <UnstyledButton
             onClick={() => {

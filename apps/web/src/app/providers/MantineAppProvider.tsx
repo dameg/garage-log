@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { MantineProvider, createTheme } from '@mantine/core';
+import { MantineProvider, createTheme, localStorageColorSchemeManager } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 const theme = createTheme({
@@ -7,9 +7,17 @@ const theme = createTheme({
   defaultRadius: 'md',
 });
 
+const colorSchemeManager = localStorageColorSchemeManager({
+  key: 'garage-log-color-scheme',
+});
+
 export function MantineAppProvider({ children }: PropsWithChildren) {
   return (
-    <MantineProvider theme={theme} defaultColorScheme="dark">
+    <MantineProvider
+      theme={theme}
+      colorSchemeManager={colorSchemeManager}
+      defaultColorScheme="auto"
+    >
       <Notifications position="top-right" />
       {children}
     </MantineProvider>
