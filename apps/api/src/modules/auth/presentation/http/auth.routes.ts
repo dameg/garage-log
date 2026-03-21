@@ -5,11 +5,47 @@ import { createAuthServices } from '../../auth.factory';
 import { registerUserHttpSchema } from '../validation/register-user.schema';
 import { loginUserHttpSchema } from '../validation/login-user.schema';
 import { clearAuthCookie, setAuthCookie } from '../../../../shared/auth/auth-cookies';
+import { UnauthorizedError } from '../../../../shared/errors/unauthorized-error';
+import {
+  authResponseSchema,
+  conflictErrorResponseSchema,
+  internalServerErrorResponseSchema,
+  toOpenApiSchema,
+  unauthorizedErrorResponseSchema,
+  validationErrorResponseSchema,
+} from '../../../../shared/http/openapi';
 
 export async function authRoutes(app: FastifyInstance) {
   const { registerUserUseCase, loginUserUseCase } = createAuthServices(app);
 
-  app.post('/register', async (req, reply) => {
+  app.post('/register', {
+    schema: {
+      tags: ['Auth'],
+      operationId: 'registerUser',
+      summary: 'Register a user',
+      description:
+        'Creates a new user account and immediately sets the `access_token` auth cookie used by protected endpoints.',
+      body: toOpenApiSchema(registerUserHttpSchema),
+      response: {
+        201: {
+          description: 'User registered successfully',
+          ...authResponseSchema,
+        },
+        400: {
+          description: 'Validation error',
+          ...validationErrorResponseSchema,
+        },
+        409: {
+          description: 'User already exists',
+          ...conflictErrorResponseSchema,
+        },
+        500: {
+          description: 'Unexpected error',
+          ...internalServerErrorResponseSchema,
+        },
+      },
+    },
+  }, async (req, reply) => {
     const body = registerUserHttpSchema.parse(req.body);
 
     const user = await registerUserUseCase.execute(body);
@@ -29,7 +65,34 @@ export async function authRoutes(app: FastifyInstance) {
     });
   });
 
-  app.post('/login', async (req, reply) => {
+  app.post('/login', {
+    schema: {
+      tags: ['Auth'],
+      operationId: 'loginUser',
+      summary: 'Log in',
+      description:
+        'Authenticates a user and sets the `access_token` auth cookie used by protected endpoints.',
+      body: toOpenApiSchema(loginUserHttpSchema),
+      response: {
+        200: {
+          description: 'User logged in successfully',
+          ...authResponseSchema,
+        },
+        400: {
+          description: 'Validation error',
+          ...validationErrorResponseSchema,
+        },
+        401: {
+          description: 'Invalid credentials',
+          ...unauthorizedErrorResponseSchema,
+        },
+        500: {
+          description: 'Unexpected error',
+          ...internalServerErrorResponseSchema,
+        },
+      },
+    },
+  }, async (req, reply) => {
     const body = loginUserHttpSchema.parse(req.body);
 
     const user = await loginUserUseCase.execute(body);
@@ -49,13 +112,35 @@ export async function authRoutes(app: FastifyInstance) {
     });
   });
 
-  app.get('/me', { preHandler: requireAuth }, async (req, reply) => {
+  app.get('/me', {
+    preHandler: requireAuth,
+    schema: {
+      tags: ['Auth'],
+      operationId: 'getCurrentUser',
+      summary: 'Get current user',
+      description:
+        'Returns the currently authenticated user. This endpoint requires the `access_token` cookie returned by `/api/auth/register` or `/api/auth/login`.',
+      security: [{ cookieAuth: [] }],
+      response: {
+        200: {
+          description: 'Authenticated user',
+          ...authResponseSchema,
+        },
+        401: {
+          description: 'Unauthorized',
+          ...unauthorizedErrorResponseSchema,
+        },
+        500: {
+          description: 'Unexpected error',
+          ...internalServerErrorResponseSchema,
+        },
+      },
+    },
+  }, async (req, reply) => {
     const user = await app.deps.usersRepo.findById(req.user.sub);
 
     if (!user) {
-      return reply.code(401).send({
-        message: 'Unauthorized',
-      });
+      throw new UnauthorizedError();
     }
 
     return reply.code(200).send({
@@ -66,7 +151,19 @@ export async function authRoutes(app: FastifyInstance) {
     });
   });
 
-  app.post('/logout', async (_req, reply) => {
+  app.post('/logout', {
+    schema: {
+      tags: ['Auth'],
+      operationId: 'logoutUser',
+      summary: 'Log out',
+      description: 'Clears the `access_token` auth cookie for the current session.',
+      response: {
+        204: {
+          description: 'Logged out successfully',
+        },
+      },
+    },
+  }, async (_req, reply) => {
     clearAuthCookie(reply);
 
     return reply.code(204).send();

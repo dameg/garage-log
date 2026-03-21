@@ -1,11 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { UnauthorizedError } from '../errors/unauthorized-error';
 
-export async function requireAuth(req: FastifyRequest, reply: FastifyReply) {
+export async function requireAuth(req: FastifyRequest, _reply: FastifyReply) {
   try {
     await req.jwtVerify();
   } catch {
-    return reply.code(401).send({
-      message: 'Unauthorized',
-    });
+    throw new UnauthorizedError('Authentication required');
   }
 }

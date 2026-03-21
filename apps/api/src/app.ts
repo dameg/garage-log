@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import swagger from '@fastify/swagger';
 import { env } from './shared/config';
 import { vehiclesModule } from './modules/vehicles/vehicles.module';
 import { diPlugin } from './shared/di/di.plugin';
@@ -13,6 +14,8 @@ import { ConflictError } from './shared/errors/conflict-error';
 import { authModule } from './modules/auth/auth.module';
 import { UnauthorizedError } from './shared/errors/unauthorized-error';
 import { closePrisma } from './shared/db/prisma';
+import scalar from '@scalar/fastify-api-reference';
+import { enhanceOpenApiDocument, healthResponseSchema } from './shared/http/openapi';
 
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
@@ -98,7 +101,63 @@ export async function buildApp(deps?: Deps) {
     credentials: true,
   });
 
-  app.get('/health', async () => {
+  await app.register(swagger, {
+    hideUntagged: true,
+    transformObject: (documentObject) =>
+      'openapiObject' in documentObject
+        ? enhanceOpenApiDocument(documentObject.openapiObject ?? {})
+        : (documentObject.swaggerObject ?? {}),
+    openapi: {
+      openapi: '3.0.3',
+      info: {
+        title: 'GarageLog API',
+        description: [
+          'API documentation for the GarageLog backend.',
+          '',
+          'Authentication uses an `access_token` cookie.',
+          '1. Call `POST /api/auth/register` or `POST /api/auth/login`.',
+          '2. Reuse the returned cookie for protected `/api/vehicles/*` endpoints.',
+          '3. Call `POST /api/auth/logout` to clear the session.',
+        ].join('\n'),
+        version: '1.0.0',
+      },
+      servers: [
+        {
+          url: '/',
+          description: 'Current server origin',
+        },
+      ],
+      tags: [
+        { name: 'System', description: 'System and operational endpoints' },
+        { name: 'Auth', description: 'Authentication endpoints' },
+        { name: 'Vehicles', description: 'Vehicle management endpoints' },
+      ],
+      components: {
+        securitySchemes: {
+          cookieAuth: {
+            type: 'apiKey',
+            in: 'cookie',
+            name: 'access_token',
+            description: 'JWT auth cookie returned by the login and register endpoints.',
+          },
+        },
+      },
+    },
+  });
+
+  app.get('/health', {
+    schema: {
+      tags: ['System'],
+      summary: 'Health check',
+      description: 'Checks whether the API and Redis are reachable.',
+      response: {
+        200: {
+          description: 'Service is healthy',
+          ...healthResponseSchema,
+        },
+      },
+    },
+  }, async () => {
     const redis = await app.deps.redisService.ping();
 
     return {
@@ -119,6 +178,21 @@ export async function buildApp(deps?: Deps) {
     },
     { prefix: '/api' },
   );
+
+  app.get('/openapi.json', {
+    schema: {
+      hide: true,
+    },
+  }, async () => app.swagger());
+
+  await app.register(scalar, {
+    routePrefix: '/docs',
+    configuration: {
+      title: 'GarageLog API Reference',
+      url: '/openapi.json',
+      theme: 'kepler',
+    },
+  });
 
   return app;
 }
