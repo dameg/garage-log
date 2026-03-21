@@ -1,6 +1,6 @@
 import type { UpdateVehiclePatch, Vehicle } from './vehicle';
-import { VehicleListQuery } from './vehicle-list.query';
-import { PaginatedResult } from './paginated-result';
+import type { VehicleListQuery } from './vehicle-list.query';
+import type { PaginatedResult } from '../../../shared/domain/paginated-result';
 
 export interface VehicleRepository {
   create(vehicle: Vehicle): Promise<Vehicle>;

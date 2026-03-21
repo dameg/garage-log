@@ -1,6 +1,6 @@
-import { PaginatedResult } from '../../domain/paginated-result';
+import type { PaginatedResult } from '../../../../shared/domain/paginated-result';
 import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';
-import { VehicleListQuery } from '../../domain/vehicle-list.query';
+import type { VehicleListQuery } from '../../domain/vehicle-list.query';
 import type { VehicleRepository } from '../../domain/vehicle.repository';
 import type { PrismaClient } from '@prisma/client';
 import { buildVehicleWhere } from './build-vehicle-where';

@@ -1,5 +1,5 @@
-import { Vehicle } from '../../../modules/vehicles/domain/vehicle';
-import { VehicleListQuery } from '../../../modules/vehicles/domain/vehicle-list.query';
+import type { Vehicle } from '../../../modules/vehicles/domain/vehicle';
+import type { VehicleListQuery } from '../../../modules/vehicles/domain/vehicle-list.query';
 
 export function sortVehicles(vehicles: Vehicle[], query: VehicleListQuery): Vehicle[] {
   const { field, direction } = query.sort;

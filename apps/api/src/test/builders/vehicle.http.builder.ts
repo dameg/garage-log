@@ -1,4 +1,4 @@
-import { CreateVehicleBody } from '../../modules/vehicles/presentation/validation/create-vehicle.schema';
+import type { CreateVehicleBody } from '../../modules/vehicles/presentation/validation/create-vehicle.schema';
 
 export class VehicleHttpBuilder {
   private data: CreateVehicleBody = {

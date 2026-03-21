@@ -1,7 +1,7 @@
-import { VehicleRepository } from '../../../modules/vehicles/domain/vehicle.repository';
-import { VehicleListQuery } from '../../../modules/vehicles/domain/vehicle-list.query';
-import { Vehicle } from '../../../modules/vehicles/domain/vehicle';
-import { PaginatedResult } from '../../../modules/vehicles/domain/paginated-result';
+import type { VehicleRepository } from '../../../modules/vehicles/domain/vehicle.repository';
+import type { VehicleListQuery } from '../../../modules/vehicles/domain/vehicle-list.query';
+import type { Vehicle } from '../../../modules/vehicles/domain/vehicle';
+import type { PaginatedResult } from '../../../shared/domain/paginated-result';
 
 export class SpyVehicleRepository implements VehicleRepository {
   public lastListQuery: VehicleListQuery | null = null;

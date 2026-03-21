@@ -1,7 +1,7 @@
 import { NotFoundError } from '../../../shared/errors/not-found-error';
 import { updateVehicle, type UpdatableVehicleFields, type Vehicle } from '../domain/vehicle';
 import type { VehicleRepository } from '../domain/vehicle.repository';
-import { UpdateVehicleInput } from './dto/update-vehicle.dto';
+import type { UpdateVehicleInput } from './dto/update-vehicle.dto';
 
 function toUpdatableFields(vehicle: Vehicle): UpdatableVehicleFields {
   return {

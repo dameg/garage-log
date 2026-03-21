@@ -1,6 +1,6 @@
 import 'fastify';
 import type { Deps } from './types';
-import Redis from 'ioredis';
+import type Redis from 'ioredis';
 
 declare module 'fastify' {
   interface FastifyInstance {

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { createVehicle, Vehicle } from '../domain/vehicle';
+import { createVehicle, type Vehicle } from '../domain/vehicle';
 import type { VehicleRepository } from '../domain/vehicle.repository';
 import type { CreateVehicleInput } from './dto/create-vehicle.dto';
 

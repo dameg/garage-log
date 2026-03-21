@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify';
+import type { FastifyInstance } from 'fastify';
 import { CreateVehicleUseCase } from './application/create-vehicle.usecase';
 import { ListVehiclesUseCase } from './application/list-vehicles.usecase';
 import { GetVehicleUseCase } from './application/get-vehicle.usecase';

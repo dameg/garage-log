@@ -1,5 +1,5 @@
-import { createUser, normalizeEmail, User } from '../domain/user';
-import { UserRepository } from '../domain/user.repository';
+import { createUser, normalizeEmail, type User } from '../domain/user';
+import type { UserRepository } from '../domain/user.repository';
 import type { RegisterUserInput } from './dto/register.dto';
 import { randomUUID } from 'crypto';
 import * as bcrypt from 'bcrypt';

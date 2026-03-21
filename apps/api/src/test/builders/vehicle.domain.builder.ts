@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { CreateVehicleProps } from '../../modules/vehicles/domain/vehicle';
+import type { CreateVehicleProps } from '../../modules/vehicles/domain/vehicle';
 
 export class VehicleDomainBuilder {
   private data: CreateVehicleProps = {

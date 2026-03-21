@@ -1,6 +1,6 @@
-import { VehicleRepository } from '../domain/vehicle.repository';
+import type { VehicleRepository } from '../domain/vehicle.repository';
 import { NotFoundError } from '../../../shared/errors/not-found-error';
-import { Vehicle } from '../domain/vehicle';
+import type { Vehicle } from '../domain/vehicle';
 export class GetVehicleUseCase {
   constructor(private readonly repo: VehicleRepository) {}
 

@@ -1,4 +1,4 @@
-import { VehicleListQuery } from '../../domain/vehicle-list.query';
+import type { VehicleListQuery } from '../../domain/vehicle-list.query';
 
 export function buildVehicleWhere(query: VehicleListQuery) {
   const { ownerId, filters } = query;
