@@ -16,6 +16,7 @@ import { UnauthorizedError } from './shared/errors/unauthorized-error';
 import { closePrisma } from './shared/db/prisma';
 import scalar from '@scalar/fastify-api-reference';
 import { enhanceOpenApiDocument, healthResponseSchema } from './shared/http/openapi';
+import { RateLimitExceededError } from './shared/errors/rate-limit-error';
 
 export async function buildApp(deps?: Deps) {
   const app = Fastify({
@@ -69,6 +70,13 @@ export async function buildApp(deps?: Deps) {
       });
     }
 
+    if (err instanceof RateLimitExceededError) {
+      return reply.code(429).header('Retry-After', err.retryAfterSec.toString()).send({
+        error: 'Too Many Requests',
+        message: err.message,
+      });
+    }
+
     req.log.error({ err }, 'Unhandled error');
 
     return reply.code(500).send({
@@ -118,6 +126,7 @@ export async function buildApp(deps?: Deps) {
           '1. Call `POST /api/auth/register` or `POST /api/auth/login`.',
           '2. Reuse the returned cookie for protected `/api/vehicles/*` endpoints.',
           '3. Call `POST /api/auth/logout` to clear the session.',
+          'Rate-limited endpoints return `429 Too Many Requests` and include a `Retry-After` header.',
         ].join('\n'),
         version: '1.0.0',
       },
@@ -129,8 +138,12 @@ export async function buildApp(deps?: Deps) {
       ],
       tags: [
         { name: 'System', description: 'System and operational endpoints' },
-        { name: 'Auth', description: 'Authentication endpoints' },
-        { name: 'Vehicles', description: 'Vehicle management endpoints' },
+        { name: 'Auth', description: 'Authentication endpoints. Login attempts are rate-limited.' },
+        {
+          name: 'Vehicles',
+          description:
+            'Vehicle management endpoints protected by authentication and API rate limiting.',
+        },
       ],
       components: {
         securitySchemes: {
@@ -145,26 +158,30 @@ export async function buildApp(deps?: Deps) {
     },
   });
 
-  app.get('/health', {
-    schema: {
-      tags: ['System'],
-      summary: 'Health check',
-      description: 'Checks whether the API and Redis are reachable.',
-      response: {
-        200: {
-          description: 'Service is healthy',
-          ...healthResponseSchema,
+  app.get(
+    '/health',
+    {
+      schema: {
+        tags: ['System'],
+        summary: 'Health check',
+        description: 'Checks whether the API and Redis are reachable.',
+        response: {
+          200: {
+            description: 'Service is healthy',
+            ...healthResponseSchema,
+          },
         },
       },
     },
-  }, async () => {
-    const redis = await app.deps.redisService.ping();
+    async () => {
+      const redis = await app.deps.redisService.ping();
 
-    return {
-      ok: true,
-      redis,
-    };
-  });
+      return {
+        ok: true,
+        redis,
+      };
+    },
+  );
 
   app.addHook('onClose', async () => {
     await app.deps.redisService.quit();
@@ -179,11 +196,15 @@ export async function buildApp(deps?: Deps) {
     { prefix: '/api' },
   );
 
-  app.get('/openapi.json', {
-    schema: {
-      hide: true,
+  app.get(
+    '/openapi.json',
+    {
+      schema: {
+        hide: true,
+      },
     },
-  }, async () => app.swagger());
+    async () => app.swagger(),
+  );
 
   await app.register(scalar, {
     routePrefix: '/docs',

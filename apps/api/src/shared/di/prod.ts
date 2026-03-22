@@ -6,6 +6,11 @@ import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/p
 import { createRedisClient } from '../redis/redis';
 import { RedisService } from '../redis/redis.service';
 
+import { RedisTokenBucketRepository } from '../rate-limit/infrastructure/redis/redis-token-bucket.repository';
+import { RedisSlidingWindowRepository } from '../rate-limit/infrastructure/redis/redis-sliding-window.repository';
+import { ConsumeTokenBucketUseCase } from '../rate-limit/application/consume-token-bucket.usecase';
+import { CheckSlidingWindowUseCase } from '../rate-limit/application/check-sliding-window.usecase';
+
 let prodDeps: Deps | null = null;
 
 export function createProdDeps(): Deps {
@@ -17,10 +22,17 @@ export function createProdDeps(): Deps {
 
   const redisClient = createRedisClient(env.REDIS_URL ?? 'redis://localhost:6379');
 
+  const redisService = new RedisService(redisClient);
+
+  const tokenBucketRepository = new RedisTokenBucketRepository(redisService);
+  const slidingWindowRepository = new RedisSlidingWindowRepository(redisService);
+
   prodDeps = {
-    redisService: new RedisService(redisClient),
+    redisService,
     vehiclesRepo: new PrismaVehicleRepository(prisma),
     usersRepo: new PrismaUserRepository(prisma),
+    consumeTokenBucketUseCase: new ConsumeTokenBucketUseCase(tokenBucketRepository),
+    checkSlidingWindowUseCase: new CheckSlidingWindowUseCase(slidingWindowRepository),
   };
 
   return prodDeps;

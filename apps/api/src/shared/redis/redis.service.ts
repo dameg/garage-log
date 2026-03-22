@@ -91,6 +91,15 @@ export class RedisService {
     };
   }
 
+  async eval<T = unknown>(
+    script: string,
+    keysCount: number,
+    ...args: (string | number)[]
+  ): Promise<T> {
+    const result = await this.redis.eval(script, keysCount, ...args);
+    return result as T;
+  }
+
   public async ping(): Promise<string> {
     return this.redis.ping();
   }

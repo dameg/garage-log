@@ -1,4 +1,5 @@
 import { z, type ZodType } from 'zod';
+import { apiRateLimitConfig, loginRateLimitConfig } from '../rate-limit/rate-limit.factory';
 
 type JsonSchema = Record<string, unknown>;
 type OpenApiDocument = Record<string, any>;
@@ -70,6 +71,11 @@ export const vehicleIdParamExample = {
 export const userExample = {
   id: '8df4d5c0-cd82-4fc2-b5e1-62de0fe42fd6',
   email: 'john@example.com',
+} as const;
+
+export const rateLimitExceededExample = {
+  error: 'Too Many Requests',
+  message: 'Too many requests',
 } as const;
 
 export const vehicleExample = {
@@ -193,6 +199,43 @@ export const internalServerErrorResponseSchema = {
   required: ['error'],
 } as const;
 
+export const rateLimitErrorResponseSchema = {
+  type: 'object',
+  properties: {
+    error: { type: 'string', example: 'Too Many Requests' },
+    message: { type: 'string', example: 'Too many requests' },
+  },
+  required: ['error', 'message'],
+} as const;
+
+export const retryAfterHeaderSchema = {
+  description: 'Seconds until the client can retry the request.',
+  schema: {
+    type: 'string',
+    example: '60',
+  },
+} as const;
+
+export const loginRateLimitDescription =
+  `This endpoint is rate-limited to ${loginRateLimitConfig.limit} attempts per ` +
+  `${Math.floor(loginRateLimitConfig.windowSec / 60)} minutes for the same email and IP address. ` +
+  'Exceeded requests return `429 Too Many Requests` with a `Retry-After` header.';
+
+export const vehiclesRateLimitDescription =
+  `This endpoint uses a token bucket limiter with a burst of ${apiRateLimitConfig.capacity} requests ` +
+  `and a refill rate of ${apiRateLimitConfig.refillRatePerSec} request per second per authenticated user. ` +
+  'Exceeded requests return `429 Too Many Requests` with a `Retry-After` header.';
+
+export function createRateLimitOpenApiResponse(description = 'Rate limit exceeded') {
+  return {
+    description,
+    headers: {
+      'Retry-After': retryAfterHeaderSchema,
+    },
+    ...rateLimitErrorResponseSchema,
+  };
+}
+
 function setMediaTypeExample(
   operation: Record<string, any> | undefined,
   responseCode: string,
@@ -227,6 +270,26 @@ function setParameterExample(
   }
 }
 
+function setResponseHeader(
+  operation: Record<string, any> | undefined,
+  responseCode: string,
+  headerName: string,
+  example: unknown,
+) {
+  const response = operation?.responses?.[responseCode];
+
+  if (!response) return;
+
+  response.headers ??= {};
+  response.headers[headerName] = {
+    description: retryAfterHeaderSchema.description,
+    schema: {
+      type: retryAfterHeaderSchema.schema.type,
+      example,
+    },
+  };
+}
+
 export function enhanceOpenApiDocument<T extends OpenApiDocument>(document: T): T {
   const registerOperation = document.paths?.['/api/auth/register']?.post;
   const loginOperation = document.paths?.['/api/auth/login']?.post;
@@ -234,6 +297,7 @@ export function enhanceOpenApiDocument<T extends OpenApiDocument>(document: T): 
   const createVehicleOperation = document.paths?.['/api/vehicles/']?.post;
   const listVehiclesOperation = document.paths?.['/api/vehicles/']?.get;
   const vehicleByIdGetOperation = document.paths?.['/api/vehicles/{id}']?.get;
+  const vehicleByIdDeleteOperation = document.paths?.['/api/vehicles/{id}']?.delete;
   const vehicleByIdPatchOperation = document.paths?.['/api/vehicles/{id}']?.patch;
 
   setRequestBodyExample(registerOperation, registerUserExample);
@@ -241,11 +305,20 @@ export function enhanceOpenApiDocument<T extends OpenApiDocument>(document: T): 
 
   setRequestBodyExample(loginOperation, loginUserExample);
   setMediaTypeExample(loginOperation, '200', { user: userExample });
+  setMediaTypeExample(loginOperation, '429', rateLimitExceededExample);
+  setResponseHeader(
+    loginOperation,
+    '429',
+    'Retry-After',
+    loginRateLimitConfig.windowSec.toString(),
+  );
 
   setMediaTypeExample(meOperation, '200', { user: userExample });
 
   setRequestBodyExample(createVehicleOperation, createVehicleExample);
   setMediaTypeExample(createVehicleOperation, '201', vehicleExample);
+  setMediaTypeExample(createVehicleOperation, '429', rateLimitExceededExample);
+  setResponseHeader(createVehicleOperation, '429', 'Retry-After', '1');
 
   setParameterExample(listVehiclesOperation, 'search', listVehiclesQueryExample.search);
   setParameterExample(listVehiclesOperation, 'yearFrom', listVehiclesQueryExample.yearFrom);
@@ -261,9 +334,16 @@ export function enhanceOpenApiDocument<T extends OpenApiDocument>(document: T): 
     page: 1,
     limit: 10,
   });
+  setMediaTypeExample(listVehiclesOperation, '429', rateLimitExceededExample);
+  setResponseHeader(listVehiclesOperation, '429', 'Retry-After', '1');
 
   setParameterExample(vehicleByIdGetOperation, 'id', vehicleIdParamExample.id);
   setMediaTypeExample(vehicleByIdGetOperation, '200', vehicleExample);
+  setMediaTypeExample(vehicleByIdGetOperation, '429', rateLimitExceededExample);
+  setResponseHeader(vehicleByIdGetOperation, '429', 'Retry-After', '1');
+
+  setMediaTypeExample(vehicleByIdDeleteOperation, '429', rateLimitExceededExample);
+  setResponseHeader(vehicleByIdDeleteOperation, '429', 'Retry-After', '1');
 
   setParameterExample(vehicleByIdPatchOperation, 'id', vehicleIdParamExample.id);
   setRequestBodyExample(vehicleByIdPatchOperation, updateVehicleExample);
@@ -271,6 +351,8 @@ export function enhanceOpenApiDocument<T extends OpenApiDocument>(document: T): 
     ...vehicleExample,
     ...updateVehicleExample,
   });
+  setMediaTypeExample(vehicleByIdPatchOperation, '429', rateLimitExceededExample);
+  setResponseHeader(vehicleByIdPatchOperation, '429', 'Retry-After', '1');
 
   return document;
 }
