@@ -11,6 +11,8 @@ import { Group, Pagination, ScrollArea, Select, Skeleton, Table, Text } from '@m
 
 import { createColumns } from './columns';
 import type { Vehicle } from '../../types';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '@/app/routes';
 
 const PAGE_SIZE_OPTIONS = ['10', '20', '50', '100'];
 
@@ -39,6 +41,8 @@ export function VehiclesTable({
   onEdit,
   onDelete,
 }: Props) {
+  const navigate = useNavigate();
+
   const columns = useMemo(
     () =>
       createColumns({
@@ -120,7 +124,11 @@ export function VehiclesTable({
               </Table.Tr>
             ) : (
               table.getRowModel().rows.map((row) => (
-                <Table.Tr key={row.id}>
+                <Table.Tr
+                  key={row.id}
+                  onClick={() => navigate(routes.vehicles.detail.build(row.original.id))}
+                  style={{ cursor: 'pointer' }}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <Table.Td key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

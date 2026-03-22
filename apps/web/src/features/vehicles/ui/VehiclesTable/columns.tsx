@@ -29,7 +29,7 @@ export function createColumns({ onEdit, onDelete }: Props = {}): ColumnDef<Vehic
     },
     {
       accessorKey: 'mileage',
-      header: 'Mileage',
+      header: 'Mileage (km)',
       cell: (info) => Number(info.getValue()).toLocaleString(),
     },
     {
@@ -50,7 +50,7 @@ export function createColumns({ onEdit, onDelete }: Props = {}): ColumnDef<Vehic
               onEdit?.(row.original);
             }}
           >
-            <IconEdit size={16} />
+            <IconEdit size={24} />
           </ActionIcon>
 
           <ActionIcon
@@ -61,7 +61,7 @@ export function createColumns({ onEdit, onDelete }: Props = {}): ColumnDef<Vehic
               onDelete?.(row.original);
             }}
           >
-            <IconTrash size={16} />
+            <IconTrash size={24} />
           </ActionIcon>
         </Group>
       ),
