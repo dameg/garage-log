@@ -27,24 +27,50 @@ export type VehiclesListParams = SortParams<VehiclesSortBy> & {
   limit: number;
 };
 
-export const vehicleRangeFiltersSchema = z.object({
-  yearFrom: z
-    .union([z.literal(''), z.number().int().min(1886, 'Year must be at least 1886')])
+const optionalNumberFilter = (schema: z.ZodNumber) =>
+  z
+    .union([z.literal(''), schema])
     .optional()
-    .transform((value) => (value === '' ? undefined : value)),
-  yearTo: z
-    .union([z.literal(''), z.number().int().min(1886, 'Year must be at least 1886')])
-    .optional()
-    .transform((value) => (value === '' ? undefined : value)),
-  mileageFrom: z
-    .union([z.literal(''), z.number().int().min(0, 'Mileage cannot be negative')])
-    .optional()
-    .transform((value) => (value === '' ? undefined : value)),
-  mileageTo: z
-    .union([z.literal(''), z.number().int().min(0, 'Mileage cannot be negative')])
-    .optional()
-    .transform((value) => (value === '' ? undefined : value)),
-});
+    .transform((value) => (value === '' ? undefined : value));
+
+export const vehicleRangeFiltersSchema = z
+  .object({
+    yearFrom: optionalNumberFilter(z.number().int().min(1886, 'Year must be at least 1886')),
+    yearTo: optionalNumberFilter(z.number().int().min(1886, 'Year must be at least 1886')),
+    mileageFrom: optionalNumberFilter(z.number().int().min(0, 'Mileage cannot be negative')),
+    mileageTo: optionalNumberFilter(z.number().int().min(0, 'Mileage cannot be negative')),
+  })
+  .superRefine((values, ctx) => {
+    if (values.yearFrom != null && values.yearTo != null && values.yearFrom > values.yearTo) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['yearFrom'],
+        message: '`Year from` cannot be greater than `Year to`',
+      });
+      ctx.addIssue({
+        code: 'custom',
+        path: ['yearTo'],
+        message: '`Year to` cannot be lower than `Year from`',
+      });
+    }
+
+    if (
+      values.mileageFrom != null &&
+      values.mileageTo != null &&
+      values.mileageFrom > values.mileageTo
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['mileageFrom'],
+        message: '`Mileage from` cannot be greater than `Mileage to`',
+      });
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['mileageTo'],
+        message: '`Mileage to` cannot be lower than `Mileage from`',
+      });
+    }
+  });
 
 export type VehicleRangeFilters = z.output<typeof vehicleRangeFiltersSchema>;
 export type VehicleRangeFiltersFormValues = z.input<typeof vehicleRangeFiltersSchema>;

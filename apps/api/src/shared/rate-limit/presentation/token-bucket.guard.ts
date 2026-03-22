@@ -1,4 +1,4 @@
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { rateLimitKeys, rateLimitSubjects } from '../domain/rate-limit.keys';
 import { ConsumeTokenBucketUseCase } from '../application/consume-token-bucket.usecase';
 import { RateLimitExceededError } from '../../errors/rate-limit-error';
@@ -12,7 +12,7 @@ export function createTokenBucketGuard(
   useCase: ConsumeTokenBucketUseCase,
   options: TokenBucketGuardOptions,
 ) {
-  return async function tokenBucketGuard(req: FastifyRequest, reply: FastifyReply) {
+  return async function tokenBucketGuard(req: FastifyRequest) {
     const userId = (req as FastifyRequest & { user?: { sub?: string } }).user?.sub;
     const ip = req.ip;
 

@@ -30,7 +30,7 @@ export function VehiclesFilters({
   return (
     <Stack gap="md">
       <TextInput
-        label="Search"
+        label="Live Search"
         name="search"
         autoComplete="off"
         placeholder="Search by VIN, brand, model…"

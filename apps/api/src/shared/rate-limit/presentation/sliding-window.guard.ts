@@ -1,4 +1,4 @@
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyRequest } from 'fastify';
 import { rateLimitKeys, rateLimitSubjects } from '../domain/rate-limit.keys';
 import { CheckSlidingWindowUseCase } from '../application/check-sliding-window.usecase';
 import { RateLimitExceededError } from '../../errors/rate-limit-error';
@@ -13,7 +13,7 @@ export function createSlidingWindowGuard(
   useCase: CheckSlidingWindowUseCase,
   options: SlidingWindowGuardOptions,
 ) {
-  return async function slidingWindowGuard(req: FastifyRequest, reply: FastifyReply) {
+  return async function slidingWindowGuard(req: FastifyRequest) {
     const subject = options.subjectFactory(req);
 
     if (!subject) return;
