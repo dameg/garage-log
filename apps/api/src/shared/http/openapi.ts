@@ -199,7 +199,9 @@ export const internalServerErrorResponseSchema = {
   required: ['error'],
 } as const;
 
-export const rateLimitErrorResponseSchema = {
+export const rateLimitExceededErrorResponseSchema = {
+  description:
+    'HTTP 429 response produced from `RateLimitExceededError`. The retry delay is exposed via the `Retry-After` header.',
   type: 'object',
   properties: {
     error: { type: 'string', example: 'Too Many Requests' },
@@ -207,6 +209,8 @@ export const rateLimitErrorResponseSchema = {
   },
   required: ['error', 'message'],
 } as const;
+
+export const rateLimitErrorResponseSchema = rateLimitExceededErrorResponseSchema;
 
 export const retryAfterHeaderSchema = {
   description: 'Seconds until the client can retry the request.',
@@ -228,11 +232,11 @@ export const vehiclesRateLimitDescription =
 
 export function createRateLimitOpenApiResponse(description = 'Rate limit exceeded') {
   return {
+    ...rateLimitErrorResponseSchema,
     description,
     headers: {
       'Retry-After': retryAfterHeaderSchema,
     },
-    ...rateLimitErrorResponseSchema,
   };
 }
 
