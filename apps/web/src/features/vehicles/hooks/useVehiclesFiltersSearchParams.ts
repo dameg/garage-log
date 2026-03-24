@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import type { VehicleRangeFilters } from '../types';
+import type { VehicleFilters } from '../types';
 
 const EMPTY = '';
 
@@ -20,21 +20,11 @@ export function useVehiclesFiltersSearchParams() {
     ? Number(searchParams.get('mileageTo'))
     : undefined;
 
-  const setSearch = (value: string) => {
+  const setFilters = ({ search, yearFrom, yearTo, mileageFrom, mileageTo }: VehicleFilters) => {
     const nextParams = new URLSearchParams(searchParams);
 
-    if (value.trim()) {
-      nextParams.set('search', value);
-    } else {
-      nextParams.delete('search');
-    }
-
-    nextParams.set('page', '1');
-    setSearchParams(nextParams, { replace: true });
-  };
-
-  const setRangeFilters = ({ yearFrom, yearTo, mileageFrom, mileageTo }: VehicleRangeFilters) => {
-    const nextParams = new URLSearchParams(searchParams);
+    if (search != null) nextParams.set('search', search);
+    else nextParams.delete('search');
 
     if (yearFrom != null) nextParams.set('yearFrom', String(yearFrom));
     else nextParams.delete('yearFrom');
@@ -49,6 +39,12 @@ export function useVehiclesFiltersSearchParams() {
     else nextParams.delete('mileageTo');
 
     nextParams.set('page', '1');
+
+    const current = searchParams.toString();
+    const next = nextParams.toString();
+
+    if (current === next) return;
+
     setSearchParams(nextParams, { replace: true });
   };
 
@@ -73,8 +69,7 @@ export function useVehiclesFiltersSearchParams() {
       mileageFrom,
       mileageTo,
     },
-    setSearch,
-    setRangeFilters,
+    setFilters,
     resetFilters,
   };
 }

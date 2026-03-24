@@ -26,7 +26,7 @@ export class PrismaVehicleRepository implements VehicleRepository {
     return toDomainVehicle(created);
   }
 
-  async findManyByOwner(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
+  async list(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
     const where = buildVehicleWhere(query);
     const skip = (query.page - 1) * query.limit;
     const take = query.limit;
@@ -62,11 +62,11 @@ export class PrismaVehicleRepository implements VehicleRepository {
   }
 
   async deleteByIdForOwner(id: string, ownerId: string): Promise<boolean> {
-    const result = await this.prisma.vehicle.deleteMany({
+    const deleted = await this.prisma.vehicle.deleteMany({
       where: { id, ownerId },
     });
 
-    return result.count > 0;
+    return deleted.count > 0;
   }
 
   async updateByIdForOwner(
@@ -83,10 +83,10 @@ export class PrismaVehicleRepository implements VehicleRepository {
       return null;
     }
 
-    const row = await this.prisma.vehicle.findFirst({
+    const updated = await this.prisma.vehicle.findFirst({
       where: { id, ownerId },
     });
 
-    return row ? toDomainVehicle(row) : null;
+    return updated ? toDomainVehicle(updated) : null;
   }
 }

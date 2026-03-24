@@ -38,6 +38,7 @@ export function VehiclesTable({
   setPagination,
   setSorting,
   isFetching,
+
   onEdit,
   onDelete,
 }: Props) {
@@ -84,8 +85,14 @@ export function VehiclesTable({
 
   return (
     <>
+      <Group justify="end" gap="md" mb="lg">
+        <Text size="sm" c="dimmed">
+          {totalItems} vehicles
+        </Text>
+      </Group>
+
       <ScrollArea>
-        <Table striped highlightOnHover>
+        <Table striped highlightOnHover withRowBorders>
           <Table.Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Tr key={headerGroup.id}>
@@ -117,7 +124,7 @@ export function VehiclesTable({
             ) : table.getRowModel().rows.length === 0 ? (
               <Table.Tr>
                 <Table.Td colSpan={columns.length}>
-                  <Text ta="center" c="dimmed">
+                  <Text ta="center" c="dimmed" py="md">
                     No vehicles found
                   </Text>
                 </Table.Td>
@@ -141,15 +148,15 @@ export function VehiclesTable({
         </Table>
       </ScrollArea>
 
-      <Group justify="space-between" mt="md" align="center">
-        <Group gap="md">
+      <Group justify="space-between" mt="lg" align="center" gap="md" wrap="wrap">
+        <Group gap="sm" align="center">
           <Text size="sm" c="dimmed">
-            {totalItems} vehicles
+            Rows per page
           </Text>
-
           <Select
             size="xs"
             w={80}
+            radius="md"
             value={String(pagination.pageSize)}
             data={PAGE_SIZE_OPTIONS}
             onChange={(value) => {
@@ -175,6 +182,7 @@ export function VehiclesTable({
           siblings={1}
           boundaries={1}
           withEdges
+          size="sm"
           disabled={isFetching}
         />
       </Group>

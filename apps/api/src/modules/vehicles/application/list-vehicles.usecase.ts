@@ -23,6 +23,6 @@ export class ListVehiclesUseCase {
       limit: input.limit,
     };
 
-    return this.repo.findManyByOwner(query);
+    return this.repo.list(query);
   }
 }

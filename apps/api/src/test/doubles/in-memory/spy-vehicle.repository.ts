@@ -35,7 +35,7 @@ export class SpyVehicleRepository implements VehicleRepository {
     return null;
   }
 
-  async findManyByOwner(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
+  async list(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
     this.lastListQuery = query;
     return this.result;
   }

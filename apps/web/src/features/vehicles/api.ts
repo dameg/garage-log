@@ -27,10 +27,9 @@ export function getVehicles(params: VehiclesListParams) {
 }
 
 export async function getVehicle(id: string): Promise<Vehicle> {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then((response) =>
-    response.json(),
-  );
-  return res;
+  return http<Vehicle>(`/vehicles/${id}`, {
+    method: 'GET',
+  });
 }
 
 export async function createVehicle(payload: CreateVehicleInput) {

@@ -1,121 +1,122 @@
-import { Button, Group, NumberInput, SimpleGrid, Stack, Text, TextInput } from '@mantine/core';
+import { Button, Group, NumberInput, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { zod4Resolver } from 'mantine-form-zod-resolver';
 import {
-  vehicleRangeFiltersSchema,
-  type VehicleRangeFilters,
-  type VehicleRangeFiltersFormValues,
+  vehicleFiltersSchema,
+  type VehicleFilters,
+  type VehicleFiltersFormValues,
 } from '../../types';
+import { IconCalendar, IconGauge, IconSearch } from '@tabler/icons-react';
 
 type Props = {
-  searchInput: string;
-  onSearchChange: (value: string) => void;
-  initialValues: VehicleRangeFilters;
-  onSubmit: (values: VehicleRangeFilters) => void;
+  initialValues: VehicleFilters;
+  onSubmit: (values: VehicleFilters) => void;
   onReset: () => void;
 };
 
-export function VehiclesFilters({
-  searchInput,
-  onSearchChange,
-  initialValues,
-  onSubmit,
-  onReset,
-}: Props) {
-  const form = useForm<VehicleRangeFiltersFormValues>({
+export function VehiclesFilters({ initialValues, onSubmit, onReset }: Props) {
+  const form = useForm<VehicleFiltersFormValues>({
     initialValues,
-    validate: zod4Resolver(vehicleRangeFiltersSchema),
+    validate: zod4Resolver(vehicleFiltersSchema),
   });
 
   return (
-    <Stack gap="md">
-      <TextInput
-        label="Live Search"
-        name="search"
-        autoComplete="off"
-        placeholder="Search by VIN, brand, model…"
-        w={{ base: '100%', sm: 'calc(50% - var(--mantine-spacing-md) / 2)' }}
-        value={searchInput}
-        onChange={(event) => onSearchChange(event.currentTarget.value)}
-      />
-
+    <Stack gap="lg">
       <form
         onSubmit={form.onSubmit((values) => {
-          onSubmit(vehicleRangeFiltersSchema.parse(values));
+          onSubmit(vehicleFiltersSchema.parse(values));
         })}
       >
-        <Stack gap="md">
-          <Stack gap="xs">
-            <Text size="sm" fw={500}>
-              Year
-            </Text>
+        <Stack gap="lg">
+          <Group align="flex-end" gap="lg" wrap="wrap">
+            <Stack gap="xs" style={{ flex: 1, minWidth: 220 }}>
+              <Group grow align="flex-start" gap="sm" wrap="nowrap">
+                <TextInput
+                  label="Search"
+                  name="search"
+                  autoComplete="off"
+                  placeholder="Search by VIN, brand, model..."
+                  size="sm"
+                  radius="md"
+                  w="100%"
+                  leftSection={<IconSearch size={16} stroke={1.8} />}
+                  {...form.getInputProps('search')}
+                />
+                <NumberInput
+                  label="Year from"
+                  name="yearFrom"
+                  autoComplete="off"
+                  inputMode="numeric"
+                  placeholder="eg. 2010"
+                  size="sm"
+                  radius="md"
+                  hideControls
+                  leftSection={<IconCalendar size={16} stroke={1.8} />}
+                  {...form.getInputProps('yearFrom')}
+                />
 
-            <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="md">
-              <NumberInput
-                label="From"
-                name="yearFrom"
-                autoComplete="off"
-                inputMode="numeric"
-                placeholder="2010"
-                hideControls
-                {...form.getInputProps('yearFrom')}
-              />
+                <NumberInput
+                  label="Year to"
+                  name="yearTo"
+                  autoComplete="off"
+                  inputMode="numeric"
+                  placeholder="eg. 2020"
+                  size="sm"
+                  radius="md"
+                  hideControls
+                  leftSection={<IconCalendar size={16} stroke={1.8} />}
+                  {...form.getInputProps('yearTo')}
+                />
+              </Group>
+            </Stack>
 
-              <NumberInput
-                label="To"
-                name="yearTo"
-                autoComplete="off"
-                inputMode="numeric"
-                placeholder="2020"
-                hideControls
-                {...form.getInputProps('yearTo')}
-              />
-            </SimpleGrid>
-          </Stack>
+            <Stack gap="xs" style={{ flex: 1, minWidth: 220 }}>
+              <Group grow align="flex-start" gap="sm" wrap="nowrap">
+                <NumberInput
+                  label="Mileage from"
+                  name="mileageFrom"
+                  autoComplete="off"
+                  inputMode="numeric"
+                  placeholder="eg. 50 000"
+                  size="sm"
+                  radius="md"
+                  thousandSeparator=" "
+                  hideControls
+                  leftSection={<IconGauge size={16} stroke={1.8} />}
+                  {...form.getInputProps('mileageFrom')}
+                />
 
-          <Stack gap="xs">
-            <Text size="sm" fw={500}>
-              Mileage
-            </Text>
+                <NumberInput
+                  label="Mileage to"
+                  name="mileageTo"
+                  autoComplete="off"
+                  inputMode="numeric"
+                  placeholder="eg. 150 000"
+                  size="sm"
+                  radius="md"
+                  thousandSeparator=" "
+                  hideControls
+                  leftSection={<IconGauge size={16} stroke={1.8} />}
+                  {...form.getInputProps('mileageTo')}
+                />
+              </Group>
+            </Stack>
+          </Group>
 
-            <SimpleGrid cols={{ base: 1, xs: 2 }} spacing="md">
-              <NumberInput
-                label="From"
-                name="mileageFrom"
-                autoComplete="off"
-                inputMode="numeric"
-                placeholder="50 000"
-                thousandSeparator=" "
-                hideControls
-                {...form.getInputProps('mileageFrom')}
-              />
-
-              <NumberInput
-                label="To"
-                name="mileageTo"
-                autoComplete="off"
-                inputMode="numeric"
-                placeholder="150 000"
-                thousandSeparator=" "
-                hideControls
-                {...form.getInputProps('mileageTo')}
-              />
-            </SimpleGrid>
-          </Stack>
-
-          <Group justify="flex-end">
+          <Group justify="flex-end" gap="sm">
             <Button
               type="button"
               variant="default"
+              radius="md"
               onClick={() => {
-                form.reset();
                 onReset();
               }}
             >
               Reset
             </Button>
-
-            <Button type="submit">Apply filters</Button>
+            <Button type="submit" radius="md">
+              Apply filters
+            </Button>
           </Group>
         </Stack>
       </form>

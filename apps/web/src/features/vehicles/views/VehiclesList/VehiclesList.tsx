@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Button, Center, Divider, Group, Loader, Modal, Text, Title } from '@mantine/core';
+import { Button, Card, Center, Group, Loader, Modal, Stack, Text, Title } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
 import { useCreateVehicle } from '../../hooks/useCreateVehicle';
@@ -7,9 +7,9 @@ import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTab
 import { useUpdateVehicle } from '../../hooks/useUpdateVehicle';
 import { useVehicles } from '../../hooks/useVehicles';
 import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSearchParams';
-import { useVehiclesTextSearch } from '../../hooks/useVehiclesTextSearch';
+
 import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
-import type { CreateVehicleInput, Vehicle, VehicleRangeFilters } from '../../types';
+import type { CreateVehicleInput, Vehicle, VehicleFilters } from '../../types';
 import { VehicleForm } from '../../ui/VehicleForm';
 import { VehiclesFilters } from '../../ui/VehiclesFilters';
 import { VehiclesTable } from '../../ui/VehiclesTable';
@@ -21,7 +21,7 @@ type VehicleModalState =
   | { mode: 'edit'; vehicle: Vehicle }
   | { mode: 'delete'; vehicle: Vehicle };
 
-function getVehicleFiltersFormKey(filters: VehicleRangeFilters) {
+function getVehicleFiltersFormKey(filters: VehicleFilters) {
   return [filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo]
     .map((value) => value ?? '')
     .join(':');
@@ -56,12 +56,7 @@ export function VehiclesList() {
     setSorting,
   } = useVehiclesTableSearchParams();
 
-  const { filters, setSearch, setRangeFilters, resetFilters } = useVehiclesFiltersSearchParams();
-
-  const { searchInput, onSearchChange, resetSearch } = useVehiclesTextSearch(
-    filters.search,
-    setSearch,
-  );
+  const { filters, setFilters, resetFilters } = useVehiclesFiltersSearchParams();
 
   const params = useMemo(
     () => ({
@@ -73,12 +68,13 @@ export function VehiclesList() {
 
   const filterInitialValues = useMemo(
     () => ({
+      search: filters.search,
       yearFrom: filters.yearFrom,
       yearTo: filters.yearTo,
       mileageFrom: filters.mileageFrom,
       mileageTo: filters.mileageTo,
     }),
-    [filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo],
+    [filters.search, filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo],
   );
   const filtersFormKey = getVehicleFiltersFormKey(filterInitialValues);
 
@@ -133,7 +129,7 @@ export function VehiclesList() {
     totalPages,
   });
 
-  if (query.isLoading && !query.data) {
+  if (query.isPending) {
     return (
       <Center mih="100vh">
         <Loader />
@@ -147,39 +143,40 @@ export function VehiclesList() {
 
   return (
     <>
-      <Group justify="space-between" mb="md">
-        <Title order={3}>Vehicles</Title>
-        <Button leftSection={<IconPlus size={16} />} onClick={openCreateModal}>
-          Create vehicle
-        </Button>
-      </Group>
+      <Stack gap="xl">
+        <Group justify="space-between" align="center" gap="md" wrap="wrap">
+          <Title order={3}>Vehicles</Title>
+          <Button leftSection={<IconPlus size={16} />} radius="md" onClick={openCreateModal}>
+            Create vehicle
+          </Button>
+        </Group>
 
-      <Divider mb="md" />
+        <Card shadow="sm" padding="lg" radius="lg" withBorder>
+          <VehiclesFilters
+            key={filtersFormKey}
+            initialValues={filterInitialValues}
+            onSubmit={setFilters}
+            onReset={() => {
+              resetFilters();
+            }}
+          />
+        </Card>
 
-      <VehiclesFilters
-        key={filtersFormKey}
-        searchInput={searchInput}
-        onSearchChange={onSearchChange}
-        initialValues={filterInitialValues}
-        onSubmit={setRangeFilters}
-        onReset={() => {
-          resetSearch();
-          resetFilters();
-        }}
-      />
-
-      <VehiclesTable
-        data={data}
-        totalItems={totalItems}
-        totalPages={totalPages}
-        pagination={pagination}
-        sorting={sorting}
-        setPagination={setPagination}
-        setSorting={setSorting}
-        isFetching={query.isFetching}
-        onDelete={openDeleteModal}
-        onEdit={openEditModal}
-      />
+        <Card shadow="sm" padding="lg" radius="lg" withBorder>
+          <VehiclesTable
+            data={data}
+            totalItems={totalItems}
+            totalPages={totalPages}
+            pagination={pagination}
+            sorting={sorting}
+            setPagination={setPagination}
+            setSorting={setSorting}
+            isFetching={query.isFetching}
+            onDelete={openDeleteModal}
+            onEdit={openEditModal}
+          />
+        </Card>
+      </Stack>
 
       <Modal
         opened={isEditorModalOpen}

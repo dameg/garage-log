@@ -13,23 +13,54 @@ datasource db {
 }
 
 model Vehicle {
-  id        String   @id
-  vin       String
-  brand     String
-  model     String
-  year      Int
-  mileage   Int
-  createdAt DateTime @default(now())
+  id           String        @id
+  vin          String
+  brand        String
+  model        String
+  year         Int
+  mileage      Int
+  createdAt    DateTime      @default(now())
 
-  ownerId   String
-  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId      String
+  owner        User          @relation(fields: [ownerId], references: [id])
+
+  documentLogs DocumentLog[]
+
+  @@index([ownerId])
 }
 
 model User {
-  id           String    @id
-  email        String    @unique
+  id           String        @id
+  email        String        @unique
   passwordHash String
-  createdAt    DateTime
+  createdAt    DateTime      @default(now())
 
   vehicles     Vehicle[]
+  documentLogs DocumentLog[]
+}
+
+enum DocumentLogType {
+  insurance
+  inspection
+}
+
+model DocumentLog {
+  id        String           @id
+  type      DocumentLogType
+  title     String
+  issuer    String?
+  validFrom DateTime
+  validTo   DateTime
+  issuedAt  DateTime?
+  cost      Float?
+  note      String?
+  createdAt DateTime         @default(now())
+
+  ownerId   String
+  owner     User             @relation(fields: [ownerId], references: [id])
+
+  vehicleId String
+  vehicle   Vehicle          @relation(fields: [vehicleId], references: [id])
+
+  @@index([vehicleId, ownerId])
 }

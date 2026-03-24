@@ -13,7 +13,7 @@ export class InMemoryVehicleRepository implements VehicleRepository {
     return vehicle;
   }
 
-  async findManyByOwner(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
+  async list(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>> {
     const filtered = this.data.filter((vehicle) => matchesVehicleFilters(vehicle, query));
 
     const sorted = sortVehicles(filtered, query);

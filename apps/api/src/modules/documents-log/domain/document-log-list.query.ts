@@ -1,24 +1,34 @@
+import { DocumentLogType } from './document-log';
+
 export type DocumentLogSortField =
   | 'createdAt'
   | 'title'
   | 'issuer'
-  | 'validForm'
+  | 'validFrom'
   | 'validTo'
   | 'issuedAt'
   | 'cost';
 
 export type SortDirection = 'asc' | 'desc';
 
-export type VehicleFilters = {
-  type?: string;
+export type DocumentLogFilters = {
+  search?: string;
+  type?: DocumentLogType;
   issuer?: string;
   costFrom?: number;
   costTo?: number;
+  hasCost?: boolean;
+  issuedAtFrom?: Date;
+  issuedAtTo?: Date;
+  validFromFrom?: Date;
+  validFromTo?: Date;
+  validToFrom?: Date;
+  validToTo?: Date;
 };
 
 export type DocumentLogListQuery = {
   ownerId: string;
-  filters?: VehicleFilters;
+  filters?: DocumentLogFilters;
   page: number;
   limit: number;
   sort: {

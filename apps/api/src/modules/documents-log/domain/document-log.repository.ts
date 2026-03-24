@@ -4,7 +4,7 @@ import type { DocumentLogListQuery } from './document-log-list.query';
 
 export interface DocumentLogRepository {
   create(documentLog: DocumentLog): Promise<DocumentLog>;
-  findManyByVehicle(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>>;
+  list(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>>;
   findByIdForOwner(id: string, ownerId: string): Promise<DocumentLog | null>;
   deleteByIdForOwner(id: string, ownerId: string): Promise<boolean>;
   updateByIdForOwner(

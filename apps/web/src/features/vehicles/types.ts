@@ -33,8 +33,12 @@ const optionalNumberFilter = (schema: z.ZodNumber) =>
     .optional()
     .transform((value) => (value === '' ? undefined : value));
 
-export const vehicleRangeFiltersSchema = z
+export const vehicleFiltersSchema = z
   .object({
+    search: z
+      .string()
+      .optional()
+      .transform((value) => value?.trim() || undefined),
     yearFrom: optionalNumberFilter(z.number().int().min(1886, 'Year must be at least 1886')),
     yearTo: optionalNumberFilter(z.number().int().min(1886, 'Year must be at least 1886')),
     mileageFrom: optionalNumberFilter(z.number().int().min(0, 'Mileage cannot be negative')),
@@ -72,8 +76,8 @@ export const vehicleRangeFiltersSchema = z
     }
   });
 
-export type VehicleRangeFilters = z.output<typeof vehicleRangeFiltersSchema>;
-export type VehicleRangeFiltersFormValues = z.input<typeof vehicleRangeFiltersSchema>;
+export type VehicleFilters = z.output<typeof vehicleFiltersSchema>;
+export type VehicleFiltersFormValues = z.input<typeof vehicleFiltersSchema>;
 
 export const createVehicleSchema = z.object({
   vin: z.string().min(1),

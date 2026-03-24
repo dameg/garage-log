@@ -4,7 +4,7 @@ import type { PaginatedResult } from '../../../shared/domain/paginated-result';
 
 export interface VehicleRepository {
   create(vehicle: Vehicle): Promise<Vehicle>;
-  findManyByOwner(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>>;
+  list(query: VehicleListQuery): Promise<PaginatedResult<Vehicle>>;
   findByIdForOwner(id: string, ownerId: string): Promise<Vehicle | null>;
   deleteByIdForOwner(id: string, ownerId: string): Promise<boolean>;
   updateByIdForOwner(
