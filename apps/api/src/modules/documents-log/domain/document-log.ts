@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from '../../../shared/domain/normalize-optional-sring';
+import { normalizeOptionalString } from '../../../shared/domain/normalize-optional-string';
 import { normalizeRequiredString } from '../../../shared/domain/normalize-required-string';
 import { DomainError } from '../../../shared/errors/domain-error';
 
@@ -62,8 +62,14 @@ export function assertOptionalDateNotAfter(
   }
 }
 
-export function normalizeOptionalDate(value?: Date | null): Date | null {
-  return value ?? null;
+export function normalizeOptionalDate(fieldName: string, value?: Date | null): Date | null {
+  if (value == null) return null;
+
+  if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
+    throw new DomainError(`${fieldName} must be a valid date`);
+  }
+
+  return value;
 }
 
 export function normalizeOptionalNonNegativeCost(value?: number | null): number | null {
@@ -80,20 +86,22 @@ export function normalizeOptionalNonNegativeCost(value?: number | null): number 
   return value;
 }
 
+export function validateDocumentLogInvariant(documentLog: DocumentLog) {
+  assertValidDateRange(documentLog.validFrom, documentLog.validTo);
+  assertOptionalDateNotAfter(documentLog.issuedAt, documentLog.validTo, 'issuedAt');
+  assertOptionalDateNotInFuture(documentLog.issuedAt, 'issuedAt');
+}
+
 export function createDocumentLog(props: CreateDocumentLogProps): DocumentLog {
   const title = normalizeRequiredString('Document log title', props.title);
   const issuer = normalizeOptionalString(props.issuer);
   const validFrom = normalizeRequiredDate('validFrom', props.validFrom);
   const validTo = normalizeRequiredDate('validTo', props.validTo);
-  const issuedAt = normalizeOptionalDate(props.issuedAt);
+  const issuedAt = normalizeOptionalDate('issuedAt', props.issuedAt);
   const cost = normalizeOptionalNonNegativeCost(props.cost);
   const note = normalizeOptionalString(props.note);
 
-  assertValidDateRange(validFrom, validTo);
-  assertOptionalDateNotAfter(issuedAt, validTo, 'issuedAt');
-  assertOptionalDateNotInFuture(issuedAt, 'issuedAt');
-
-  return {
+  const documentLog = {
     id: props.id,
     vehicleId: props.vehicleId,
     ownerId: props.ownerId,
@@ -107,4 +115,44 @@ export function createDocumentLog(props: CreateDocumentLogProps): DocumentLog {
     note,
     createdAt: props.createdAt ?? new Date(),
   };
+
+  validateDocumentLogInvariant(documentLog);
+
+  return documentLog;
+}
+
+export function updateDocumentLog(documentLog: DocumentLog, patch: UpdateDocumentLogPatch) {
+  const next: DocumentLog = { ...documentLog, ...patch };
+
+  if (patch.title !== undefined) {
+    next.title = normalizeRequiredString('Document log title', next.title);
+  }
+
+  if (patch.issuer !== undefined) {
+    next.issuer = normalizeOptionalString(next.issuer);
+  }
+
+  if (patch.validFrom !== undefined) {
+    next.validFrom = normalizeRequiredDate('validFrom', next.validFrom);
+  }
+
+  if (patch.validTo !== undefined) {
+    next.validTo = normalizeRequiredDate('validTo', next.validTo);
+  }
+
+  if (patch.issuedAt !== undefined) {
+    next.issuedAt = normalizeOptionalDate('issuedAt', next.issuedAt);
+  }
+
+  if (patch.cost !== undefined) {
+    next.cost = normalizeOptionalNonNegativeCost(next.cost);
+  }
+
+  if (patch.note !== undefined) {
+    next.note = normalizeOptionalString(next.note);
+  }
+
+  validateDocumentLogInvariant(next);
+
+  return next;
 }

@@ -1,6 +1,19 @@
 import { useMemo, useState } from 'react';
-import { Button, Card, Center, Group, Loader, Modal, Stack, Text, Title } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import {
+  Alert,
+  Button,
+  Card,
+  Center,
+  Container,
+  Divider,
+  Group,
+  Loader,
+  Modal,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
+import { IconInfoCircle, IconPlus } from '@tabler/icons-react';
 
 import { useCreateVehicle } from '../../hooks/useCreateVehicle';
 import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
@@ -22,9 +35,13 @@ type VehicleModalState =
   | { mode: 'delete'; vehicle: Vehicle };
 
 function getVehicleFiltersFormKey(filters: VehicleFilters) {
-  return [filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo]
-    .map((value) => value ?? '')
-    .join(':');
+  return JSON.stringify([
+    filters.search ?? '',
+    filters.yearFrom ?? '',
+    filters.yearTo ?? '',
+    filters.mileageFrom ?? '',
+    filters.mileageTo ?? '',
+  ]);
 }
 
 export function VehiclesList() {
@@ -138,7 +155,18 @@ export function VehiclesList() {
   }
 
   if (query.isError) {
-    return <Text c="red">Failed to load vehicles</Text>;
+    return (
+      <Container size="xl">
+        <Alert
+          icon={<IconInfoCircle size={16} />}
+          color="red"
+          radius="lg"
+          title="Unable to load vehicles"
+        >
+          Something went wrong while loading vehicles.
+        </Alert>
+      </Container>
+    );
   }
 
   return (
@@ -150,7 +178,7 @@ export function VehiclesList() {
             Create vehicle
           </Button>
         </Group>
-
+        <Divider />
         <Card shadow="sm" padding="lg" radius="lg" withBorder>
           <VehiclesFilters
             key={filtersFormKey}
