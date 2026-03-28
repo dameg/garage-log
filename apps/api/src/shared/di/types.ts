@@ -1,4 +1,5 @@
 import type { UserRepository } from '../../modules/auth/domain/user.repository';
+import type { DocumentLogRepository } from '../../modules/documents-log/domain/document-log.repository';
 import type { VehicleRepository } from '../../modules/vehicles/domain/vehicle.repository';
 import type { CheckSlidingWindowUseCase } from '../rate-limit/application/check-sliding-window.usecase';
 import type { ConsumeTokenBucketUseCase } from '../rate-limit/application/consume-token-bucket.usecase';
@@ -8,6 +9,7 @@ export type Deps = {
   redisService: RedisService;
   usersRepo: UserRepository;
   vehiclesRepo: VehicleRepository;
+  documentLogsRepo: DocumentLogRepository;
   consumeTokenBucketUseCase: ConsumeTokenBucketUseCase;
   checkSlidingWindowUseCase: CheckSlidingWindowUseCase;
 };
