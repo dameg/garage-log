@@ -1,3 +1,4 @@
+import { SortDirection } from '../../../shared/domain/sort-direction';
 import { DocumentLogType } from './document-log';
 
 export type DocumentLogSortField =
@@ -8,8 +9,6 @@ export type DocumentLogSortField =
   | 'validTo'
   | 'issuedAt'
   | 'cost';
-
-export type SortDirection = 'asc' | 'desc';
 
 export type DocumentLogFilters = {
   search?: string;

@@ -95,7 +95,7 @@ export function VehiclesList() {
   );
   const filtersFormKey = getVehicleFiltersFormKey(filterInitialValues);
 
-  const createVehicleMutation = useCreateVehicle(params);
+  const createVehicleMutation = useCreateVehicle();
   const updateVehicleMutation = useUpdateVehicle(params);
   const deleteVehicleMutation = useDeleteVehicle(params);
 

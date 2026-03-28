@@ -10,7 +10,7 @@ export function useDeleteVehicle(params: VehiclesListParams) {
   return useMutation({
     ...vehiclesMutations.deleteVehicle(),
     onSuccess: async (_, id) => {
-      await queryClient.removeQueries({
+      queryClient.removeQueries({
         queryKey: vehiclesKeys.detail(id),
         exact: true,
       });

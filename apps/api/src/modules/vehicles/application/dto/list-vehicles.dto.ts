@@ -1,4 +1,5 @@
-import type { VehicleSortField, SortDirection } from '../../domain/vehicle-list.query';
+import type { SortDirection } from '../../../../shared/domain/sort-direction';
+import type { VehicleSortField } from '../../domain/vehicle-list.query';
 
 export type ListVehiclesInput = {
   ownerId: string;

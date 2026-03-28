@@ -1,22 +1,22 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { vehiclesMutations } from '../queries/vehicles.mutations';
 import { vehiclesKeys } from '../queries/vehicles.keys';
-import type { VehiclesListParams } from '../types';
+
 import { notifications } from '@mantine/notifications';
 
-export function useCreateVehicle(params: VehiclesListParams) {
+export function useCreateVehicle() {
   const queryClient = useQueryClient();
 
   return useMutation({
     ...vehiclesMutations.createVehicle(),
-    onSuccess: async () => {
+    onSuccess: async (createdVehicle) => {
       await queryClient.invalidateQueries({
-        queryKey: vehiclesKeys.list(params),
+        queryKey: vehiclesKeys.lists(),
         exact: true,
       });
       notifications.show({
         title: 'Success',
-        message: 'Vehicle created',
+        message: `Vehicle ${createdVehicle.brand} ${createdVehicle.model} created`,
         color: 'green',
       });
     },
