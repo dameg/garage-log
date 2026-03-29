@@ -7,7 +7,9 @@
     "start": "node src/main.ts",
     "test": "vitest run",
     "test:db": "dotenv -e .env.test -- vitest run --config vitest.e2e.config.ts",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "node scripts/seed-db.mjs",
+    "codex:test": "node scripts/codex-test-module.mjs",
+    "codex:review:module": "node scripts/codex-review-module.mjs"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
