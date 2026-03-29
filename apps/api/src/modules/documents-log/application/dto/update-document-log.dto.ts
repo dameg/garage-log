@@ -1,7 +1,7 @@
 import type { UpdateDocumentLogPatch } from '../../domain/document-log';
 
 export type UpdateDocumentLogInput = {
-  id: string;
+  documentLogId: string;
   ownerId: string;
   patch: UpdateDocumentLogPatch;
 };

@@ -4,11 +4,17 @@ import { DocumentLogRepository } from '../domain/document-log.repository';
 export class DeleteDocumentLogUseCase {
   constructor(private readonly repo: DocumentLogRepository) {}
 
-  async execute({ id, ownerId }: { id: string; ownerId: string }): Promise<void> {
-    const deleted = await this.repo.deleteByIdForOwner(id, ownerId);
+  async execute({
+    documentLogId,
+    ownerId,
+  }: {
+    documentLogId: string;
+    ownerId: string;
+  }): Promise<void> {
+    const deleted = await this.repo.deleteByIdForOwner(documentLogId, ownerId);
 
     if (!deleted) {
-      throw new NotFoundError('Document Log', id);
+      throw new NotFoundError('Document Log', documentLogId);
     }
   }
 }
