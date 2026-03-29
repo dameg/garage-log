@@ -1,7 +1,7 @@
 import type { UpdateVehiclePatch } from '../../domain/vehicle';
 
 export type UpdateVehicleInput = {
-  id: string;
+  vehicleId: string;
   ownerId: string;
   patch: UpdateVehiclePatch;
 };

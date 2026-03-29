@@ -5,11 +5,10 @@ export type CreateDocumentLogInput = {
   ownerId: string;
   type: DocumentLogType;
   title: string;
-  issuer: string | null;
+  issuer?: string | null;
   validFrom: Date;
   validTo: Date;
-  issuedAt: Date | null;
-  cost: number | null;
-  note: string | null;
-  createdAt: Date;
+  issuedAt?: Date | null;
+  cost?: number | null;
+  note?: string | null;
 };

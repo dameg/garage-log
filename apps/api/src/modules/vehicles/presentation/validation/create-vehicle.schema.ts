@@ -4,8 +4,8 @@ export const createVehicleHttpSchema = z.object({
   vin: z.string().min(1),
   brand: z.string().min(1),
   model: z.string().min(1),
-  year: z.number().int(),
-  mileage: z.number().int(),
+  year: z.coerce.number().int(),
+  mileage: z.coerce.number().int(),
 });
 
 export type CreateVehicleBody = z.infer<typeof createVehicleHttpSchema>;

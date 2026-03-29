@@ -4,7 +4,9 @@ import { DomainError } from '../../../shared/errors/domain-error';
 
 export type DocumentLogId = string;
 
-export type DocumentLogType = 'insurance' | 'inspection';
+export const documentLogTypes = ['insurance', 'inspection'] as const;
+
+export type DocumentLogType = (typeof documentLogTypes)[number];
 
 export type DocumentLog = {
   id: DocumentLogId;

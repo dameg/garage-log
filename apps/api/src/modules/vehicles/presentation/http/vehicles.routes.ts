@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { createVehicleHttpSchema } from '../validation/create-vehicle.schema';
 import { createVehiclesServices } from '../../vehicles.factory';
-import { vehicleIdParamsSchema } from '../validation/vehicle-id.schema';
+import { vehicleIdParamsSchema } from '../../../../shared/http/params/vehicle-id.schema';
 import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
 import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
 import {
@@ -15,6 +15,7 @@ import {
   vehicleResponseSchema,
   vehiclesRateLimitDescription,
 } from '../../../../shared/http/openapi';
+import { parseBody, parseParams, parseQuery } from '../../../../shared/http/validation';
 
 export async function vehiclesRoutes(app: FastifyInstance) {
   const {
@@ -58,7 +59,7 @@ export async function vehiclesRoutes(app: FastifyInstance) {
       },
     },
     async (req, reply) => {
-      const body = createVehicleHttpSchema.parse(req.body);
+      const body = parseBody(createVehicleHttpSchema, req.body);
 
       const created = await createVehicleUseCase.execute({ ...body, ownerId: req.user.sub });
 
@@ -100,14 +101,14 @@ export async function vehiclesRoutes(app: FastifyInstance) {
       },
     },
     async (req) => {
-      const query = listVehiclesQuerySchema.parse(req.query);
+      const query = parseQuery(listVehiclesQuerySchema, req.query);
 
       return listVehiclesUseCase.execute({ ...query, ownerId: req.user.sub });
     },
   );
 
   app.get(
-    '/:id',
+    '/:vehicleId',
     {
       schema: {
         tags: ['Vehicles'],
@@ -144,14 +145,14 @@ export async function vehiclesRoutes(app: FastifyInstance) {
       },
     },
     async (req) => {
-      const params = vehicleIdParamsSchema.parse(req.params);
+      const params = parseParams(vehicleIdParamsSchema, req.params);
 
       return getVehicleUseCase.execute({ ...params, ownerId: req.user.sub });
     },
   );
 
   app.delete(
-    '/:id',
+    '/:vehicleId',
     {
       schema: {
         tags: ['Vehicles'],
@@ -186,7 +187,7 @@ export async function vehiclesRoutes(app: FastifyInstance) {
       },
     },
     async (req, reply) => {
-      const params = vehicleIdParamsSchema.parse(req.params);
+      const params = parseParams(vehicleIdParamsSchema, req.params);
 
       await deleteVehicleUseCase.execute({ ...params, ownerId: req.user.sub });
 
@@ -195,7 +196,7 @@ export async function vehiclesRoutes(app: FastifyInstance) {
   );
 
   app.patch(
-    '/:id',
+    '/:vehicleId',
     {
       schema: {
         tags: ['Vehicles'],
@@ -233,12 +234,11 @@ export async function vehiclesRoutes(app: FastifyInstance) {
       },
     },
     async (req, reply) => {
-      const params = vehicleIdParamsSchema.parse(req.params);
-
-      const body = updateVehicleHttpSchema.parse(req.body);
+      const params = parseParams(vehicleIdParamsSchema, req.params);
+      const body = parseBody(updateVehicleHttpSchema, req.body);
 
       const updated = await updateVehicleUseCase.execute({
-        id: params.id,
+        vehicleId: params.vehicleId,
         ownerId: req.user.sub,
         patch: body,
       });

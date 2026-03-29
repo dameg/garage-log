@@ -12,7 +12,7 @@ export async function documentLogsModule(app: FastifyInstance) {
       protectedApp.addHook('preHandler', apiRateLimitGuard);
     },
     {
-      prefix: '/document-logs',
+      prefix: '/vehicles/:vehicleId/document-logs',
     },
   );
 }
