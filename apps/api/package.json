@@ -9,17 +9,14 @@
     "test:db": "dotenv -e .env.test -- vitest run --config vitest.e2e.config.ts",
     "seed": "node scripts/seed-db.mjs",
     "codex:test": "node scripts/codex-test-module.mjs",
-    "codex:review": "node scripts/codex-review-module.mjs",
-    "codex:openapi": "node scripts/codex-openapi-module.mjs"
+    "codex:review": "node scripts/codex-review-module.mjs"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.2.0",
     "@fastify/jwt": "^10.0.0",
-    "@fastify/swagger": "^9.7.0",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
-    "@scalar/fastify-api-reference": "^1.49.3",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.3.1",
     "fastify": "^5.8.1",

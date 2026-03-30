@@ -144,6 +144,18 @@ describe('Vehicles (integration - in memory)', () => {
     const res = await createVehicle(app, user.cookie, new VehicleHttpBuilder().withVin('').build());
 
     expect(res.statusCode).toBe(400);
+    expect(res.json()).toEqual(
+      expect.objectContaining({
+        error: 'Bad Request',
+        message: 'Validation error',
+        issues: expect.arrayContaining([
+          expect.objectContaining({
+            path: 'vin',
+            message: expect.stringContaining('>=1 characters'),
+          }),
+        ]),
+      }),
+    );
   });
 
   it('returns 400 for invalid patch body', async () => {
@@ -152,12 +164,23 @@ describe('Vehicles (integration - in memory)', () => {
     const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
 
     const created = createRes.json();
-    console.log(created);
     const res = await updateVehicle(app, user.cookie, created.id, {
       year: 'abc',
     } as any);
-    console.log(res);
+
     expect(res.statusCode).toBe(400);
+    expect(res.json()).toEqual(
+      expect.objectContaining({
+        error: 'Bad Request',
+        message: 'Validation error',
+        issues: expect.arrayContaining([
+          expect.objectContaining({
+            path: 'year',
+            message: expect.stringContaining('expected number'),
+          }),
+        ]),
+      }),
+    );
   });
 
   it('returns 401 when user is not authenticated', async () => {
