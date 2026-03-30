@@ -18,7 +18,7 @@ describe('UpdateVehicleUseCase', () => {
     await repo.create(vehicle);
 
     const result = await useCase.execute({
-      id: 'v-1',
+      vehicleId: 'v-1',
       ownerId: 'user-1',
       patch: {
         vin: '4ALGYGW1H1YP26659',
@@ -41,7 +41,7 @@ describe('UpdateVehicleUseCase', () => {
 
     await expect(
       useCase.execute({
-        id: 'missing',
+        vehicleId: 'missing',
         ownerId: 'user-1',
         patch: {
           mileage: 260000,
@@ -62,7 +62,7 @@ describe('UpdateVehicleUseCase', () => {
 
     await expect(
       useCase.execute({
-        id: 'v-1',
+        vehicleId: 'v-1',
         ownerId: 'user-2',
         patch: {
           mileage: 260000,

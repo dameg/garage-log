@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { buildApp } from '../../app';
-import { createTestDeps } from '../../shared/di/test';
+import { createTestAppContainer } from '../../shared/di/test';
 import { registerAndGetCookie } from '../../test/utils/auth';
 import { VehicleHttpBuilder } from '../../test/builders/vehicle.http.builder';
 import {
@@ -15,8 +15,8 @@ describe('Vehicles (integration - in memory)', () => {
   let app: Awaited<ReturnType<typeof buildApp>>;
 
   beforeEach(async () => {
-    app = await buildApp(createTestDeps());
-    await app.ready();
+    app = await buildApp(createTestAppContainer());
+    app.ready();
   });
 
   afterEach(async () => {
@@ -152,11 +152,11 @@ describe('Vehicles (integration - in memory)', () => {
     const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
 
     const created = createRes.json();
-
+    console.log(created);
     const res = await updateVehicle(app, user.cookie, created.id, {
       year: 'abc',
     } as any);
-
+    console.log(res);
     expect(res.statusCode).toBe(400);
   });
 

@@ -5,7 +5,7 @@ import { env } from './shared/config';
 import { vehiclesModule } from './modules/vehicles/vehicles.module';
 import { diPlugin } from './shared/di/di.plugin';
 import { createProdDeps } from './shared/di/prod';
-import type { Deps } from './shared/di/types';
+import type { AppContainer } from './shared/di/types';
 import { ZodError } from 'zod';
 import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
@@ -18,7 +18,7 @@ import scalar from '@scalar/fastify-api-reference';
 import { enhanceOpenApiDocument, healthResponseSchema } from './shared/http/openapi';
 import { RateLimitExceededError } from './shared/errors/rate-limit-error';
 
-export async function buildApp(deps?: Deps) {
+export async function buildApp(deps?: AppContainer) {
   const app = Fastify({
     logger:
       env.NODE_ENV === 'test'

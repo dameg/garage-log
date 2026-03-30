@@ -1,8 +1,8 @@
 import 'fastify';
-import type { Deps } from './types';
+import type { AppContainer } from './types';
 
 declare module 'fastify' {
   interface FastifyInstance {
-    deps: Deps;
+    deps: AppContainer;
   }
 }

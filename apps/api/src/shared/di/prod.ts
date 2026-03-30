@@ -1,5 +1,5 @@
 import { env } from '../config';
-import type { Deps } from './types';
+import type { AppContainer } from './types';
 import { getPrisma } from '../db/prisma';
 import { PrismaVehicleRepository } from '../../modules/vehicles/infrastructure/prisma/prisma-vehicle.repository';
 import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
@@ -12,9 +12,9 @@ import { ConsumeTokenBucketUseCase } from '../rate-limit/application/consume-tok
 import { CheckSlidingWindowUseCase } from '../rate-limit/application/check-sliding-window.usecase';
 import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
 
-let prodDeps: Deps | null = null;
+let prodDeps: AppContainer | null = null;
 
-export function createProdDeps(): Deps {
+export function createProdDeps(): AppContainer {
   if (prodDeps) {
     return prodDeps;
   }

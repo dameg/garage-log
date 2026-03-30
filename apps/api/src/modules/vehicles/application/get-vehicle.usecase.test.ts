@@ -15,7 +15,7 @@ describe('GetVehicleUseCase', () => {
     await repo.create(vehicle);
 
     const result = await useCase.execute({
-      id: 'v-1',
+      vehicleId: 'v-1',
       ownerId: 'user-1',
     });
 
@@ -29,7 +29,7 @@ describe('GetVehicleUseCase', () => {
 
     await expect(
       useCase.execute({
-        id: 'missing-1',
+        vehicleId: 'missing-1',
         ownerId: 'missing-2',
       }),
     ).rejects.toThrow(NotFoundError);
@@ -47,7 +47,7 @@ describe('GetVehicleUseCase', () => {
 
     await expect(
       useCase.execute({
-        id: 'v-1',
+        vehicleId: 'v-1',
         ownerId: 'user-2',
       }),
     ).rejects.toThrow(NotFoundError);

@@ -19,7 +19,7 @@ describe('DeleteVehicleUseCase', () => {
 
     await expect(
       useCase.execute({
-        id: 'v-1',
+        vehicleId: 'v-1',
         ownerId: 'user-1',
       }),
     ).resolves.toBeUndefined();
@@ -34,7 +34,7 @@ describe('DeleteVehicleUseCase', () => {
 
     await expect(
       useCase.execute({
-        id: 'missing',
+        vehicleId: 'missing',
         ownerId: 'user-1',
       }),
     ).rejects.toThrow(NotFoundError);
@@ -52,7 +52,7 @@ describe('DeleteVehicleUseCase', () => {
 
     await expect(
       useCase.execute({
-        id: 'v-1',
+        vehicleId: 'v-1',
         ownerId: 'user-2',
       }),
     ).rejects.toThrow(NotFoundError);
