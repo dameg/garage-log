@@ -17,11 +17,9 @@ import { IconInfoCircle, IconPlus } from '@tabler/icons-react';
 
 import { useCreateVehicle } from '../../hooks/useCreateVehicle';
 import { usePrefetchVehiclesTablePage } from '../../hooks/usePrefetchVehiclesTablePage';
+import { useVehiclesSearchParams } from '../../hooks/useVehiclesSearchParams';
 import { useUpdateVehicle } from '../../hooks/useUpdateVehicle';
 import { useVehicles } from '../../hooks/useVehicles';
-import { useVehiclesFiltersSearchParams } from '../../hooks/useVehiclesFiltersSearchParams';
-
-import { useVehiclesTableSearchParams } from '../../hooks/useVehiclesTableSearchParams';
 import type { CreateVehicleInput, Vehicle, VehicleFilters } from '../../types';
 import { VehicleForm } from '../../ui/VehicleForm';
 import { VehiclesFilters } from '../../ui/VehiclesFilters';
@@ -66,22 +64,15 @@ export function VehiclesList() {
   };
 
   const {
-    params: tableParams,
+    params,
+    filters,
     pagination,
     sorting,
+    setFilters,
+    resetFilters,
     setPagination,
     setSorting,
-  } = useVehiclesTableSearchParams();
-
-  const { filters, setFilters, resetFilters } = useVehiclesFiltersSearchParams();
-
-  const params = useMemo(
-    () => ({
-      ...tableParams,
-      ...filters,
-    }),
-    [tableParams, filters],
-  );
+  } = useVehiclesSearchParams();
 
   const filterInitialValues = useMemo(
     () => ({
