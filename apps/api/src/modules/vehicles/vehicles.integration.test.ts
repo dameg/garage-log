@@ -1,30 +1,29 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { buildApp } from '../../app';
-import { createTestAppContainer } from '../../shared/di/test';
-import { registerAndGetCookie } from '../../test/utils/auth';
-import { VehicleHttpBuilder } from '../../test/builders/vehicle.http.builder';
+import { createTestApp } from '../../shared/testing/create-test-app';
+import { VehicleHttpBuilder } from './test/vehicle.http.builder';
 import {
   createVehicle,
   deleteVehicle,
   getVehicle,
   listVehicles,
   updateVehicle,
-} from '../../test/actions/vehicle.actions';
+} from './test/actions/vehicle.actions';
 
 describe('Vehicles (integration - in memory)', () => {
-  let app: Awaited<ReturnType<typeof buildApp>>;
+  let testApp: Awaited<ReturnType<typeof createTestApp>>;
+  let app: Awaited<ReturnType<typeof createTestApp>>['app'];
 
   beforeEach(async () => {
-    app = await buildApp(createTestAppContainer());
-    app.ready();
+    testApp = await createTestApp();
+    app = testApp.app;
   });
 
   afterEach(async () => {
-    await app.close();
+    await testApp.close();
   });
 
   it('creates and lists vehicles for authenticated user', async () => {
-    const user = await registerAndGetCookie(app);
+    const user = await testApp.registerAndGetCookie();
 
     const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
 
@@ -58,7 +57,7 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('returns vehicle by id', async () => {
-    const user = await registerAndGetCookie(app);
+    const user = await testApp.registerAndGetCookie();
 
     const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
 
@@ -76,7 +75,7 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('updates vehicle', async () => {
-    const user = await registerAndGetCookie(app);
+    const user = await testApp.registerAndGetCookie();
 
     const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
 
@@ -98,8 +97,8 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('returns 404 when another user tries to update vehicle', async () => {
-    const owner = await registerAndGetCookie(app, 'owner3@test.com');
-    const stranger = await registerAndGetCookie(app, 'stranger3@test.com');
+    const owner = await testApp.registerAndGetCookie('owner3@test.com');
+    const stranger = await testApp.registerAndGetCookie('stranger3@test.com');
 
     const createRes = await createVehicle(app, owner.cookie, new VehicleHttpBuilder().build());
     const created = createRes.json();
@@ -112,7 +111,7 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('deletes vehicle', async () => {
-    const user = await registerAndGetCookie(app);
+    const user = await testApp.registerAndGetCookie();
 
     const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
 
@@ -127,8 +126,8 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('returns 404 when another user tries to delete vehicle', async () => {
-    const owner = await registerAndGetCookie(app, 'owner4@test.com');
-    const stranger = await registerAndGetCookie(app, 'stranger4@test.com');
+    const owner = await testApp.registerAndGetCookie('owner4@test.com');
+    const stranger = await testApp.registerAndGetCookie('stranger4@test.com');
 
     const createRes = await createVehicle(app, owner.cookie, new VehicleHttpBuilder().build());
     const created = createRes.json();
@@ -139,7 +138,7 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('returns 400 for invalid create body', async () => {
-    const user = await registerAndGetCookie(app);
+    const user = await testApp.registerAndGetCookie();
 
     const res = await createVehicle(app, user.cookie, new VehicleHttpBuilder().withVin('').build());
 
@@ -159,7 +158,7 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('returns 400 for invalid patch body', async () => {
-    const user = await registerAndGetCookie(app);
+    const user = await testApp.registerAndGetCookie();
 
     const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
 
@@ -193,7 +192,7 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('returns 404 when vehicle does not exist', async () => {
-    const user = await registerAndGetCookie(app);
+    const user = await testApp.registerAndGetCookie();
 
     const res = await getVehicle(app, user.cookie, '00000000-0000-0000-0000-000000000000');
 
@@ -201,8 +200,8 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('does not return vehicles of another user', async () => {
-    const owner = await registerAndGetCookie(app, 'owner@test.com');
-    const stranger = await registerAndGetCookie(app, 'stranger@test.com');
+    const owner = await testApp.registerAndGetCookie('owner@test.com');
+    const stranger = await testApp.registerAndGetCookie('stranger@test.com');
 
     await createVehicle(app, owner.cookie, new VehicleHttpBuilder().withModel('340i').build());
 
@@ -216,8 +215,8 @@ describe('Vehicles (integration - in memory)', () => {
   });
 
   it('returns 404 when another user tries to fetch vehicle by id', async () => {
-    const owner = await registerAndGetCookie(app, 'owner2@test.com');
-    const stranger = await registerAndGetCookie(app, 'stranger2@test.com');
+    const owner = await testApp.registerAndGetCookie('owner2@test.com');
+    const stranger = await testApp.registerAndGetCookie('stranger2@test.com');
 
     const createRes = await createVehicle(app, owner.cookie, new VehicleHttpBuilder().build());
 

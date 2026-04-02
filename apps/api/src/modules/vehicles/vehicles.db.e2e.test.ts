@@ -2,14 +2,14 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { buildApp } from '../../app';
 import { getPrisma } from '../../shared/db/prisma';
 import { registerAndGetCookie } from '../../test/utils/auth';
-import { VehicleHttpBuilder } from '../../test/builders/vehicle.http.builder';
+import { VehicleHttpBuilder } from './test/vehicle.http.builder';
 import {
   createVehicle,
   deleteVehicle,
   getVehicle,
   listVehicles,
   updateVehicle,
-} from '../../test/actions/vehicle.actions';
+} from './test/actions/vehicle.actions';
 
 describe('Vehicles (db e2e)', () => {
   const prisma = getPrisma();

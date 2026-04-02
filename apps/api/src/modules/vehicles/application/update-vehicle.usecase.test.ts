@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { NotFoundError } from '../../../shared/errors/not-found-error';
-import { VehicleDomainBuilder } from '../../../test/builders/vehicle.domain.builder';
-import { InMemoryVehicleRepository } from '../../../test/doubles/in-memory/in-memory-vehicle.repository';
+import { VehicleDomainBuilder } from '../test/vehicle.domain.builder';
+import { InMemoryVehicleRepository } from '../test/in-memory/in-memory-vehicle.repository';
 import { createVehicle } from '../domain/vehicle';
 import { UpdateVehicleUseCase } from './update-vehicle.usecase';
 

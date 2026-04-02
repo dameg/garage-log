@@ -1,7 +1,7 @@
-import type { VehicleRepository } from '../../../modules/vehicles/domain/vehicle.repository';
-import type { UpdatableVehicleFields, Vehicle } from '../../../modules/vehicles/domain/vehicle';
-import type { VehicleListQuery } from '../../../modules/vehicles/domain/vehicle-list.query';
-import type { PaginatedResult } from '../../../shared/domain/paginated-result';
+import type { PaginatedResult } from '../../../../shared/domain/paginated-result';
+import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';
+import type { VehicleListQuery } from '../../domain/vehicle-list.query';
+import type { VehicleRepository } from '../../domain/vehicle.repository';
 import { matchesVehicleFilters } from './matches-vehicle-filters';
 import { sortVehicles } from './sort-vehicles';
 
