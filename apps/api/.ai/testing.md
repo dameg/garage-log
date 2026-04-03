@@ -179,10 +179,42 @@ Rules:
 
 ## How to Choose the Test Level
 
+- If implementing a new module or a feature that spans multiple layers, do not stop after only one test layer by default
+- For a new CRUD-style module, usually cover:
+- domain tests for domain rules
+- use case tests for application flows
+- integration tests for HTTP routes with in-memory wiring
+- db e2e tests for the most important end-to-end flows when the module is exposed over authenticated HTTP and real infrastructure adds confidence
 - If modifying `domain/` → generate domain unit tests
 - If modifying `application/` / use cases → generate use case unit tests
 - If modifying `presentation/` / routes / request schemas → prefer integration tests
 - Only generate e2e tests when the full HTTP flow with real infrastructure matters
+
+## Minimum Coverage For New Modules
+
+When creating a new module or adding a major new feature to an existing module, do not stop after a single happy-path test file. Prefer a balanced test slice across the layers that actually carry logic or risk:
+
+- domain tests for invariants and normalization
+- use case tests for each primary use case
+- integration tests for route behavior, validation, auth, and ownership
+- db e2e tests for the main happy path and the most important permission or validation regressions
+
+Not every module needs every layer. Skip a layer when there is a concrete reason, for example:
+
+- the module has no HTTP surface
+- the change does not touch domain rules
+- e2e would only duplicate existing integration coverage without adding infrastructure confidence
+- the feature is too small to justify a dedicated helper or full extra suite
+
+## Use Case Coverage Checklist
+
+When the requested module contains `application/*.usecase.ts` files, audit that folder before finishing.
+
+- treat each primary use case in the module as requiring an explicit coverage decision
+- compare existing `*.usecase.ts` files with `*.usecase.test.ts` files in the same folder
+- create missing use case tests when the module is new, CRUD-style, or when the change touches application behavior
+- if a use case intentionally does not get a dedicated test, state the concrete reason in the final response
+- do not consider the task complete if a primary use case in scope has no test coverage and there is no concrete reason to skip it
 
 ## Mocking Rules
 

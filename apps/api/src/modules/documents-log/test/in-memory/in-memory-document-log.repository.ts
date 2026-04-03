@@ -5,6 +5,8 @@ import type {
 } from '../../domain/document-log';
 import type { DocumentLogListQuery } from '../../domain/document-log-list.query';
 import type { PaginatedResult } from '../../../../shared/domain/paginated-result';
+import { matchesDocumentLogFilters } from './matches-document-log-filters';
+import { sortDocumentLogs } from './sort-document-logs';
 
 export class InMemoryDocumentLogRepository implements DocumentLogRepository {
   private data: DocumentLog[] = [];
@@ -15,9 +17,18 @@ export class InMemoryDocumentLogRepository implements DocumentLogRepository {
   }
 
   async list(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>> {
+    const filtered = this.data.filter((documentLog) =>
+      matchesDocumentLogFilters(documentLog, query),
+    );
+
+    const sorted = sortDocumentLogs(filtered, query);
+    const total = sorted.length;
+    const start = (query.page - 1) * query.limit;
+    const end = start + query.limit;
+
     return {
-      data: [],
-      total: 0,
+      data: sorted.slice(start, end),
+      total,
       page: query.page,
       limit: query.limit,
     };

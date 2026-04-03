@@ -65,4 +65,107 @@ describe('CreateDocumentLogUseCase', () => {
     expect(result.note).toBe(input.note);
     expect(result.createdAt).toEqual(createdAt);
   });
+
+  it('passes optional fields to the repository unchanged apart from the generated id', async () => {
+    let createdDocumentLog: DocumentLog | null = null;
+
+    const repo: DocumentLogRepository = {
+      async create(documentLog) {
+        createdDocumentLog = documentLog;
+        return documentLog;
+      },
+      async list(query: DocumentLogListQuery) {
+        return {
+          data: [],
+          total: 0,
+          page: query.page,
+          limit: query.limit,
+        };
+      },
+      async findByIdForOwner() {
+        return null;
+      },
+      async deleteByIdForOwner() {
+        return false;
+      },
+      async updateByIdForOwner() {
+        return null;
+      },
+    };
+
+    const useCase = new CreateDocumentLogUseCase(repo);
+
+    await useCase.execute({
+      vehicleId: 'vehicle-1',
+      ownerId: 'user-1',
+      type: 'insurance',
+      title: '  OC policy  ',
+      issuer: '   ',
+      validFrom: new Date('2025-01-01T00:00:00.000Z'),
+      validTo: new Date('2025-12-31T00:00:00.000Z'),
+      issuedAt: new Date('2024-12-15T00:00:00.000Z'),
+      cost: 1299,
+      note: '   ',
+    });
+
+    expect(createdDocumentLog).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        vehicleId: 'vehicle-1',
+        ownerId: 'user-1',
+        type: 'insurance',
+        title: '  OC policy  ',
+        issuer: '   ',
+        validFrom: new Date('2025-01-01T00:00:00.000Z'),
+        validTo: new Date('2025-12-31T00:00:00.000Z'),
+        issuedAt: new Date('2024-12-15T00:00:00.000Z'),
+        cost: 1299,
+        note: '   ',
+      }),
+    );
+  });
+
+  it('propagates repository errors', async () => {
+    const expectedError = new Error('repository failed');
+
+    const repo: DocumentLogRepository = {
+      async create() {
+        throw expectedError;
+      },
+      async list(query: DocumentLogListQuery) {
+        return {
+          data: [],
+          total: 0,
+          page: query.page,
+          limit: query.limit,
+        };
+      },
+      async findByIdForOwner() {
+        return null;
+      },
+      async deleteByIdForOwner() {
+        return false;
+      },
+      async updateByIdForOwner() {
+        return null;
+      },
+    };
+
+    const useCase = new CreateDocumentLogUseCase(repo);
+
+    await expect(
+      useCase.execute({
+        vehicleId: 'vehicle-1',
+        ownerId: 'user-1',
+        type: 'insurance',
+        title: 'OC policy',
+        issuer: 'PZU',
+        validFrom: new Date('2025-12-31T00:00:00.000Z'),
+        validTo: new Date('2025-01-01T00:00:00.000Z'),
+        issuedAt: new Date('2024-12-15T00:00:00.000Z'),
+        cost: 1299,
+        note: 'Annual renewal',
+      }),
+    ).rejects.toThrow(expectedError);
+  });
 });
