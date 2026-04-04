@@ -1,5 +1,5 @@
 import { buildApp } from '../../app';
-import { registerAndGetCookie } from '../../test/utils/auth';
+import { registerAndGetCookie } from './register-and-get-cookie';
 import { createTestAppContainer } from '../di/test';
 import type { AppContainer } from '../di/types';
 

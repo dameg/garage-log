@@ -2,7 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { buildApp } from '../../app';
 import { getPrisma } from '../db/prisma';
 import { resetDb } from '../testing/reset-db';
-import { registerAndGetCookie } from '../../test/utils/auth';
+import { registerAndGetCookie } from '../testing/register-and-get-cookie';
 import { listVehicles } from '../../modules/vehicles/test/actions/vehicle.actions';
 
 describe('Rate limit (db e2e)', () => {

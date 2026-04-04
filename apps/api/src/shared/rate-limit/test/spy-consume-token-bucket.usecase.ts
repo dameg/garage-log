@@ -1,8 +1,8 @@
-import type { ConsumeTokenBucketUseCasePort } from '../../../shared/rate-limit/application/consume-token-bucket.usecase.port';
+import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token-bucket.usecase.port';
 import type {
   ConsumeTokenBucketParams,
   ConsumeTokenBucketResult,
-} from '../../../shared/rate-limit/domain/token-bucket.repository';
+} from '../domain/token-bucket.repository';
 
 export class SpyConsumeTokenBucketUseCase implements ConsumeTokenBucketUseCasePort {
   lastParams: ConsumeTokenBucketParams | null = null;

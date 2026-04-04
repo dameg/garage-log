@@ -6,7 +6,7 @@ import { InMemoryDocumentLogRepository } from '../../modules/documents-log/test/
 import {
   AllowAllCheckSlidingWindowUseCase,
   AllowAllConsumeTokenBucketUseCase,
-} from '../../test/doubles/rate-limit/allow-all-rate-limiters';
+} from '../rate-limit/test/allow-all-rate-limiters';
 
 export function createTestAppContainer(): AppContainer {
   const redisService = new RedisService({

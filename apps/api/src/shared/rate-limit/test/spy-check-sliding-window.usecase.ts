@@ -1,8 +1,8 @@
-import type { CheckSlidingWindowUseCasePort } from '../../../shared/rate-limit/application/check-sliding-window.usecase.port';
+import type { CheckSlidingWindowUseCasePort } from '../application/check-sliding-window.usecase.port';
 import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
-} from '../../../shared/rate-limit/domain/sliding-window.repository';
+} from '../domain/sliding-window.repository';
 
 export class SpyCheckSlidingWindowUseCase implements CheckSlidingWindowUseCasePort {
   lastParams: HitSlidingWindowParams | null = null;

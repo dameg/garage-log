@@ -1,7 +1,7 @@
 import type { FastifyRequest } from 'fastify';
 import { describe, expect, it } from 'vitest';
 import { RateLimitExceededError } from '../../errors/rate-limit-error';
-import { SpyConsumeTokenBucketUseCase } from '../../../test/doubles/rate-limit/spy-consume-token-bucket.usecase';
+import { SpyConsumeTokenBucketUseCase } from '../test/spy-consume-token-bucket.usecase';
 import { createTokenBucketGuard } from './token-bucket.guard';
 
 describe('createTokenBucketGuard', () => {

@@ -4,12 +4,12 @@ import { PrismaVehicleRepository } from '../../modules/vehicles/infrastructure/p
 import {
   AllowAllCheckSlidingWindowUseCase,
   AllowAllConsumeTokenBucketUseCase,
-} from '../../test/doubles/rate-limit/allow-all-rate-limiters';
+} from '../rate-limit/test/allow-all-rate-limiters';
 import { buildApp } from '../../app';
 import { getPrisma } from '../db/prisma';
 import { RedisService } from '../redis/redis.service';
 import type { AppContainer } from '../di/types';
-import { registerAndGetCookie } from '../../test/utils/auth';
+import { registerAndGetCookie } from './register-and-get-cookie';
 import type { TestAppHarness } from './create-test-app';
 
 export async function createDbTestApp(

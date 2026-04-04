@@ -2,7 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { getPrisma } from '../../shared/db/prisma';
 import { createDbTestApp } from '../../shared/testing/create-db-test-app';
 import { resetDb } from '../../shared/testing/reset-db';
-import { registerAndGetCookie } from '../../test/utils/auth';
+import { registerAndGetCookie } from '../../shared/testing/register-and-get-cookie';
 import { VehicleHttpBuilder } from '../vehicles/test/vehicle.http.builder';
 import { createVehicle } from '../vehicles/test/actions/vehicle.actions';
 import { DocumentLogHttpBuilder } from './test/document-log.http.builder';
