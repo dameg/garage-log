@@ -1,12 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { buildApp } from '../../app';
-import { requireAuth } from '../../shared/auth/require-auth';
-import { createTestAppContainer } from '../../shared/di/test';
 import type { AppContainer } from '../../shared/di/types';
-import { createRateLimitServices } from '../../shared/rate-limit/rate-limit.factory';
-import { registerAndGetCookie } from '../../test/utils/auth';
-import { documentLogsRoutes } from './presentation/http/document-logs.routes';
+import { createTestApp } from '../../shared/testing/create-test-app';
 import { DocumentLogHttpBuilder } from './test/document-log.http.builder';
 import { SpyDocumentLogRepository } from './test/in-memory/spy-document-log.repository';
 import {
@@ -17,46 +12,13 @@ import {
   updateDocumentLog,
 } from './test/actions/document-log.actions';
 
-async function createDocumentLogsTestApp(overrides: Partial<AppContainer> = {}) {
-  const container: AppContainer = {
-    ...createTestAppContainer(),
-    ...overrides,
-  };
-
-  const app = await buildApp(container);
-
-  await app.register(
-    async function protectedDocumentLogs(protectedApp) {
-      protectedApp.addHook('preHandler', requireAuth);
-
-      const { apiRateLimitGuard } = createRateLimitServices(protectedApp);
-
-      protectedApp.addHook('preHandler', apiRateLimitGuard);
-
-      await protectedApp.register(documentLogsRoutes);
-    },
-    {
-      prefix: '/api/vehicles/:vehicleId/document-logs',
-    },
-  );
-
-  await app.ready();
-
-  return {
-    app,
-    container,
-    close: () => app.close(),
-    registerAndGetCookie: (email?: string) => registerAndGetCookie(app, email),
-  };
-}
-
 describe('Document logs (integration - in memory)', () => {
   const vehicleId = 'vehicle-1';
-  let testApp: Awaited<ReturnType<typeof createDocumentLogsTestApp>>;
-  let app: Awaited<ReturnType<typeof createDocumentLogsTestApp>>['app'];
+  let testApp: Awaited<ReturnType<typeof createTestApp>>;
+  let app: Awaited<ReturnType<typeof createTestApp>>['app'];
 
   beforeEach(async () => {
-    testApp = await createDocumentLogsTestApp();
+    testApp = await createTestApp();
     app = testApp.app;
   });
 
@@ -349,7 +311,7 @@ describe('Document logs (integration - in memory)', () => {
     const repo = new SpyDocumentLogRepository();
 
     await testApp.close();
-    testApp = await createDocumentLogsTestApp({ documentLogsRepo: repo });
+    testApp = await createTestApp({ documentLogsRepo: repo } satisfies Partial<AppContainer>);
     app = testApp.app;
 
     const user = await testApp.registerAndGetCookie();

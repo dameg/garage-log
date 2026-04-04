@@ -15,6 +15,7 @@ import { UnauthorizedError } from './shared/errors/unauthorized-error';
 import { closePrisma } from './shared/db/prisma';
 import { RateLimitExceededError } from './shared/errors/rate-limit-error';
 import { DomainError } from './shared/errors/domain-error';
+import { documentLogsModule } from './modules/documents-log/document-logs.module';
 
 export async function buildApp(deps?: AppContainer) {
   const app = Fastify({
@@ -133,6 +134,7 @@ export async function buildApp(deps?: AppContainer) {
     async (api) => {
       await api.register(authModule);
       await api.register(vehiclesModule);
+      await api.register(documentLogsModule);
     },
     { prefix: '/api' },
   );
