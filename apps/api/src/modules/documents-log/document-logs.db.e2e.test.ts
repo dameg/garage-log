@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { buildApp } from '../../app';
 import { getPrisma } from '../../shared/db/prisma';
+import { createDbTestApp } from '../../shared/testing/create-db-test-app';
 import { registerAndGetCookie } from '../../test/utils/auth';
 import { VehicleHttpBuilder } from '../vehicles/test/vehicle.http.builder';
 import { createVehicle } from '../vehicles/test/actions/vehicle.actions';
@@ -15,11 +15,12 @@ import {
 
 describe('Document logs (db e2e)', () => {
   const prisma = getPrisma();
-  let app: Awaited<ReturnType<typeof buildApp>>;
+  let testApp: Awaited<ReturnType<typeof createDbTestApp>>;
+  let app: Awaited<ReturnType<typeof createDbTestApp>>['app'];
 
   beforeAll(async () => {
-    app = await buildApp();
-    await app.ready();
+    testApp = await createDbTestApp();
+    app = testApp.app;
   });
 
   beforeEach(async () => {
@@ -29,7 +30,7 @@ describe('Document logs (db e2e)', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    await testApp.close();
     await prisma.$disconnect();
   });
 

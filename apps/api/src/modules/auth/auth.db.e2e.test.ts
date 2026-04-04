@@ -1,14 +1,15 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
-import { buildApp } from '../../app';
 import { getPrisma } from '../../shared/db/prisma';
+import { createDbTestApp } from '../../shared/testing/create-db-test-app';
 
 describe('Auth (db e2e)', () => {
   const prisma = getPrisma();
-  let app: Awaited<ReturnType<typeof buildApp>>;
+  let testApp: Awaited<ReturnType<typeof createDbTestApp>>;
+  let app: Awaited<ReturnType<typeof createDbTestApp>>['app'];
 
   beforeAll(async () => {
-    app = await buildApp();
-    await app.ready();
+    testApp = await createDbTestApp();
+    app = testApp.app;
   });
 
   beforeEach(async () => {
@@ -17,7 +18,7 @@ describe('Auth (db e2e)', () => {
   });
 
   afterAll(async () => {
-    await app.close();
+    await testApp.close();
     await prisma.$disconnect();
   });
 

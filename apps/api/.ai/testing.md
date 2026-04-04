@@ -177,6 +177,7 @@ Rules:
 - reserve for scenarios that depend on real database, real auth wiring, or infrastructure behavior
 - do not duplicate the entire integration CRUD matrix unless infrastructure is part of the risk
 - for HTTP modules backed by real infrastructure, db e2e coverage is the default expectation, not an optional extra
+- when rate limiting is not the behavior under test, prefer disabling or stubbing it in general db e2e suites and covering it in a dedicated rate-limit suite
 
 ## How to Choose the Test Level
 
