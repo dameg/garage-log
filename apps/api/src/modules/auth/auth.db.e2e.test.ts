@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { getPrisma } from '../../shared/db/prisma';
 import { createDbTestApp } from '../../shared/testing/create-db-test-app';
+import { resetDb } from '../../shared/testing/reset-db';
 
 describe('Auth (db e2e)', () => {
   const prisma = getPrisma();
@@ -13,8 +14,7 @@ describe('Auth (db e2e)', () => {
   });
 
   beforeEach(async () => {
-    await prisma.vehicle.deleteMany();
-    await prisma.user.deleteMany();
+    await resetDb(prisma);
   });
 
   afterAll(async () => {

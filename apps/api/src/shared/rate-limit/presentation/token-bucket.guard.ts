@@ -1,6 +1,6 @@
 import type { FastifyRequest } from 'fastify';
 import { rateLimitKeys, rateLimitSubjects } from '../domain/rate-limit.keys';
-import { ConsumeTokenBucketUseCase } from '../application/consume-token-bucket.usecase';
+import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token-bucket.usecase.port';
 import { RateLimitExceededError } from '../../errors/rate-limit-error';
 
 type TokenBucketGuardOptions = {
@@ -9,7 +9,7 @@ type TokenBucketGuardOptions = {
 };
 
 export function createTokenBucketGuard(
-  useCase: ConsumeTokenBucketUseCase,
+  useCase: ConsumeTokenBucketUseCasePort,
   options: TokenBucketGuardOptions,
 ) {
   return async function tokenBucketGuard(req: FastifyRequest) {

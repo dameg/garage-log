@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { getPrisma } from '../../shared/db/prisma';
 import { createDbTestApp } from '../../shared/testing/create-db-test-app';
+import { resetDb } from '../../shared/testing/reset-db';
 import { registerAndGetCookie } from '../../test/utils/auth';
 import { VehicleHttpBuilder } from '../vehicles/test/vehicle.http.builder';
 import { createVehicle } from '../vehicles/test/actions/vehicle.actions';
@@ -24,9 +25,7 @@ describe('Document logs (db e2e)', () => {
   });
 
   beforeEach(async () => {
-    await prisma.documentLog.deleteMany();
-    await prisma.vehicle.deleteMany();
-    await prisma.user.deleteMany();
+    await resetDb(prisma);
   });
 
   afterAll(async () => {

@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { buildApp } from '../../app';
 import { getPrisma } from '../db/prisma';
+import { resetDb } from '../testing/reset-db';
 import { registerAndGetCookie } from '../../test/utils/auth';
 import { listVehicles } from '../../modules/vehicles/test/actions/vehicle.actions';
 
@@ -14,8 +15,7 @@ describe('Rate limit (db e2e)', () => {
   });
 
   beforeEach(async () => {
-    await prisma.vehicle.deleteMany();
-    await prisma.user.deleteMany();
+    await resetDb(prisma);
   });
 
   afterAll(async () => {
@@ -57,15 +57,55 @@ describe('Rate limit (db e2e)', () => {
     );
   });
 
-  it('rate-limits authenticated API traffic after token bucket capacity is exhausted', async () => {
-    const user = await registerAndGetCookie(app, `api-rate-limit-${Date.now()}@test.com`);
+  it('keeps login rate limits isolated per email and ip subject', async () => {
+    const limitedEmail = `limited-${Date.now()}@test.com`;
+    const freshEmail = `fresh-${Date.now()}@test.com`;
+
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const res = await app.inject({
+        method: 'POST',
+        url: '/api/auth/login',
+        payload: {
+          email: limitedEmail,
+          password: 'wrong-password',
+        },
+      });
+
+      expect(res.statusCode).toBe(401);
+    }
+
+    const limitedRes = await app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      payload: {
+        email: limitedEmail,
+        password: 'wrong-password',
+      },
+    });
+    const freshRes = await app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      payload: {
+        email: freshEmail,
+        password: 'wrong-password',
+      },
+    });
+
+    expect(limitedRes.statusCode).toBe(429);
+    expect(freshRes.statusCode).toBe(401);
+  });
+
+  it('keeps token bucket limits isolated per authenticated user', async () => {
+    const limitedUser = await registerAndGetCookie(app, `api-rate-limit-a-${Date.now()}@test.com`);
+    const freshUser = await registerAndGetCookie(app, `api-rate-limit-b-${Date.now()}@test.com`);
 
     for (let attempt = 0; attempt < 60; attempt++) {
-      const res = await listVehicles(app, user.cookie);
+      const res = await listVehicles(app, limitedUser.cookie);
       expect(res.statusCode).toBe(200);
     }
 
-    const limitedRes = await listVehicles(app, user.cookie);
+    const limitedRes = await listVehicles(app, limitedUser.cookie);
+    const freshRes = await listVehicles(app, freshUser.cookie);
 
     expect(limitedRes.statusCode).toBe(429);
     expect(limitedRes.headers['retry-after']).toBeTruthy();
@@ -74,5 +114,6 @@ describe('Rate limit (db e2e)', () => {
         error: 'Too Many Requests',
       }),
     );
+    expect(freshRes.statusCode).toBe(200);
   });
 });
