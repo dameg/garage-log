@@ -1,2 +1,2 @@
-export * from './ColorSchemeToggle';
+export * from './vehicle';
 export * from './Navbar';

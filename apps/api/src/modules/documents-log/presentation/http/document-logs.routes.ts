@@ -28,10 +28,11 @@ export async function documentLogsRoutes(app: FastifyInstance) {
     return reply.status(201).send(created);
   });
 
-  app.get('/', async (req, reply) => {
+  app.get('/', async (req) => {
     const query = parseQuery(listDocumentLogsQuerySchema, req.query);
+    const params = parseParams(vehicleIdParamsSchema, req.params);
 
-    return listDocumentLogsUseCase.execute({ ...query, ownerId: req.user.sub });
+    return listDocumentLogsUseCase.execute({ ...query, ...params, ownerId: req.user.sub });
   });
 
   app.get('/:documentLogId', async (req) => {

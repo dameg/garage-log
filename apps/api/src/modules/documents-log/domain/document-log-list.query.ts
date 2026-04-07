@@ -27,6 +27,7 @@ export type DocumentLogFilters = {
 
 export type DocumentLogListQuery = {
   ownerId: string;
+  vehicleId: string;
   filters?: DocumentLogFilters;
   page: number;
   limit: number;

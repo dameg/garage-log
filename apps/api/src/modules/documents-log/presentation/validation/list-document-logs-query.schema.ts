@@ -16,11 +16,9 @@ export const listDocumentLogsQuerySchema = z
     search: z.string().optional(),
     type: z.enum(documentLogTypes).optional(),
     issuer: z.string().optional(),
-
     costFrom: z.coerce.number().nonnegative().optional(),
     costTo: z.coerce.number().nonnegative().optional(),
     hasCost: z.stringbool().optional(),
-
     issuedAtFrom: z.coerce.date().optional(),
     issuedAtTo: z.coerce.date().optional(),
     validFromFrom: z.coerce.date().optional(),

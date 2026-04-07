@@ -4,6 +4,7 @@ import { DocumentLogSortField } from '../../domain/document-log-list.query';
 
 export type ListDocumentLogsInput = {
   ownerId: string;
+  vehicleId: string;
   search?: string;
   type?: DocumentLogType;
   issuer?: string;

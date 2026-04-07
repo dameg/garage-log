@@ -1,0 +1,53 @@
+import { http } from '@/shared/api/httpClient';
+import type {
+  CreateVehicleInput,
+  UpdateVehicleInput,
+  Vehicle,
+  VehiclesListParams,
+  VehiclesResponse,
+} from './types';
+
+export function getVehicles(params: VehiclesListParams) {
+  const searchParams = new URLSearchParams();
+
+  if (params.search) searchParams.set('search', params.search);
+  if (params.mileageFrom != null) searchParams.set('mileageFrom', String(params.mileageFrom));
+  if (params.mileageTo != null) searchParams.set('mileageTo', String(params.mileageTo));
+  if (params.yearFrom != null) searchParams.set('yearFrom', String(params.yearFrom));
+  if (params.yearTo != null) searchParams.set('yearTo', String(params.yearTo));
+
+  searchParams.set('page', String(params.page));
+  searchParams.set('limit', String(params.limit));
+  searchParams.set('sortBy', params.sortBy);
+  searchParams.set('direction', params.direction);
+
+  return http<VehiclesResponse>(`/vehicles?${searchParams.toString()}`, {
+    method: 'GET',
+  });
+}
+
+export async function getVehicle(id: string) {
+  return http<Vehicle>(`/vehicles/${id}`, {
+    method: 'GET',
+  });
+}
+
+export async function createVehicle(payload: CreateVehicleInput) {
+  return http<Vehicle>('/vehicles', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateVehicle({ id, payload }: UpdateVehicleInput) {
+  return http<Vehicle>(`/vehicles/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteVehicle(id: string) {
+  return http<void>(`/vehicles/${id}`, {
+    method: 'DELETE',
+  });
+}

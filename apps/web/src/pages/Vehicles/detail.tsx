@@ -1,8 +1,8 @@
-import { VehicleDetail } from '@/features/vehicles';
+// import { VehicleDetail } from '@/features/vehicles';
 import { useRequiredParam } from '@/shared/lib/router';
 
 export function VehicleDetailPage() {
-  const id = useRequiredParam('id');
+  const vehicleId = useRequiredParam('id');
 
-  return <VehicleDetail id={id} />;
+  // return <VehicleDetail vehicleId={vehicleId} />;
 }

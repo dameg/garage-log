@@ -1,19 +1,11 @@
-import {
-  Box,
-  Group,
-  Stack,
-  Text,
-  ThemeIcon,
-  Tooltip,
-  UnstyledButton,
-} from '@mantine/core';
+import { Box, Group, Stack, Text, ThemeIcon, Tooltip, UnstyledButton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconLogout } from '@tabler/icons-react';
 import { NavLink } from 'react-router-dom';
 
 import { navigation } from '@/app/config';
 import { useLogout } from '@/features/auth/hooks/useLogout';
-import { ColorSchemeToggle } from './ColorSchemeToggle';
+import { ColorSchemeToggle } from '../shared/ui/ColorSchemeToggle';
 
 type Props = {
   onNavigate?: () => void;

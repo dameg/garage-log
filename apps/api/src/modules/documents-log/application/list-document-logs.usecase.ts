@@ -10,6 +10,7 @@ export class ListDocumentLogsUseCase {
   async execute(input: ListDocumentLogsInput): Promise<PaginatedResult<DocumentLog>> {
     const query: DocumentLogListQuery = {
       ownerId: input.ownerId,
+      vehicleId: input.vehicleId,
       filters: {
         search: input.search,
         type: input.type,

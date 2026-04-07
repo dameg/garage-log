@@ -1,0 +1,43 @@
+import { Button, Group, Modal, Text } from '@mantine/core';
+import { useDeleteVehicle } from '../model/useDeleteVehicle';
+import type { Vehicle } from '@/entities/vehicle/types';
+
+type Props = {
+  opened: boolean;
+  onClose: () => void;
+  onExited: () => void;
+  vehicle: Vehicle | null;
+};
+
+export function DeleteVehicleDialog({ opened, onClose, onExited, vehicle }: Props) {
+  const { isPending, mutateAsync } = useDeleteVehicle();
+
+  const handleConfirmDelete = async () => {
+    if (!vehicle) return;
+    await mutateAsync(vehicle.id);
+    onClose();
+  };
+
+  return (
+    <Modal
+      opened={opened}
+      onClose={onClose}
+      onExitTransitionEnd={onExited}
+      title="Delete Vehicle"
+      centered
+      size={'lg'}
+    >
+      {!vehicle ? null : (
+        <Text>{`Delete ${vehicle.brand} ${vehicle.model} (VIN: ${vehicle.vin})?`}</Text>
+      )}
+      <Group mt="md">
+        <Button variant="outline" onClick={onClose} disabled={isPending}>
+          Cancel
+        </Button>
+        <Button color="red" loading={isPending} onClick={handleConfirmDelete} disabled={!vehicle}>
+          Delete
+        </Button>
+      </Group>
+    </Modal>
+  );
+}

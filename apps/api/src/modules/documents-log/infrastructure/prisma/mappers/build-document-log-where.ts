@@ -1,10 +1,11 @@
 import type { DocumentLogListQuery } from '../../../domain/document-log-list.query';
 
 export function buildDocumentLogWhere(query: DocumentLogListQuery) {
-  const { ownerId, filters } = query;
+  const { ownerId, vehicleId, filters } = query;
 
   return {
     ownerId,
+    vehicleId,
     ...(filters?.search && {
       title: {
         contains: filters.search,
