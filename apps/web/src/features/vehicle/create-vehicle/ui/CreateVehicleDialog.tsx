@@ -1,7 +1,6 @@
-import { VehicleForm } from '@/entities/vehicle/ui/VehicleForm';
 import { Modal } from '@mantine/core';
 import { useCreateVehicle } from '../model/useCreateVehicle';
-import type { CreateVehicleInput } from '@/entities/vehicle/types';
+import { VehicleForm, type VehicleFormValues } from '@/features/vehicle/vehicle-form';
 
 type Props = {
   opened: boolean;
@@ -11,7 +10,7 @@ type Props = {
 export function CreateVehicleDialog({ opened, onClose }: Props) {
   const { mutateAsync, isPending } = useCreateVehicle();
 
-  const handleSubmit = async (values: CreateVehicleInput) => {
+  const handleSubmit = async (values: VehicleFormValues) => {
     await mutateAsync(values);
     onClose();
   };
@@ -19,11 +18,10 @@ export function CreateVehicleDialog({ opened, onClose }: Props) {
   return (
     <Modal title="Create Vehicle" opened={opened} onClose={onClose} centered size={'lg'}>
       <VehicleForm
-        vehicle={null}
-        mode="create"
         onSubmit={handleSubmit}
-        isSubmitting={isPending}
         onClose={onClose}
+        isSubmitting={isPending}
+        submitLabel="Create"
       />
     </Modal>
   );

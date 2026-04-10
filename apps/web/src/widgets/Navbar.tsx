@@ -4,7 +4,7 @@ import { IconLogout } from '@tabler/icons-react';
 import { NavLink } from 'react-router-dom';
 
 import { navigation } from '@/app/config';
-import { useLogout } from '@/features/auth/hooks/useLogout';
+import { useLogout } from '@/features/auth/logout-user/model/useLogout';
 import { ColorSchemeToggle } from '../shared/ui/ColorSchemeToggle';
 
 type Props = {

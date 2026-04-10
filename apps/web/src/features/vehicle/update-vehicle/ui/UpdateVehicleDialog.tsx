@@ -1,8 +1,9 @@
-import type { UpdateVehicleInput, Vehicle } from '@/entities/vehicle/types';
-import { VehicleForm } from '@/entities/vehicle/ui/VehicleForm';
 import { Modal } from '@mantine/core';
 
 import { useUpdateVehicle } from '../model/useUpdateVehicle';
+import { VehicleForm } from '../../vehicle-form/ui/VehicleForm';
+import type { VehicleFormValues } from '../../vehicle-form/model/vehicle-form.schema';
+import type { Vehicle } from '@/entities/vehicle';
 
 type Props = {
   opened: boolean;
@@ -14,9 +15,9 @@ type Props = {
 export function UpdateVehicleDialog({ opened, onClose, onExited, vehicle }: Props) {
   const { mutateAsync, isPending } = useUpdateVehicle();
 
-  const handleSubmit = async (values: UpdateVehicleInput) => {
+  const handleSubmit = async (values: VehicleFormValues) => {
     if (!vehicle) return;
-    await mutateAsync(values);
+    await mutateAsync({ id: vehicle.id, payload: values });
     onClose();
   };
 
@@ -30,11 +31,11 @@ export function UpdateVehicleDialog({ opened, onClose, onExited, vehicle }: Prop
       size={'lg'}
     >
       <VehicleForm
-        mode="edit"
-        vehicle={vehicle}
+        defaultValues={{ ...vehicle }}
         onSubmit={handleSubmit}
         onClose={onClose}
-        isPending={isPending}
+        isSubmitting={isPending}
+        submitLabel="Update"
       />
     </Modal>
   );

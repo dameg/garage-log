@@ -10,21 +10,21 @@ import {
   Stack,
   Title,
 } from '@mantine/core';
-import { CreateVehicleAction } from '@/features/vehicle/create-vehicle';
-import { VehiclesFilters } from './VehiclesFilters';
-
-import { useVehiclesTableSearchParams } from '../model/useVehiclesTableSearchParams';
-import { VehiclesTable } from './VehiclesTable';
-import { useVehiclesList } from '@/entities/vehicle/model/useVehiclesList';
-import { IconInfoCircle } from '@tabler/icons-react';
-import { usePrefetchVehiclesTablePage } from '../model/usePrefetchVehiclesTablePage';
-import { DeleteVehicleDialog } from '@/features/vehicle/delete-vehicle/ui/DeleteVehicleDialog';
-import type { Vehicle } from '@/entities/vehicle/types';
-import { UpdateVehicleDialog } from '@/features/vehicle/update-vehicle/ui/UpdateVehicleDialog';
 import { useDisclosure } from '@mantine/hooks';
+import { IconInfoCircle } from '@tabler/icons-react';
+
+import type { Vehicle } from '@/entities/vehicle';
+import { useVehiclesTableSearchParams } from '../model/useVehiclesTableSearchParams';
+import { useVehiclesList } from '../model/useVehiclesList';
+import { usePrefetchVehiclesTablePage } from '../model/usePrefetchVehiclesTablePage';
+import { VehiclesFiltersForm } from './VehiclesFiltersForm';
+import { VehiclesTable } from './VehiclesTable';
+import { CreateVehicleAction } from '@/features/vehicle/create-vehicle';
+import { DeleteVehicleDialog } from '@/features/vehicle/delete-vehicle';
+import { UpdateVehicleDialog } from '@/features/vehicle/update-vehicle';
 
 const EMPTY_VEHICLES_LIST = {
-  items: [],
+  data: [],
   total: 0,
 };
 
@@ -53,7 +53,7 @@ export function VehiclesListWidget() {
     isError,
   } = useVehiclesList(params);
 
-  const data = vehiclesResponse.items;
+  const data = vehiclesResponse.data;
   const totalItems = vehiclesResponse.total;
   const totalPages = Math.ceil(totalItems / pagination.pageSize);
 
@@ -128,11 +128,7 @@ export function VehiclesListWidget() {
         </Group>
         <Divider />
         <Card shadow="sm" padding="lg" radius="lg" withBorder>
-          <VehiclesFilters
-            filters={filterInitialValues}
-            onSubmit={setFilters}
-            onReset={resetFilters}
-          />
+          <VehiclesFiltersForm filters={filters} onSubmit={setFilters} onReset={resetFilters} />
         </Card>
         <Card shadow="sm" padding="lg" radius="lg" withBorder>
           <VehiclesTable

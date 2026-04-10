@@ -1,5 +1,5 @@
-import { Login } from '@/features/auth';
+import { LoginUserAction } from '@/features/auth/login-user';
 
 export function LoginPage() {
-  return <Login />;
+  return <LoginUserAction />;
 }

@@ -10,9 +10,10 @@ import {
 import { Group, Pagination, ScrollArea, Select, Skeleton, Table, Text } from '@mantine/core';
 
 import { createColumns } from './columns';
-import type { Vehicle } from '../../../../../entities/vehicle/types';
+
 import { useNavigate } from 'react-router-dom';
 import { routes } from '@/app/routes';
+import type { Vehicle } from '@/entities/vehicle';
 
 const PAGE_SIZE_OPTIONS = ['10', '20', '50', '100'];
 
@@ -91,7 +92,7 @@ export function VehiclesTable({
       </Group>
 
       <ScrollArea>
-        <Table striped highlightOnHover withRowBorders>
+        <Table striped highlightOnHover withColumnBorders>
           <Table.Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Tr key={headerGroup.id}>

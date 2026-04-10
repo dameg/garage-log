@@ -1,7 +1,8 @@
 import { ActionIcon, Group } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { Vehicle } from '../../../../../entities/vehicle/types';
+
+import type { Vehicle } from '@/entities/vehicle';
 
 type Props = {
   onEdit?: (vehicle: Vehicle) => void;

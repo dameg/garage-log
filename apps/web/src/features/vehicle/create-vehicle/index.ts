@@ -1,1 +1,1 @@
-export * from './ui';
+export { CreateVehicleAction } from './ui/CreateVehicleAction';

@@ -1,26 +1,73 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { vehiclesMutations } from '../../../../entities/vehicle/queries/vehicles.mutations';
-import { vehiclesKeys } from '../../../../entities/vehicle/queries/vehicles.keys';
 import { notifications } from '@mantine/notifications';
+
+import { vehicleKeys, vehicleMutations, type VehicleResponse } from '@/entities/vehicle';
+import type { PaginatedResult } from '@/shared/api';
 
 export function useDeleteVehicle() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    ...vehiclesMutations.deleteVehicle(),
-    onSuccess: async (_, id) => {
+    ...vehicleMutations.deleteVehicle(),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: vehicleKeys.lists() });
+      await queryClient.cancelQueries({ queryKey: vehicleKeys.detail(id) });
+
+      const previousLists = queryClient.getQueriesData<PaginatedResult<VehicleResponse>>({
+        queryKey: vehicleKeys.lists(),
+      });
+      const previousDetail = queryClient.getQueryData<VehicleResponse>(vehicleKeys.detail(id));
+
       queryClient.removeQueries({
-        queryKey: vehiclesKeys.detail(id),
+        queryKey: vehicleKeys.detail(id),
         exact: true,
       });
-      await queryClient.invalidateQueries({
-        queryKey: vehiclesKeys.lists(),
-        exact: true,
+
+      previousLists.forEach(([queryKey, queryData]) => {
+        if (!queryData) return;
+
+        queryClient.setQueryData<PaginatedResult<VehicleResponse>>(queryKey, {
+          ...queryData,
+          data: queryData.data.filter((vehicle) => vehicle.id !== id),
+          total: Math.max(0, queryData.total - 1),
+        });
       });
+
+      return {
+        previousLists,
+        previousDetail,
+      };
+    },
+
+    onError: (_error, id, context) => {
+      context?.previousLists?.forEach(([queryKey, queryData]) => {
+        queryClient.setQueryData(queryKey, queryData);
+      });
+
+      if (context?.previousDetail) {
+        queryClient.setQueryData(vehicleKeys.detail(id), context.previousDetail);
+      }
+
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to delete vehicle',
+        color: 'red',
+      });
+    },
+    onSuccess: async () => {
       notifications.show({
         title: 'Success',
         message: 'Vehicle deleted',
         color: 'green',
+      });
+    },
+    onSettled: async (_data, _error, id) => {
+      queryClient.removeQueries({
+        queryKey: vehicleKeys.detail(id),
+        exact: true,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: vehicleKeys.lists(),
       });
     },
   });

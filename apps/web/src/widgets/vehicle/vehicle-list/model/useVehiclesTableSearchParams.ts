@@ -1,18 +1,14 @@
+import type { VehiclesListParams, VehiclesSortBy } from '@/entities/vehicle';
+import type { SortDirection } from '@/shared/types';
 import type { OnChangeFn, PaginationState, SortingState } from '@tanstack/react-table';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { SortDirection } from '@/shared/types/sorting';
-import type {
-  VehicleFilters,
-  VehiclesListParams,
-  VehiclesSortBy,
-} from '../../../../entities/vehicle/types';
+import type { VehiclesFiltersFormOutput } from './vehicles-filters-form.schema';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
 const DEFAULT_SORT_BY: VehiclesSortBy = 'createdAt';
 const DEFAULT_DIRECTION: SortDirection = 'desc';
-const EMPTY = '';
 
 function toPositiveNumber(value: string | null, fallback: number) {
   const parsed = Number(value);
@@ -57,9 +53,9 @@ export function useVehiclesTableSearchParams() {
     ];
   }, [searchParams]);
 
-  const filters = useMemo<VehicleFilters>(
+  const filters = useMemo<VehiclesFiltersFormOutput>(
     () => ({
-      search: searchParams.get('search') ?? EMPTY,
+      search: searchParams.get('search') ?? undefined,
       yearFrom: toOptionalNumber(searchParams.get('yearFrom')),
       yearTo: toOptionalNumber(searchParams.get('yearTo')),
       mileageFrom: toOptionalNumber(searchParams.get('mileageFrom')),
@@ -97,7 +93,13 @@ export function useVehiclesTableSearchParams() {
     });
   };
 
-  const setFilters = ({ search, yearFrom, yearTo, mileageFrom, mileageTo }: VehicleFilters) => {
+  const setFilters = ({
+    search,
+    yearFrom,
+    yearTo,
+    mileageFrom,
+    mileageTo,
+  }: VehiclesFiltersFormOutput) => {
     updateSearchParams((nextParams) => {
       if (search != null) nextParams.set('search', search);
       else nextParams.delete('search');

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { vehiclesQueries } from '../../../../entities/vehicle/queries/vehicles.queries';
-import type { VehiclesListParams } from '../../../../entities/vehicle/types';
+import { vehicleQueries, type VehiclesListParams } from '@/entities/vehicle';
+
 import { useEffect } from 'react';
 
 type Options = {
@@ -22,6 +22,6 @@ export function usePrefetchVehiclesTablePage({ params, pageIndex, totalPages }: 
       page: nextPage,
     };
 
-    queryClient.prefetchQuery(vehiclesQueries.list(nextParams));
+    queryClient.prefetchQuery(vehicleQueries.list(nextParams));
   }, [pageIndex, totalPages, params, queryClient]);
 }

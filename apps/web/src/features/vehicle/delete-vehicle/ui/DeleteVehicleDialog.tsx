@@ -1,6 +1,6 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
 import { useDeleteVehicle } from '../model/useDeleteVehicle';
-import type { Vehicle } from '@/entities/vehicle/types';
+import type { Vehicle } from '@/entities/vehicle';
 
 type Props = {
   opened: boolean;
@@ -27,9 +27,9 @@ export function DeleteVehicleDialog({ opened, onClose, onExited, vehicle }: Prop
       centered
       size={'lg'}
     >
-      {!vehicle ? null : (
+      {vehicle ? (
         <Text>{`Delete ${vehicle.brand} ${vehicle.model} (VIN: ${vehicle.vin})?`}</Text>
-      )}
+      ) : null}
       <Group mt="md">
         <Button variant="outline" onClick={onClose} disabled={isPending}>
           Cancel
