@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { navigation } from '@/app/config';
 import { useLogout } from '@/features/auth/logout-user/model/useLogout';
 import { ColorSchemeToggle } from '../shared/ui/ColorSchemeToggle';
+import { LogoutUserAction } from '@/features/auth/logout-user';
 
 type Props = {
   onNavigate?: () => void;
@@ -102,33 +103,7 @@ export function Navbar({ onNavigate }: Props) {
         </Box>
 
         <Tooltip label="Logout" position="right" disabled={showLabels}>
-          <UnstyledButton
-            onClick={() => {
-              onNavigate?.();
-              logout.mutate();
-            }}
-            w="100%"
-            px={showLabels ? 'sm' : 0}
-            py={showLabels ? 'xs' : 'sm'}
-            style={(theme) => ({
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: showLabels ? 'flex-start' : 'center',
-              borderRadius: theme.radius.sm,
-              color: 'light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-1))',
-            })}
-          >
-            <IconLogout
-              stroke={1.5}
-              size={25}
-              style={{ marginRight: showLabels ? 'var(--mantine-spacing-sm)' : 0 }}
-            />
-            {showLabels ? (
-              <Text size="sm" fw={500}>
-                Logout
-              </Text>
-            ) : null}
-          </UnstyledButton>
+          <LogoutUserAction showLabel={showLabels} onAction={onNavigate} />
         </Tooltip>
       </Box>
     </Box>

@@ -2,8 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { routes } from '@/app/routes';
-import { authMutations } from '../../../../entities/auth/model/auth.mutations';
-import { authKeys } from '../../../../entities/auth/model/auth.keys';
+import { authKeys, authMutations } from '@/entities/auth';
 
 export function useLogout() {
   const queryClient = useQueryClient();
