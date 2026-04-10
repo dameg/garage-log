@@ -25,12 +25,15 @@ export function useDeleteVehicle() {
 
       previousLists.forEach(([queryKey, queryData]) => {
         if (!queryData) return;
+        const hasVehicle = queryData.data.some((vehicle) => vehicle.id === id);
 
-        queryClient.setQueryData<PaginatedResult<VehicleResponse>>(queryKey, {
-          ...queryData,
-          data: queryData.data.filter((vehicle) => vehicle.id !== id),
-          total: Math.max(0, queryData.total - 1),
-        });
+        if (hasVehicle) {
+          queryClient.setQueryData<PaginatedResult<VehicleResponse>>(queryKey, {
+            ...queryData,
+            data: queryData.data.filter((vehicle) => vehicle.id !== id),
+            total: Math.max(0, queryData.total - 1),
+          });
+        }
       });
 
       return {
@@ -62,12 +65,13 @@ export function useDeleteVehicle() {
       });
     },
     onSettled: async (_data, _error, id) => {
+      await queryClient.invalidateQueries({
+        queryKey: vehicleKeys.lists(),
+      });
+
       queryClient.removeQueries({
         queryKey: vehicleKeys.detail(id),
         exact: true,
-      });
-      await queryClient.invalidateQueries({
-        queryKey: vehicleKeys.lists(),
       });
     },
   });

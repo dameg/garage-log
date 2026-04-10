@@ -59,17 +59,6 @@ export function VehiclesListWidget() {
 
   usePrefetchVehiclesTablePage({ params, pageIndex: pagination.pageIndex, totalPages });
 
-  const filterInitialValues = useMemo(
-    () => ({
-      search: filters.search,
-      yearFrom: filters.yearFrom,
-      yearTo: filters.yearTo,
-      mileageFrom: filters.mileageFrom,
-      mileageTo: filters.mileageTo,
-    }),
-    [filters.search, filters.yearFrom, filters.yearTo, filters.mileageFrom, filters.mileageTo],
-  );
-
   if (isLoading && !vehiclesResponse) {
     return (
       <Center mih="100vh">
