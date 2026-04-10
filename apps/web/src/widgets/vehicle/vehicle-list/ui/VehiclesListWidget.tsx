@@ -59,7 +59,7 @@ export function VehiclesListWidget() {
 
   usePrefetchVehiclesTablePage({ params, pageIndex: pagination.pageIndex, totalPages });
 
-  if (isLoading && !vehiclesResponse) {
+  if (isLoading) {
     return (
       <Center mih="100vh">
         <Loader />

@@ -1,14 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AuthLayout, MainLayout } from '@/app/layouts';
-import { VehicleDetailPage, VehiclesPage } from '@/pages/Vehicles';
 
 import { routes } from './routes';
 
-import { LoginPage } from '@/pages/Login';
-import { RegisterPage } from '@/pages/Register';
-import { RootRedirect } from './guards/RootRedirect';
-import { PublicOnlyRoute } from './guards/PublicOnlyRoute';
-import { ProtectedRoute } from './guards/ProtectedRoute';
+import { ProtectedRoute, PublicOnlyRoute, RootRedirect } from './guards';
+import { LoginPage, RegisterPage, VehicleDetailPage, VehiclesPage } from '@/pages';
 
 export const router = createBrowserRouter([
   {
@@ -43,10 +39,10 @@ export const router = createBrowserRouter([
             path: routes.vehicles.path,
             element: <VehiclesPage />,
           },
-          // {
-          //   path: routes.vehicles.detail.path,
-          //   element: <VehicleDetailPage />,
-          // },
+          {
+            path: routes.vehicles.detail.path,
+            element: <VehicleDetailPage />,
+          },
         ],
       },
     ],
