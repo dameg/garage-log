@@ -1,9 +1,10 @@
 import { Modal } from '@mantine/core';
 
-import { useUpdateVehicle } from '../model/useUpdateVehicle';
-import { VehicleForm } from '../../vehicle-form/ui/VehicleForm';
-import type { VehicleFormValues } from '../../vehicle-form/model/vehicle-form.schema';
 import type { Vehicle } from '@/entities/vehicle';
+
+import type { VehicleFormValues } from '../../vehicle-form/model/vehicle-form.schema';
+import { VehicleForm } from '../../vehicle-form/ui/VehicleForm';
+import { useUpdateVehicle } from '../model/useUpdateVehicle';
 
 type Props = {
   opened: boolean;

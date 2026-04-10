@@ -1,12 +1,11 @@
-import { Button, Grid, Group, NumberInput, Stack, TextInput } from '@mantine/core';
-
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Grid, Group, NumberInput, Stack, TextInput } from '@mantine/core';
+import { IconCalendar, IconSearch } from '@tabler/icons-react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { IconCalendar, IconSearch } from '@tabler/icons-react';
 import {
-  vehiclesFiltersFormSchema,
   type VehiclesFiltersFormOutput,
+  vehiclesFiltersFormSchema,
   type VehiclesFiltersFormValues,
 } from '../model/vehicles-filters-form.schema';
 

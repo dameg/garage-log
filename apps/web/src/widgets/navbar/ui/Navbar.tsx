@@ -2,10 +2,11 @@ import { Box, Group, Stack, Text, ThemeIcon, Tooltip, UnstyledButton } from '@ma
 import { useMediaQuery } from '@mantine/hooks';
 import { NavLink } from 'react-router-dom';
 
-import { navigation } from '@/app/config';
+import { ThemeSelector } from '@/shared/ui';
 
 import { LogoutUserAction } from '@/features/auth/logout-user';
-import { ThemeSelector } from '@/shared/ui';
+
+import { navigation } from '@/app/config';
 
 type Props = {
   onNavigate?: () => void;

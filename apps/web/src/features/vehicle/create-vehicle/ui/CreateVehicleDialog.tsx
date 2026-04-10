@@ -1,6 +1,8 @@
 import { Modal } from '@mantine/core';
-import { useCreateVehicle } from '../model/useCreateVehicle';
+
 import { VehicleForm, type VehicleFormValues } from '@/features/vehicle/vehicle-form';
+
+import { useCreateVehicle } from '../model/useCreateVehicle';
 
 type Props = {
   opened: boolean;

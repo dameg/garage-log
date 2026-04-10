@@ -1,8 +1,9 @@
 import { Container, SimpleGrid, Stack, Title } from '@mantine/core';
 import { IconCalendarStats, IconCar, IconGauge } from '@tabler/icons-react';
 
-import { DetailStat } from './DetailStat';
 import type { Vehicle } from '@/entities/vehicle';
+
+import { DetailStat } from './DetailStat';
 
 type Props = {
   vehicle: Vehicle;

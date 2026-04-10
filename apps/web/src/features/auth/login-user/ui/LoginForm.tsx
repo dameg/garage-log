@@ -1,10 +1,11 @@
-import { Anchor, Button, PasswordInput, TextInput, Title, Text } from '@mantine/core';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Anchor, Button, PasswordInput, Text,TextInput, Title } from '@mantine/core';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+
 import { routes } from '@/app/routes';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, type LoginInput } from '../model/login.schema';
+import { type LoginInput,loginSchema } from '../model/login.schema';
 
 type Props = {
   onSubmit: (values: LoginInput) => void;

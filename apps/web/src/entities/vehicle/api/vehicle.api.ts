@@ -1,11 +1,13 @@
+import type { PaginatedResult } from '@/shared/api';
 import { http } from '@/shared/api/httpClient';
+
 import type { Vehicle, VehicleResponse } from '../model';
+
 import type {
   CreateVehicleInput,
   UpdateVehicleInput,
   VehiclesListParams,
 } from './vehicle.contracts';
-import type { PaginatedResult } from '@/shared/api';
 import { buildVehiclesSearchParams } from './vehicle.search-params';
 
 export function getVehicles(params: VehiclesListParams) {

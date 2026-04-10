@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+
 import { authQueries } from './auth.queries';
 
 export function useAuth() {

@@ -1,6 +1,8 @@
 import { Button, Group, Modal, Text } from '@mantine/core';
-import { useDeleteVehicle } from '../model/useDeleteVehicle';
+
 import type { Vehicle } from '@/entities/vehicle';
+
+import { useDeleteVehicle } from '../model/useDeleteVehicle';
 
 type Props = {
   opened: boolean;

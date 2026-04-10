@@ -1,7 +1,8 @@
-import { Outlet } from 'react-router-dom';
-import { Navbar } from '@/widgets/navbar';
 import { AppShell, Burger, Group, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { Outlet } from 'react-router-dom';
+
+import { Navbar } from '@/widgets/navbar';
 
 export function MainLayout() {
   const [mobileNavbarOpened, { toggle: toggleMobileNavbar, close: closeMobileNavbar }] =

@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react';
+
 import { MantineAppProvider } from './MantineAppProvider';
 import { QueryProvider } from './QueryProvider';
 

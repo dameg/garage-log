@@ -1,8 +1,11 @@
-import type { VehiclesListParams, VehiclesSortBy } from '@/entities/vehicle';
-import type { SortDirection } from '@/shared/types';
-import type { OnChangeFn, PaginationState, SortingState } from '@tanstack/react-table';
 import { useMemo } from 'react';
+import type { OnChangeFn, PaginationState, SortingState } from '@tanstack/react-table';
 import { useSearchParams } from 'react-router-dom';
+
+import type { SortDirection } from '@/shared/types';
+
+import type { VehiclesListParams, VehiclesSortBy } from '@/entities/vehicle';
+
 import type { VehiclesFiltersFormOutput } from './vehicles-filters-form.schema';
 
 const DEFAULT_PAGE = 1;

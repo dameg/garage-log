@@ -1,2 +1,2 @@
-export * from './sorting';
 export * from './pagination';
+export * from './sorting';

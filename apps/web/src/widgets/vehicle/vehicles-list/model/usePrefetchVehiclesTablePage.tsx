@@ -1,7 +1,7 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { vehicleQueries, type VehiclesListParams } from '@/entities/vehicle';
-
 import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { vehicleQueries, type VehiclesListParams } from '@/entities/vehicle';
 
 type Options = {
   params: VehiclesListParams;

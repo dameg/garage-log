@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { vehicleMutations, vehicleKeys } from '@/entities/vehicle';
+import { vehicleKeys,vehicleMutations } from '@/entities/vehicle';
 
 export function useCreateVehicle() {
   const queryClient = useQueryClient();

@@ -1,5 +1,7 @@
 import { useRequiredParam } from '@/shared/lib/router';
+
 import { useVehicle } from '@/entities/vehicle';
+
 import { VehicleDetail } from '@/widgets/vehicle/vehicle-detail';
 
 export function VehicleDetailPage() {

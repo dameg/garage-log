@@ -1,6 +1,7 @@
-import type { FunctionComponent } from 'react';
 import type { IconProps } from '@tabler/icons-react';
 import { IconCar } from '@tabler/icons-react';
+import type { FunctionComponent } from 'react';
+
 import { routes } from '../routes';
 
 export type TablerIcon = FunctionComponent<IconProps>;

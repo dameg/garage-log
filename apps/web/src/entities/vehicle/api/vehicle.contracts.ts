@@ -1,4 +1,5 @@
 import type { PaginationParams, SortParams } from '@/shared/types';
+
 import type { Vehicle, VehiclesSortBy } from '../model';
 
 export type CreateVehicleInput = {

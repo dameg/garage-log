@@ -1,5 +1,7 @@
 import { http } from '@/shared/api';
+
 import type { AuthResponse } from '../model';
+
 import type { LoginInput, RegisterInput } from './auth.contracts';
 
 export function me() {

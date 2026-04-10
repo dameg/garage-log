@@ -1,6 +1,7 @@
 import { queryOptions } from '@tanstack/react-query';
 
 import { me } from '../api';
+
 import { authKeys } from './auth.keys';
 
 export const authQueries = {

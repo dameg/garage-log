@@ -1,4 +1,5 @@
 import { mutationOptions } from '@tanstack/react-query';
+
 import { login, logout, register } from '../api';
 
 export const authMutations = {

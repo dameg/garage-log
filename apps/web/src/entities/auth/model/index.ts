@@ -1,6 +1,5 @@
 export { authKeys } from './auth.keys';
-export { authQueries } from './auth.queries';
 export { authMutations } from './auth.mutations';
+export { authQueries } from './auth.queries';
+export type { AuthResponse,AuthUser } from './auth.types';
 export { useAuth } from './useAuth';
-
-export type { AuthUser, AuthResponse } from './auth.types';

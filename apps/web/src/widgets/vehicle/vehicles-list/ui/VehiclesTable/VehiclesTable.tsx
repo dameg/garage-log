@@ -1,19 +1,20 @@
 import { useMemo } from 'react';
+import { Group, Pagination, ScrollArea, Select, Skeleton, Table, Text } from '@mantine/core';
 import {
   flexRender,
   getCoreRowModel,
-  useReactTable,
   type OnChangeFn,
   type PaginationState,
   type SortingState,
+  useReactTable,
 } from '@tanstack/react-table';
-import { Group, Pagination, ScrollArea, Select, Skeleton, Table, Text } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
+
+import type { Vehicle } from '@/entities/vehicle';
+
+import { routes } from '@/app/routes';
 
 import { createColumns } from './columns';
-
-import { useNavigate } from 'react-router-dom';
-import { routes } from '@/app/routes';
-import type { Vehicle } from '@/entities/vehicle';
 
 const PAGE_SIZE_OPTIONS = ['10', '20', '50', '100'];
 

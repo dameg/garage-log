@@ -11,9 +11,10 @@ import { CreateVehicleAction } from '@/features/vehicle/create-vehicle';
 import { DeleteVehicleDialog } from '@/features/vehicle/delete-vehicle';
 import { UpdateVehicleDialog } from '@/features/vehicle/update-vehicle';
 
-import { useVehiclesTableSearchParams } from '../model/useVehiclesTableSearchParams';
-import { useVehiclesList } from '../model/useVehiclesList';
 import { usePrefetchVehiclesTablePage } from '../model/usePrefetchVehiclesTablePage';
+import { useVehiclesList } from '../model/useVehiclesList';
+import { useVehiclesTableSearchParams } from '../model/useVehiclesTableSearchParams';
+
 import { VehiclesFiltersForm } from './VehiclesFiltersForm';
 import { VehiclesTable } from './VehiclesTable';
 

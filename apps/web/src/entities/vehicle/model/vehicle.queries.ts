@@ -1,7 +1,8 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { vehicleKeys } from './vehicle.keys';
 import { getVehicle, getVehicles, type VehiclesListParams } from '../api';
+
+import { vehicleKeys } from './vehicle.keys';
 
 export const vehicleQueries = {
   list: (params: VehiclesListParams) =>

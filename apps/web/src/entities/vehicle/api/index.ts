@@ -1,13 +1,12 @@
 export {
-  getVehicles,
-  getVehicle,
   createVehicle,
-  updateVehicle,
   deleteVehicle,
+  getVehicle,
+  getVehicles,
+  updateVehicle,
 } from './vehicle.api';
-
 export type {
-  VehiclesListParams,
   CreateVehicleInput,
   UpdateVehicleInput,
+  VehiclesListParams,
 } from './vehicle.contracts';

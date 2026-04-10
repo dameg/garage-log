@@ -1,9 +1,5 @@
-export { getVehicles, getVehicle, createVehicle, updateVehicle, deleteVehicle } from './api';
-
-export { useVehicle } from './model';
-
-export type { VehiclesListParams, CreateVehicleInput, UpdateVehicleInput } from './api';
-
-export { vehicleKeys, vehicleQueries, vehicleMutations } from './model';
-
+export type { CreateVehicleInput, UpdateVehicleInput,VehiclesListParams } from './api';
+export { createVehicle, deleteVehicle,getVehicle, getVehicles, updateVehicle } from './api';
 export type { Vehicle, VehicleResponse, VehiclesSortBy } from './model';
+export { useVehicle } from './model';
+export { vehicleKeys, vehicleMutations,vehicleQueries } from './model';

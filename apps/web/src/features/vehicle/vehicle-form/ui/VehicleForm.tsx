@@ -1,7 +1,8 @@
-import { vehicleFormSchema, type VehicleFormValues } from '../model/vehicle-form.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Group, NumberInput, Stack, TextInput } from '@mantine/core';
 import { Controller, useForm } from 'react-hook-form';
+
+import { vehicleFormSchema, type VehicleFormValues } from '../model/vehicle-form.schema';
 
 type Props = {
   defaultValues?: Partial<VehicleFormValues>;

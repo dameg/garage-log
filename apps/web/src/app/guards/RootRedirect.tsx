@@ -1,6 +1,8 @@
 import { Center, Loader } from '@mantine/core';
 import { Navigate } from 'react-router-dom';
+
 import { routes } from '@/app/routes';
+
 import { useAuth } from '../../entities/auth/model/useAuth';
 
 export function RootRedirect() {

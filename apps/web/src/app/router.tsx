@@ -1,10 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
+
+import { LoginPage, RegisterPage, VehicleDetailPage, VehiclesPage } from '@/pages';
+
 import { AuthLayout, MainLayout } from '@/app/layouts';
 
-import { routes } from './routes';
-
 import { ProtectedRoute, PublicOnlyRoute, RootRedirect } from './guards';
-import { LoginPage, RegisterPage, VehicleDetailPage, VehiclesPage } from '@/pages';
+import { routes } from './routes';
 
 export const router = createBrowserRouter([
   {

@@ -1,4 +1,5 @@
 import { mutationOptions } from '@tanstack/react-query';
+
 import { createVehicle, deleteVehicle, updateVehicle } from '../api';
 
 export const vehicleMutations = {

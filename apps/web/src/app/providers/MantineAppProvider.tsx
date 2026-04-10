@@ -1,6 +1,6 @@
-import type { PropsWithChildren } from 'react';
-import { MantineProvider, createTheme, localStorageColorSchemeManager } from '@mantine/core';
+import { createTheme, localStorageColorSchemeManager,MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import type { PropsWithChildren } from 'react';
 
 const theme = createTheme({
   primaryColor: 'blue',

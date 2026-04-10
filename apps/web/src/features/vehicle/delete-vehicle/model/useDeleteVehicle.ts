@@ -1,8 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { PaginatedResult } from '@/shared/api';
 
 import { vehicleKeys, vehicleMutations, type VehicleResponse } from '@/entities/vehicle';
-import type { PaginatedResult } from '@/shared/api';
 
 export function useDeleteVehicle() {
   const queryClient = useQueryClient();

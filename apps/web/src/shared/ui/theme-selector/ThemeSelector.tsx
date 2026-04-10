@@ -1,6 +1,7 @@
 import {
   Box,
   Group,
+  type MantineColorScheme,
   Menu,
   Text,
   ThemeIcon,
@@ -8,7 +9,6 @@ import {
   UnstyledButton,
   useComputedColorScheme,
   useMantineColorScheme,
-  type MantineColorScheme,
 } from '@mantine/core';
 import { IconCheck, IconDeviceDesktop, IconMoon, IconSun } from '@tabler/icons-react';
 

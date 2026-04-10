@@ -1,6 +1,6 @@
+import { notifications } from '@mantine/notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { notifications } from '@mantine/notifications';
 import { vehicleKeys, vehicleMutations } from '@/entities/vehicle';
 
 export function useUpdateVehicle() {

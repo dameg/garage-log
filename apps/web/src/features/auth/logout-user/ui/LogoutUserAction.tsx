@@ -1,7 +1,8 @@
-import { UnstyledButton, Text } from '@mantine/core';
-import { IconLogout } from '@tabler/icons-react';
-import { useLogout } from '../model/useLogout';
 import { forwardRef } from 'react';
+import { Text,UnstyledButton } from '@mantine/core';
+import { IconLogout } from '@tabler/icons-react';
+
+import { useLogout } from '../model/useLogout';
 
 type Props = {
   onAction?: () => void;
