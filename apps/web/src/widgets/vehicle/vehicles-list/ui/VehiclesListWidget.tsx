@@ -1,27 +1,21 @@
-import { useMemo, useState } from 'react';
-import {
-  Alert,
-  Card,
-  Center,
-  Container,
-  Divider,
-  Group,
-  Loader,
-  Stack,
-  Title,
-} from '@mantine/core';
+import { useState } from 'react';
+import { Card, Divider, Group, Stack, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { IconCar } from '@tabler/icons-react';
+
+import { AppLoader, EmptyState, ErrorAlert } from '@/shared/ui';
 
 import type { Vehicle } from '@/entities/vehicle';
+
+import { CreateVehicleAction } from '@/features/vehicle/create-vehicle';
+import { DeleteVehicleDialog } from '@/features/vehicle/delete-vehicle';
+import { UpdateVehicleDialog } from '@/features/vehicle/update-vehicle';
+
 import { useVehiclesTableSearchParams } from '../model/useVehiclesTableSearchParams';
 import { useVehiclesList } from '../model/useVehiclesList';
 import { usePrefetchVehiclesTablePage } from '../model/usePrefetchVehiclesTablePage';
 import { VehiclesFiltersForm } from './VehiclesFiltersForm';
 import { VehiclesTable } from './VehiclesTable';
-import { CreateVehicleAction } from '@/features/vehicle/create-vehicle';
-import { DeleteVehicleDialog } from '@/features/vehicle/delete-vehicle';
-import { UpdateVehicleDialog } from '@/features/vehicle/update-vehicle';
 
 const EMPTY_VEHICLES_LIST = {
   data: [],
@@ -47,38 +41,35 @@ export function VehiclesListWidget() {
   } = useVehiclesTableSearchParams();
 
   const {
-    data: vehiclesResponse = EMPTY_VEHICLES_LIST,
+    data: vehicles = EMPTY_VEHICLES_LIST,
     isLoading,
     isFetching,
     isError,
   } = useVehiclesList(params);
 
-  const data = vehiclesResponse.data;
-  const totalItems = vehiclesResponse.total;
+  const totalItems = vehicles.total;
   const totalPages = Math.ceil(totalItems / pagination.pageSize);
 
   usePrefetchVehiclesTablePage({ params, pageIndex: pagination.pageIndex, totalPages });
 
   if (isLoading) {
-    return (
-      <Center mih="100vh">
-        <Loader />
-      </Center>
-    );
+    return <AppLoader />;
   }
 
   if (isError) {
     return (
-      <Container size="xl">
-        <Alert
-          icon={<IconInfoCircle size={16} />}
-          color="red"
-          radius="lg"
-          title="Unable to load vehicles"
-        >
-          Something went wrong while loading vehicles.
-        </Alert>
-      </Container>
+      <ErrorAlert message="An error occurred while loading your vehicles. Please try again later." />
+    );
+  }
+
+  if (!isLoading && !isError && vehicles.data.length === 0) {
+    return (
+      <EmptyState
+        icon={<IconCar size={40} />}
+        title="No vehicles yet"
+        description="Add your first vehicle to start tracking everything."
+        action={<CreateVehicleAction />}
+      />
     );
   }
 
@@ -121,7 +112,7 @@ export function VehiclesListWidget() {
         </Card>
         <Card shadow="sm" padding="lg" radius="lg" withBorder>
           <VehiclesTable
-            data={data}
+            data={vehicles.data}
             totalItems={totalItems}
             totalPages={totalPages}
             pagination={pagination}

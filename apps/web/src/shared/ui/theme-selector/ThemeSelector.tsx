@@ -10,14 +10,9 @@ import {
   useMantineColorScheme,
   type MantineColorScheme,
 } from '@mantine/core';
-import {
-  IconCheck,
-  IconDeviceDesktop,
-  IconMoon,
-  IconSun,
-} from '@tabler/icons-react';
+import { IconCheck, IconDeviceDesktop, IconMoon, IconSun } from '@tabler/icons-react';
 
-type ColorSchemeOption = {
+type ThemeSelectorOption = {
   value: MantineColorScheme;
   label: string;
   icon: typeof IconSun;
@@ -27,13 +22,13 @@ type Props = {
   showLabel?: boolean;
 };
 
-const options: ColorSchemeOption[] = [
+const options: ThemeSelectorOption[] = [
   { value: 'light', label: 'Light', icon: IconSun },
   { value: 'dark', label: 'Dark', icon: IconMoon },
   { value: 'auto', label: 'System', icon: IconDeviceDesktop },
 ];
 
-export function ColorSchemeToggle({ showLabel = false }: Props) {
+export function ThemeSelector({ showLabel = false }: Props) {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
@@ -43,12 +38,7 @@ export function ColorSchemeToggle({ showLabel = false }: Props) {
   const ActiveIcon = activeOption.icon;
 
   return (
-    <Tooltip
-      label={`Theme: ${activeOption.label}`}
-      position="right"
-      disabled={showLabel}
-      withArrow
-    >
+    <Tooltip label={`Theme: ${activeOption.label}`} position="right" disabled={showLabel} withArrow>
       <Box>
         <Menu
           position={showLabel ? 'bottom-start' : 'right-end'}

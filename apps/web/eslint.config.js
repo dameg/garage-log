@@ -36,7 +36,44 @@ export default defineConfig([
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
 
-      'simple-import-sort/imports': 'warn',
+      // 🔥 Import sorting (FSD-friendly)
+      'simple-import-sort/imports': [
+        'warn',
+        {
+          groups: [
+            // 1. React + external libs
+            ['^react$', '^@?\\w'],
+
+            // 2. Shared
+            ['^@/shared(/.*|$)'],
+
+            // 3. Entities
+            ['^@/entities(/.*|$)'],
+
+            // 4. Features
+            ['^@/features(/.*|$)'],
+
+            // 5. Widgets
+            ['^@/widgets(/.*|$)'],
+
+            // 6. Pages
+            ['^@/pages(/.*|$)'],
+
+            // 7. App (jeśli masz)
+            ['^@/app(/.*|$)'],
+
+            // 8. Parent imports
+            ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+
+            // 9. Same-folder imports
+            ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+
+            // 10. Styles
+            ['^.+\\.?(css)$'],
+          ],
+        },
+      ],
+
       'simple-import-sort/exports': 'warn',
     },
   },

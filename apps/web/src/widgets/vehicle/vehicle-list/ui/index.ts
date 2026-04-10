@@ -1,1 +1,0 @@
-export { VehiclesListWidget } from './VehiclesListWidget';

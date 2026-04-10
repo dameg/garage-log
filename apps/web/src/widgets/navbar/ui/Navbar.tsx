@@ -1,19 +1,17 @@
 import { Box, Group, Stack, Text, ThemeIcon, Tooltip, UnstyledButton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconLogout } from '@tabler/icons-react';
 import { NavLink } from 'react-router-dom';
 
 import { navigation } from '@/app/config';
-import { useLogout } from '@/features/auth/logout-user/model/useLogout';
-import { ColorSchemeToggle } from '../shared/ui/ColorSchemeToggle';
+
 import { LogoutUserAction } from '@/features/auth/logout-user';
+import { ThemeSelector } from '@/shared/ui';
 
 type Props = {
   onNavigate?: () => void;
 };
 
 export function Navbar({ onNavigate }: Props) {
-  const logout = useLogout();
   const isMobile = useMediaQuery('(max-width: 48em)');
   const showLabels = !!isMobile;
 
@@ -99,7 +97,7 @@ export function Navbar({ onNavigate }: Props) {
 
       <Box pt="md" mt="md" style={{ borderTop: '1px solid var(--mantine-color-default-border)' }}>
         <Box mb="xs">
-          <ColorSchemeToggle showLabel={showLabels} />
+          <ThemeSelector showLabel={showLabels} />
         </Box>
 
         <Tooltip label="Logout" position="right" disabled={showLabels}>
