@@ -1,6 +1,6 @@
 import { SortDirection } from '../../../shared/domain/sort-direction';
 
-export type VehicleSortField = 'createdAt' | 'name' | 'brand' | 'model' | 'year' | 'mileage';
+export type VehicleSortField = 'createdAt' | 'brand' | 'model' | 'year' | 'mileage';
 
 export type VehicleFilters = {
   search?: string;

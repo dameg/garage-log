@@ -12,7 +12,7 @@ export const listVehiclesQuerySchema = z
     page: z.coerce.number().int().positive().default(1),
     limit: z.coerce.number().int().positive().max(100).default(10),
 
-    sortBy: z.enum(['createdAt', 'name', 'brand', 'model', 'year', 'mileage']).default('createdAt'),
+    sortBy: z.enum(['createdAt', 'brand', 'model', 'year', 'mileage']).default('createdAt'),
     direction: z.enum(['asc', 'desc']).default('desc'),
   })
   .superRefine((data, ctx) => {

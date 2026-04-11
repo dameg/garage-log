@@ -1,5 +1,5 @@
 import { useRequiredParam } from '@/shared/lib/router';
-import { AppLoader, EmptyState, ErrorAlert, NotFound } from '@/shared/ui';
+import { AppLoader, ErrorAlert, NotFound } from '@/shared/ui';
 
 import { useVehicle } from '@/entities/vehicle';
 

@@ -1,16 +1,31 @@
 import { randomUUID } from 'node:crypto';
-import { DocumentLog } from '../domain/document-log';
-import { DocumentLogRepository } from '../domain/document-log.repository';
-import { CreateDocumentLogInput } from './dto/create-document-log.dto';
+import {
+  createDocumentLog,
+  type CreateDocumentLogProps,
+  type DocumentLog,
+} from '../domain/document-log';
+import type { DocumentLogRepository } from '../domain/document-log.repository';
+import type { CreateDocumentLogInput } from './dto/create-document-log.dto';
 
 export class CreateDocumentLogUseCase {
   constructor(private readonly repo: DocumentLogRepository) {}
 
   async execute(input: CreateDocumentLogInput): Promise<DocumentLog> {
-    const documentLog = {
+    const documentLogProps: CreateDocumentLogProps = {
       id: randomUUID(),
-      ...input,
+      vehicleId: input.vehicleId,
+      ownerId: input.ownerId,
+      type: input.type,
+      title: input.title,
+      issuer: input.issuer ?? null,
+      validFrom: input.validFrom,
+      validTo: input.validTo,
+      issuedAt: input.issuedAt ?? null,
+      cost: input.cost ?? null,
+      note: input.note ?? null,
     };
+
+    const documentLog = createDocumentLog(documentLogProps);
     return this.repo.create(documentLog);
   }
 }
