@@ -1,4 +1,4 @@
-export { LoginPage } from './Login/page';
-export { RegisterPage } from './Register/page';
-export { VehicleDetailPage } from './Vehicle/detail';
-export { VehiclesPage } from './Vehicle/page';
+export { LoginPage } from './login/page';
+export { RegisterPage } from './register/page';
+export { VehicleDetailPage } from './vehicle/detail';
+export { VehiclesPage } from './vehicle/page';
