@@ -59,7 +59,10 @@ export function VehiclesListWidget() {
 
   if (isError) {
     return (
-      <ErrorAlert message="An error occurred while loading your vehicles. Please try again later." />
+      <ErrorAlert
+        title="Unable to load vehicles"
+        message="An error occurred while loading your vehicles. Please try again later."
+      />
     );
   }
 

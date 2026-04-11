@@ -8,7 +8,7 @@ type Props = {
   icon: Icon;
 };
 
-export function DetailStat({ label, value, description, icon: Icon }: Props) {
+export function VehicleDetailStat({ label, value, description, icon: Icon }: Props) {
   return (
     <Paper p="lg" radius="lg" withBorder>
       <Group justify="space-between" align="flex-start" wrap="nowrap">

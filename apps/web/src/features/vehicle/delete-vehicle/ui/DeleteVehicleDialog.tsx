@@ -7,7 +7,7 @@ import { useDeleteVehicle } from '../model/useDeleteVehicle';
 type Props = {
   opened: boolean;
   onClose: () => void;
-  onExited: () => void;
+  onExited?: () => void;
   vehicle: Vehicle | null;
 };
 

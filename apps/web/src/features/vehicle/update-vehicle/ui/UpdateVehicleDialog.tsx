@@ -9,7 +9,7 @@ import { useUpdateVehicle } from '../model/useUpdateVehicle';
 type Props = {
   opened: boolean;
   onClose: () => void;
-  onExited: () => void;
+  onExited?: () => void;
   vehicle: Vehicle | null;
 };
 
