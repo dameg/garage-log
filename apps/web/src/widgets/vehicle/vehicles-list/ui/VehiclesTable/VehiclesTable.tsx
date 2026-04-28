@@ -93,7 +93,7 @@ export function VehiclesTable({
       </Group>
 
       <ScrollArea>
-        <Table striped highlightOnHover withColumnBorders>
+        <Table striped highlightOnHover>
           <Table.Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Table.Tr key={headerGroup.id}>

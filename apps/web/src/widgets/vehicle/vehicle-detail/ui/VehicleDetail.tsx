@@ -1,25 +1,25 @@
-import { Container, Flex, SimpleGrid, Stack, Title } from '@mantine/core';
-import { IconCalendarStats, IconCar, IconGauge } from '@tabler/icons-react';
+import {
+  Box,
+  Container,
+  Flex,
+  Group,
+  Paper,
+  SimpleGrid,
+  Stack,
+  Text,
+  ThemeIcon,
+  Title,
+} from '@mantine/core';
+import { IconCalendarStats, IconGauge, IconNumber } from '@tabler/icons-react';
 
 import type { Vehicle } from '@/entities/vehicle';
 
 import { DeleteVehicleAction } from '@/features/vehicle/delete-vehicle';
 import { UpdateVehicleAction } from '@/features/vehicle/update-vehicle';
 
-import { VehicleDetailStat } from './VehicleDetailStat';
-
 type Props = {
   vehicle: Vehicle;
 };
-
-const dateFormatter = new Intl.DateTimeFormat('en-US', {
-  dateStyle: 'long',
-});
-
-function getVehicleAgeLabel(year: number) {
-  const age = Math.max(new Date().getFullYear() - year, 0);
-  return age === 0 ? 'Current year model' : `${age} years on the road`;
-}
 
 export function VehicleDetail({ vehicle }: Props) {
   return (
@@ -41,24 +41,55 @@ export function VehicleDetail({ vehicle }: Props) {
         </Flex>
 
         <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="lg">
-          <VehicleDetailStat
-            label="Model year"
-            value={vehicle.year}
-            description={getVehicleAgeLabel(vehicle.year)}
-            icon={IconCalendarStats}
-          />
-          <VehicleDetailStat
-            label="Mileage"
-            value={`${vehicle.mileage.toLocaleString()} km`}
-            description="Current odometer reading"
-            icon={IconGauge}
-          />
-          <VehicleDetailStat
-            label="Record created"
-            value={dateFormatter.format(new Date(vehicle.createdAt))}
-            description="Stored in your garage log"
-            icon={IconCar}
-          />
+          <Paper p="lg" radius="lg" withBorder>
+            <Group justify="space-between" align="flex-start" wrap="nowrap">
+              <Box>
+                <Text size="sm" c="dimmed">
+                  Model year
+                </Text>
+                <Text fz="xl" fw={700} mt={6}>
+                  {vehicle.year}
+                </Text>
+              </Box>
+
+              <ThemeIcon size={40} radius="lg" variant="light" color="blue">
+                <IconCalendarStats size={22} stroke={1.8} />
+              </ThemeIcon>
+            </Group>
+          </Paper>
+
+          <Paper p="lg" radius="lg" withBorder>
+            <Group justify="space-between" align="flex-start" wrap="nowrap">
+              <Box>
+                <Text size="sm" c="dimmed">
+                  Mileage
+                </Text>
+                <Text fz="xl" fw={700} mt={6}>
+                  {`${vehicle.mileage.toLocaleString()} km`}
+                </Text>
+              </Box>
+
+              <ThemeIcon size={40} radius="lg" variant="light" color="blue">
+                <IconGauge size={22} stroke={1.8} />
+              </ThemeIcon>
+            </Group>
+          </Paper>
+          <Paper p="lg" radius="lg" withBorder>
+            <Group justify="space-between" align="flex-start" wrap="nowrap">
+              <Box>
+                <Text size="sm" c="dimmed">
+                  VIN
+                </Text>
+                <Text fz="xl" fw={700} mt={6}>
+                  {vehicle.vin}
+                </Text>
+              </Box>
+
+              <ThemeIcon size={40} radius="lg" variant="light" color="blue">
+                <IconNumber size={22} stroke={1.8} />
+              </ThemeIcon>
+            </Group>
+          </Paper>
         </SimpleGrid>
       </Stack>
     </Container>

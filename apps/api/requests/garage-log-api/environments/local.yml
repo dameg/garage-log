@@ -1,0 +1,6 @@
+name: local
+variables:
+  - name: baseUrl
+    value: http://localhost:3001
+  - name: vehicleId
+    value: cb19c491-991c-42b9-8dd3-90f83ce379d1
