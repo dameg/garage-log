@@ -9,7 +9,7 @@ export function useUpdateVehicle() {
   return useMutation({
     ...vehicleMutations.updateVehicle(),
     onSuccess: async (vehicle, variables) => {
-      queryClient.setQueryData(vehicleKeys.detail(variables.id), vehicle);
+      queryClient.setQueryData(vehicleKeys.detail(variables.vehicleId), vehicle);
 
       await queryClient.invalidateQueries({
         queryKey: vehicleKeys.lists(),

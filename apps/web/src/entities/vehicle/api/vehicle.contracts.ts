@@ -13,7 +13,7 @@ export type CreateVehicleInput = {
 export type UpdateVehiclePayload = Partial<CreateVehicleInput>;
 
 export type UpdateVehicleInput = {
-  id: Vehicle['id'];
+  vehicleId: Vehicle['id'];
   payload: UpdateVehiclePayload;
 };
 

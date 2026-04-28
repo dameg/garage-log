@@ -18,7 +18,7 @@ export function UpdateVehicleDialog({ opened, onClose, onExited, vehicle }: Prop
 
   const handleSubmit = async (values: VehicleFormValues) => {
     if (!vehicle) return;
-    await mutateAsync({ id: vehicle.id, payload: values });
+    await mutateAsync({ vehicleId: vehicle.id, payload: values });
     onClose();
   };
 

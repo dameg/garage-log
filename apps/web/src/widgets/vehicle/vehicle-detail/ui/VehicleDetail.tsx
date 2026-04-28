@@ -1,16 +1,4 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Group,
-  Paper,
-  SimpleGrid,
-  Stack,
-  Text,
-  ThemeIcon,
-  Title,
-} from '@mantine/core';
-import { IconCalendarStats, IconGauge, IconNumber } from '@tabler/icons-react';
+import { Container, Divider, Flex, Stack, Text, Title } from '@mantine/core';
 
 import type { Vehicle } from '@/entities/vehicle';
 
@@ -22,6 +10,12 @@ type Props = {
 };
 
 export function VehicleDetail({ vehicle }: Props) {
+  const createdAt = new Date(vehicle.createdAt).toLocaleDateString('pl-PL', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
     <Container size="xl" py="lg">
       <Stack gap="xl">
@@ -40,57 +34,56 @@ export function VehicleDetail({ vehicle }: Props) {
           </Flex>
         </Flex>
 
-        <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="lg">
-          <Paper p="lg" radius="lg" withBorder>
-            <Group justify="space-between" align="flex-start" wrap="nowrap">
-              <Box>
-                <Text size="sm" c="dimmed">
-                  Model year
-                </Text>
-                <Text fz="xl" fw={700} mt={6}>
-                  {vehicle.year}
-                </Text>
-              </Box>
+        <Stack gap={0}>
+          <Stack gap={8} py="md">
+            <Text size="sm" c="dimmed">
+              ID
+            </Text>
+            <Text fz="lg" fw={600}>
+              {vehicle.id}
+            </Text>
+            <Divider mt="xs" />
+          </Stack>
 
-              <ThemeIcon size={40} radius="lg" variant="light" color="blue">
-                <IconCalendarStats size={22} stroke={1.8} />
-              </ThemeIcon>
-            </Group>
-          </Paper>
+          <Stack gap={8} py="md">
+            <Text size="sm" c="dimmed">
+              Model year
+            </Text>
+            <Text fz="lg" fw={600}>
+              {vehicle.year}
+            </Text>
+            <Divider mt="xs" />
+          </Stack>
 
-          <Paper p="lg" radius="lg" withBorder>
-            <Group justify="space-between" align="flex-start" wrap="nowrap">
-              <Box>
-                <Text size="sm" c="dimmed">
-                  Mileage
-                </Text>
-                <Text fz="xl" fw={700} mt={6}>
-                  {`${vehicle.mileage.toLocaleString()} km`}
-                </Text>
-              </Box>
+          <Stack gap={8} py="md">
+            <Text size="sm" c="dimmed">
+              Mileage
+            </Text>
+            <Text fz="lg" fw={600}>
+              {vehicle.mileage.toLocaleString()} km
+            </Text>
+            <Divider mt="xs" />
+          </Stack>
 
-              <ThemeIcon size={40} radius="lg" variant="light" color="blue">
-                <IconGauge size={22} stroke={1.8} />
-              </ThemeIcon>
-            </Group>
-          </Paper>
-          <Paper p="lg" radius="lg" withBorder>
-            <Group justify="space-between" align="flex-start" wrap="nowrap">
-              <Box>
-                <Text size="sm" c="dimmed">
-                  VIN
-                </Text>
-                <Text fz="xl" fw={700} mt={6}>
-                  {vehicle.vin}
-                </Text>
-              </Box>
+          <Stack gap={8} py="md">
+            <Text size="sm" c="dimmed">
+              VIN
+            </Text>
+            <Text fz="lg" fw={600}>
+              {vehicle.vin}
+            </Text>
+            <Divider mt="xs" />
+          </Stack>
 
-              <ThemeIcon size={40} radius="lg" variant="light" color="blue">
-                <IconNumber size={22} stroke={1.8} />
-              </ThemeIcon>
-            </Group>
-          </Paper>
-        </SimpleGrid>
+          <Stack gap={8} py="md">
+            <Text size="sm" c="dimmed">
+              Created at
+            </Text>
+            <Text fz="lg" fw={600}>
+              {createdAt}
+            </Text>
+          </Stack>
+        </Stack>
       </Stack>
     </Container>
   );

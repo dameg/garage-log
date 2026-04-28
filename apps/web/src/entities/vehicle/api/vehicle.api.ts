@@ -18,8 +18,8 @@ export function getVehicles(params: VehiclesListParams) {
   });
 }
 
-export async function getVehicle(id: Vehicle['id']) {
-  return http<VehicleResponse>(`/vehicles/${id}`, {
+export async function getVehicle(vehicleId: Vehicle['id']) {
+  return http<VehicleResponse>(`/vehicles/${vehicleId}`, {
     method: 'GET',
   });
 }
@@ -31,8 +31,8 @@ export async function createVehicle(payload: CreateVehicleInput) {
   });
 }
 
-export async function updateVehicle({ id, payload }: UpdateVehicleInput) {
-  return http<VehicleResponse>(`/vehicles/${id}`, {
+export async function updateVehicle({ vehicleId, payload }: UpdateVehicleInput) {
+  return http<VehicleResponse>(`/vehicles/${vehicleId}`, {
     method: 'PATCH',
     body: JSON.stringify(payload),
   });
