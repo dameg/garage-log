@@ -1,7 +1,7 @@
-import type { PaginatedResult } from '../../../../shared/domain/paginated-result';
+import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
+import type { VehicleRepository } from '../../contracts/vehicle.repository';
 import type { Vehicle } from '../../domain/vehicle';
 import type { VehicleListQuery } from '../../domain/vehicle-list.query';
-import type { VehicleRepository } from '../../domain/vehicle.repository';
 
 export class SpyVehicleRepository implements VehicleRepository {
   public lastListQuery: VehicleListQuery | null = null;

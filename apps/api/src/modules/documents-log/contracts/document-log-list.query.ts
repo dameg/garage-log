@@ -1,6 +1,7 @@
-export type ListDocumentLogsInput = {
+export type DocumentLogListQuery = {
   ownerId: string;
   vehicleId: string;
+
   cursor?: {
     createdAt: Date;
     id: string;

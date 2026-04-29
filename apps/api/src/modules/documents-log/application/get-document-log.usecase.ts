@@ -1,6 +1,6 @@
 import { NotFoundError } from '../../../shared/errors/not-found-error';
+import type { DocumentLogRepository } from '../contracts/document-log.repository';
 import type { DocumentLog } from '../domain/document-log';
-import type { DocumentLogRepository } from '../domain/document-log.repository';
 
 export class GetDocumentLogUseCase {
   constructor(private readonly repo: DocumentLogRepository) {}

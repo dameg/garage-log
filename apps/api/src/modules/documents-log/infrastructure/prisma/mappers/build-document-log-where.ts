@@ -1,4 +1,4 @@
-import type { DocumentLogListQuery } from '../../../domain/document-log-list.query';
+import type { DocumentLogListQuery } from '../../../contracts/document-log-list.query';
 
 export function buildDocumentLogWhere(query: DocumentLogListQuery) {
   const { ownerId, vehicleId, filters } = query;

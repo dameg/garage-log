@@ -1,5 +1,5 @@
+import type { DocumentLogListQuery } from '../../contracts/document-log-list.query';
 import type { DocumentLog } from '../../domain/document-log';
-import type { DocumentLogListQuery } from '../../domain/document-log-list.query';
 
 export function matchesDocumentLogFilters(
   documentLog: DocumentLog,

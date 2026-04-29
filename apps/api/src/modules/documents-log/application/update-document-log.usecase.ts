@@ -1,10 +1,10 @@
 import { NotFoundError } from '../../../shared/errors/not-found-error';
+import type { DocumentLogRepository } from '../contracts/document-log.repository';
 import {
   type DocumentLog,
   type UpdatableDocumentLogFields,
   updateDocumentLog,
 } from '../domain/document-log';
-import type { DocumentLogRepository } from '../domain/document-log.repository';
 import type { UpdateDocumentLogInput } from './dto/update-document-log.dto';
 
 function toUpdatableFields(documentLog: DocumentLog): UpdatableDocumentLogFields {

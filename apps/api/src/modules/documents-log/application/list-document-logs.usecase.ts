@@ -1,7 +1,7 @@
-import type { PaginatedResult } from '../../../shared/domain/paginated-result';
+import type { PaginatedResult } from '../../../shared/contracts/paginated-result';
+import type { DocumentLogListQuery } from '../contracts/document-log-list.query';
+import type { DocumentLogRepository } from '../contracts/document-log.repository';
 import type { DocumentLog } from '../domain/document-log';
-import type { DocumentLogListQuery } from '../domain/document-log-list.query';
-import type { DocumentLogRepository } from '../domain/document-log.repository';
 import type { ListDocumentLogsInput } from './dto/list-document-logs.dto';
 
 export class ListDocumentLogsUseCase {
@@ -11,25 +11,7 @@ export class ListDocumentLogsUseCase {
     const query: DocumentLogListQuery = {
       ownerId: input.ownerId,
       vehicleId: input.vehicleId,
-      filters: {
-        search: input.search,
-        type: input.type,
-        issuer: input.issuer,
-        costFrom: input.costFrom,
-        costTo: input.costTo,
-        hasCost: input.hasCost,
-        issuedAtFrom: input.issuedAtFrom,
-        issuedAtTo: input.issuedAtTo,
-        validFromFrom: input.validFromFrom,
-        validFromTo: input.validFromTo,
-        validToFrom: input.validToFrom,
-        validToTo: input.validToTo,
-      },
-      sort: {
-        field: input.sortBy,
-        direction: input.direction,
-      },
-      page: input.page,
+      cursor: input.cursor,
       limit: input.limit,
     };
 

@@ -1,7 +1,7 @@
-import type { DocumentLogRepository } from '../../domain/document-log.repository';
-import type { DocumentLogListQuery } from '../../domain/document-log-list.query';
+import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
+import type { DocumentLogListQuery } from '../../contracts/document-log-list.query';
+import type { DocumentLogRepository } from '../../contracts/document-log.repository';
 import type { DocumentLog } from '../../domain/document-log';
-import type { PaginatedResult } from '../../../../shared/domain/paginated-result';
 
 export class SpyDocumentLogRepository implements DocumentLogRepository {
   public lastListQuery: DocumentLogListQuery | null = null;

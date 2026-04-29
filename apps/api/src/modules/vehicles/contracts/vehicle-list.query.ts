@@ -1,4 +1,4 @@
-import { SortDirection } from '../../../shared/domain/sort-direction';
+import { SortDirection } from '../../../shared/contracts/sort-direction';
 
 export type VehicleSortField = 'createdAt' | 'brand' | 'model' | 'year' | 'mileage';
 

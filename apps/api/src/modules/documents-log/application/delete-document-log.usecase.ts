@@ -1,5 +1,5 @@
 import { NotFoundError } from '../../../shared/errors/not-found-error';
-import { DocumentLogRepository } from '../domain/document-log.repository';
+import { DocumentLogRepository } from '../contracts/document-log.repository';
 
 export class DeleteDocumentLogUseCase {
   constructor(private readonly repo: DocumentLogRepository) {}
@@ -13,11 +13,7 @@ export class DeleteDocumentLogUseCase {
     ownerId: string;
     vehicleId: string;
   }): Promise<void> {
-    const deleted = await this.repo.deleteByIdForOwnerAndVehicle(
-      documentLogId,
-      ownerId,
-      vehicleId,
-    );
+    const deleted = await this.repo.deleteByIdForOwnerAndVehicle(documentLogId, ownerId, vehicleId);
 
     if (!deleted) {
       throw new NotFoundError('Document Log', documentLogId);

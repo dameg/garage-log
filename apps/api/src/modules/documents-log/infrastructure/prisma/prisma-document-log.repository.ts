@@ -1,10 +1,11 @@
 import type { PrismaClient } from '@prisma/client';
-import type { DocumentLogRepository } from '../../domain/document-log.repository';
-import type { PaginatedResult } from '../../../../shared/domain/paginated-result';
+
+import { CursorResult } from '../../../../shared/contracts/cursor-result';
+import type { DocumentLogListQuery } from '../../contracts/document-log-list.query';
+import type { DocumentLogRepository } from '../../contracts/document-log.repository';
 import type { DocumentLog, UpdatableDocumentLogFields } from '../../domain/document-log';
-import type { DocumentLogListQuery } from '../../domain/document-log-list.query';
-import { toDomainDocumentLog } from './mappers/to-domain-document-log';
 import { buildDocumentLogWhere } from './mappers/build-document-log-where';
+import { toDomainDocumentLog } from './mappers/to-domain-document-log';
 
 export class PrismaDocumentLogRepository implements DocumentLogRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -29,7 +30,7 @@ export class PrismaDocumentLogRepository implements DocumentLogRepository {
     return toDomainDocumentLog(created);
   }
 
-  async list(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>> {
+  async list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog>> {
     const where = buildDocumentLogWhere(query);
     const skip = (query.page - 1) * query.limit;
     const take = query.limit;

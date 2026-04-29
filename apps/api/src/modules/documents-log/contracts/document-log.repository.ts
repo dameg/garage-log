@@ -1,11 +1,15 @@
-import type { DocumentLog, UpdatableDocumentLogFields } from './document-log';
-import type { PaginatedResult } from '../../../shared/domain/paginated-result';
+import { CursorResult } from '../../../shared/contracts/cursor-result';
+import type { DocumentLog, UpdatableDocumentLogFields } from '../domain/document-log';
 import type { DocumentLogListQuery } from './document-log-list.query';
 
 export interface DocumentLogRepository {
   create(documentLog: DocumentLog): Promise<DocumentLog>;
-  list(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>>;
-  findByIdForOwnerAndVehicle(id: string, ownerId: string, vehicleId: string): Promise<DocumentLog | null>;
+  list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog>>;
+  findByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+  ): Promise<DocumentLog | null>;
   deleteByIdForOwnerAndVehicle(id: string, ownerId: string, vehicleId: string): Promise<boolean>;
   updateByIdForOwnerAndVehicle(
     id: string,

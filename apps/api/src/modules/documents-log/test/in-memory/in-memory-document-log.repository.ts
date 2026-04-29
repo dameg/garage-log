@@ -1,10 +1,7 @@
-import type { DocumentLogRepository } from '../../domain/document-log.repository';
-import type {
-  DocumentLog,
-  UpdatableDocumentLogFields,
-} from '../../domain/document-log';
-import type { DocumentLogListQuery } from '../../domain/document-log-list.query';
-import type { PaginatedResult } from '../../../../shared/domain/paginated-result';
+import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
+import type { DocumentLogListQuery } from '../../contracts/document-log-list.query';
+import type { DocumentLogRepository } from '../../contracts/document-log.repository';
+import type { DocumentLog, UpdatableDocumentLogFields } from '../../domain/document-log';
 import { matchesDocumentLogFilters } from './matches-document-log-filters';
 import { sortDocumentLogs } from './sort-document-logs';
 
@@ -58,7 +55,11 @@ export class InMemoryDocumentLogRepository implements DocumentLogRepository {
 
     this.data = this.data.filter(
       (documentLog) =>
-        !(documentLog.id === id && documentLog.ownerId === ownerId && documentLog.vehicleId === vehicleId),
+        !(
+          documentLog.id === id &&
+          documentLog.ownerId === ownerId &&
+          documentLog.vehicleId === vehicleId
+        ),
     );
 
     return this.data.length < previousLength;

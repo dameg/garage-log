@@ -1,5 +1,5 @@
 import { NotFoundError } from '../../../shared/errors/not-found-error';
-import type { VehicleRepository } from '../domain/vehicle.repository';
+import type { VehicleRepository } from '../contracts/vehicle.repository';
 
 export class DeleteVehicleUseCase {
   constructor(private readonly repo: VehicleRepository) {}

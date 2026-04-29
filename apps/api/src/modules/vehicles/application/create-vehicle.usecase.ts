@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
+import type { VehicleRepository } from '../contracts/vehicle.repository';
 import { createVehicle, type Vehicle } from '../domain/vehicle';
-import type { VehicleRepository } from '../domain/vehicle.repository';
 import type { CreateVehicleInput } from './dto/create-vehicle.dto';
 
 export class CreateVehicleUseCase {
