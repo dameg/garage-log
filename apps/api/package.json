@@ -1,7 +1,6 @@
 {
   "name": "api",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "tsc -p tsconfig.json",
@@ -11,9 +10,7 @@
     "test": "vitest run",
     "test:db": "dotenv -e .env.test -- vitest run --config vitest.e2e.config.ts",
     "seed": "node scripts/seed-db.mjs",
-    "db:migrate:deploy": "prisma migrate deploy",
-    "codex:test": "node scripts/codex-test-module.mjs",
-    "codex:review": "node scripts/codex-review-module.mjs"
+    "db:migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@fastify/cookie": "^11.0.2",

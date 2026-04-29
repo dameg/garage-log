@@ -3,7 +3,7 @@ import type { DocumentLog } from '../../domain/document-log';
 
 export function sortDocumentLogs(
   documentLogs: DocumentLog[],
-  query: DocumentLogListQuery,
+  _query: DocumentLogListQuery,
 ): DocumentLog[] {
   return [...documentLogs].sort((a, b) => {
     if (a.createdAt.getTime() === b.createdAt.getTime()) {

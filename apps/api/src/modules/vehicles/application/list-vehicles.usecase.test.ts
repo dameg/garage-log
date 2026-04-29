@@ -1,4 +1,4 @@
-import { describe, expect,it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { createVehicle } from '../domain/vehicle';
 import { SpyVehicleRepository } from '../test/in-memory/spy-vehicle.repository';
@@ -83,7 +83,7 @@ describe('ListVehiclesUseCase', () => {
 
   it('passes empty optional filters as undefined', async () => {
     const repo = new SpyVehicleRepository();
-    const useCase = new ListVehiclesUseCase(repo as any);
+    const useCase = new ListVehiclesUseCase(repo);
 
     await useCase.execute({
       ownerId: 'user-1',

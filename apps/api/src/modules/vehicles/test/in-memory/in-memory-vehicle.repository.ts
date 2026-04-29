@@ -1,7 +1,7 @@
 import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
 import type { VehicleRepository } from '../../contracts/vehicle.repository';
+import type { VehicleListQuery } from '../../contracts/vehicle-list.query';
 import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';
-import type { VehicleListQuery } from '../../domain/vehicle-list.query';
 
 import { matchesVehicleFilters } from './matches-vehicle-filters';
 import { sortVehicles } from './sort-vehicles';

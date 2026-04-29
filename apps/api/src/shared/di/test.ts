@@ -1,3 +1,5 @@
+import type Redis from 'ioredis';
+
 import { InMemoryUserRepository } from '../../modules/auth/infrastructure/in-memery-user.repository';
 import { InMemoryDocumentLogRepository } from '../../modules/documents-log/test/in-memory/in-memory-document-log.repository';
 import { InMemoryVehicleRepository } from '../../modules/vehicles/test/in-memory/in-memory-vehicle.repository';
@@ -13,7 +15,7 @@ export function createTestAppContainer(): AppContainer {
   const redisService = new RedisService({
     ping: async () => 'PONG',
     quit: async () => 'OK',
-  } as any);
+  } as unknown as Redis);
 
   return {
     redisService,

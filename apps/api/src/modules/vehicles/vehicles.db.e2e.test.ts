@@ -141,7 +141,7 @@ describe('Vehicles (db e2e)', () => {
 
     const res = await updateVehicle(app, user.cookie, created.id, {
       year: 'abc',
-    } as any);
+    });
 
     expect(res.statusCode).toBe(400);
   });

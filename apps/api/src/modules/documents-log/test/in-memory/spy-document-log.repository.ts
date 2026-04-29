@@ -1,7 +1,7 @@
 import type { CursorResult } from '../../../../shared/contracts/cursor-result';
 import type { DocumentLogRepository } from '../../contracts/document-log.repository';
 import type { DocumentLogCursor, DocumentLogListQuery } from '../../contracts/document-log-list.query';
-import type { DocumentLog } from '../../domain/document-log';
+import type { DocumentLog, UpdatableDocumentLogFields } from '../../domain/document-log';
 
 export class SpyDocumentLogRepository implements DocumentLogRepository {
   public lastListQuery: DocumentLogListQuery | null = null;
@@ -23,26 +23,26 @@ export class SpyDocumentLogRepository implements DocumentLogRepository {
   }
 
   async findByIdForOwnerAndVehicle(
-    id: string,
-    ownerId: string,
-    vehicleId: string,
+    _id: string,
+    _ownerId: string,
+    _vehicleId: string,
   ): Promise<DocumentLog | null> {
     return null;
   }
 
   async deleteByIdForOwnerAndVehicle(
-    id: string,
-    ownerId: string,
-    vehicleId: string,
+    _id: string,
+    _ownerId: string,
+    _vehicleId: string,
   ): Promise<boolean> {
     return false;
   }
 
   async updateByIdForOwnerAndVehicle(
-    id: string,
-    ownerId: string,
-    vehicleId: string,
-    patch: any,
+    _id: string,
+    _ownerId: string,
+    _vehicleId: string,
+    _patch: UpdatableDocumentLogFields,
   ): Promise<DocumentLog | null> {
     return null;
   }

@@ -1,4 +1,4 @@
-import { afterEach,beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { createTestApp } from '../../shared/testing/create-test-app';
 
@@ -167,7 +167,7 @@ describe('Vehicles (integration - in memory)', () => {
     const created = createRes.json();
     const res = await updateVehicle(app, user.cookie, created.id, {
       year: 'abc',
-    } as any);
+    });
 
     expect(res.statusCode).toBe(400);
     expect(res.json()).toEqual(

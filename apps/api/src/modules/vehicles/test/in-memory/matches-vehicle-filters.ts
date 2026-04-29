@@ -1,5 +1,5 @@
+import type { VehicleListQuery } from '../../contracts/vehicle-list.query';
 import type { Vehicle } from '../../domain/vehicle';
-import type { VehicleListQuery } from '../../domain/vehicle-list.query';
 
 export function matchesVehicleFilters(vehicle: Vehicle, query: VehicleListQuery): boolean {
   const { ownerId, filters } = query;

@@ -1,3 +1,5 @@
+import type Redis from 'ioredis';
+
 import { buildApp } from '../../app';
 import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
 import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
@@ -20,7 +22,7 @@ export async function createDbTestApp(
   const redisService = new RedisService({
     ping: async () => 'PONG',
     quit: async () => 'OK',
-  } as any);
+  } as unknown as Redis);
 
   const container: AppContainer = {
     redisService,

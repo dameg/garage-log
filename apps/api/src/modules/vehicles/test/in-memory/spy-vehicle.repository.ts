@@ -1,7 +1,7 @@
 import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
 import type { VehicleRepository } from '../../contracts/vehicle.repository';
-import type { Vehicle } from '../../domain/vehicle';
-import type { VehicleListQuery } from '../../domain/vehicle-list.query';
+import type { VehicleListQuery } from '../../contracts/vehicle-list.query';
+import type { UpdateVehiclePatch, Vehicle } from '../../domain/vehicle';
 
 export class SpyVehicleRepository implements VehicleRepository {
   public lastListQuery: VehicleListQuery | null = null;
@@ -19,19 +19,19 @@ export class SpyVehicleRepository implements VehicleRepository {
     return vehicle;
   }
 
-  async findAllByOwnerId(ownerId: string): Promise<Vehicle[]> {
-    return [];
-  }
-
-  async findByIdForOwner(id: string, ownerId: string): Promise<Vehicle | null> {
+  async findByIdForOwner(_id: string, _ownerId: string): Promise<Vehicle | null> {
     return null;
   }
 
-  async deleteByIdForOwner(id: string, ownerId: string): Promise<boolean> {
+  async deleteByIdForOwner(_id: string, _ownerId: string): Promise<boolean> {
     return false;
   }
 
-  async updateByIdForOwner(id: string, ownerId: string, patch: any): Promise<Vehicle | null> {
+  async updateByIdForOwner(
+    _id: string,
+    _ownerId: string,
+    _patch: UpdateVehiclePatch,
+  ): Promise<Vehicle | null> {
     return null;
   }
 
