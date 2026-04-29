@@ -1,10 +1,12 @@
 import { randomUUID } from 'node:crypto';
+
 import type { DocumentLogRepository } from '../contracts/document-log.repository';
 import {
   createDocumentLog,
   type CreateDocumentLogProps,
   type DocumentLog,
 } from '../domain/document-log';
+
 import type { CreateDocumentLogInput } from './dto/create-document-log.dto';
 
 export class CreateDocumentLogUseCase {

@@ -1,4 +1,4 @@
-import {
+import type {
   ConsumeTokenBucketParams,
   ConsumeTokenBucketResult,
 } from '../domain/token-bucket.repository';

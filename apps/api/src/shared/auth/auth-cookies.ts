@@ -1,4 +1,5 @@
 import type { FastifyReply } from 'fastify';
+
 import { env } from '../config';
 
 export function setAuthCookie(reply: FastifyReply, token: string) {

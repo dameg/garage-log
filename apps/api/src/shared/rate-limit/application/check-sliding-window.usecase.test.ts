@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
 import type { SlidingWindowRepository } from '../domain/sliding-window.repository';
+
 import { CheckSlidingWindowUseCase } from './check-sliding-window.usecase';
 
 describe('CheckSlidingWindowUseCase', () => {

@@ -5,6 +5,7 @@ import {
   type UpdatableDocumentLogFields,
   updateDocumentLog,
 } from '../domain/document-log';
+
 import type { UpdateDocumentLogInput } from './dto/update-document-log.dto';
 
 function toUpdatableFields(documentLog: DocumentLog): UpdatableDocumentLogFields {

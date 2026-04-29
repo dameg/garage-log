@@ -1,5 +1,6 @@
-import { VehicleListQuery } from '../contracts/vehicle-list.query';
-import { VehicleRepository } from '../contracts/vehicle.repository';
+import type { VehicleRepository } from '../contracts/vehicle.repository';
+import type { VehicleListQuery } from '../contracts/vehicle-list.query';
+
 import type { ListVehiclesInput } from './dto/list-vehicles.dto';
 
 export class ListVehiclesUseCase {

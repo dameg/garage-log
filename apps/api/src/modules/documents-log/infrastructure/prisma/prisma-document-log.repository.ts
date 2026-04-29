@@ -1,14 +1,22 @@
 import type { PrismaClient } from '@prisma/client';
 
-import { CursorResult } from '../../../../shared/contracts/cursor-result';
-import type { DocumentLogListQuery } from '../../contracts/document-log-list.query';
+import type { CursorResult } from '../../../../shared/contracts/cursor-result';
 import type { DocumentLogRepository } from '../../contracts/document-log.repository';
+import type { DocumentLogCursor, DocumentLogListQuery } from '../../contracts/document-log-list.query';
 import type { DocumentLog, UpdatableDocumentLogFields } from '../../domain/document-log';
+
 import { buildDocumentLogWhere } from './mappers/build-document-log-where';
 import { toDomainDocumentLog } from './mappers/to-domain-document-log';
 
 export class PrismaDocumentLogRepository implements DocumentLogRepository {
   constructor(private readonly prisma: PrismaClient) {}
+
+  private buildCursor(documentLog: DocumentLog): DocumentLogCursor {
+    return {
+      createdAt: documentLog.createdAt.toISOString(),
+      id: documentLog.id,
+    } as unknown as DocumentLogCursor;
+  }
 
   async create(documentLog: DocumentLog): Promise<DocumentLog> {
     const created = await this.prisma.documentLog.create({
@@ -30,30 +38,39 @@ export class PrismaDocumentLogRepository implements DocumentLogRepository {
     return toDomainDocumentLog(created);
   }
 
-  async list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog>> {
+  async list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog, DocumentLogCursor>> {
     const where = buildDocumentLogWhere(query);
-    const skip = (query.page - 1) * query.limit;
-    const take = query.limit;
+    const rows = await this.prisma.documentLog.findMany({
+      where: {
+        ...where,
+        ...(query.cursor && {
+          OR: [
+            {
+              createdAt: {
+                lt: query.cursor.createdAt,
+              },
+            },
+            {
+              createdAt: query.cursor.createdAt,
+              id: {
+                lt: query.cursor.id,
+              },
+            },
+          ],
+        }),
+      },
+      take: query.limit + 1,
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+    });
 
-    const [rows, total] = await Promise.all([
-      this.prisma.documentLog.findMany({
-        where,
-        skip,
-        take,
-        orderBy: {
-          [query.sort.field]: query.sort.direction,
-        },
-      }),
-      this.prisma.documentLog.count({
-        where,
-      }),
-    ]);
+    const domainRows = rows.map(toDomainDocumentLog);
+    const hasMore = domainRows.length > query.limit;
+    const data = hasMore ? domainRows.slice(0, query.limit) : domainRows;
+    const lastRow = data.at(-1);
 
     return {
-      data: rows.map(toDomainDocumentLog),
-      total,
-      page: query.page,
-      limit: query.limit,
+      data,
+      nextCursor: hasMore && lastRow ? { createdAt: lastRow.createdAt, id: lastRow.id } : null,
     };
   }
 

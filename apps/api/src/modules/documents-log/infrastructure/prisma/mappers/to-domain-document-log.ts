@@ -1,5 +1,6 @@
-import { DocumentLog } from '../../../domain/document-log';
 import type { DocumentLog as PrismaDocumentLog } from '@prisma/client';
+
+import type { DocumentLog } from '../../../domain/document-log';
 
 export function toDomainDocumentLog(row: PrismaDocumentLog): DocumentLog {
   return {

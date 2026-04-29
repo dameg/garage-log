@@ -1,4 +1,4 @@
-import { DocumentLogType } from '../../domain/document-log';
+import type { DocumentLogType } from '../../domain/document-log';
 
 export type CreateDocumentLogInput = {
   vehicleId: string;

@@ -1,4 +1,5 @@
 import type { Vehicle as PrismaVehicle } from '@prisma/client';
+
 import type { Vehicle } from '../../../domain/vehicle';
 
 export function toDomainVehicle(row: PrismaVehicle): Vehicle {

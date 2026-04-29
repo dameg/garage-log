@@ -1,10 +1,11 @@
 import type { FastifyInstance } from 'fastify';
-import { createVehicleHttpSchema } from '../validation/create-vehicle.schema';
-import { createVehiclesServices } from '../../vehicles.factory';
+
 import { vehicleIdParamsSchema } from '../../../../shared/http/params/vehicle-id.schema';
-import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
-import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
 import { parseBody, parseParams, parseQuery } from '../../../../shared/http/validation';
+import { createVehiclesServices } from '../../vehicles.factory';
+import { createVehicleHttpSchema } from '../validation/create-vehicle.schema';
+import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
+import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
 
 export async function vehiclesRoutes(app: FastifyInstance) {
   const {

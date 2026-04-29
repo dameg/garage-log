@@ -1,7 +1,9 @@
-import { describe, it, expect } from 'vitest';
-import { createVehicle, updateVehicle } from './vehicle';
-import { VehicleDomainBuilder } from '../test/vehicle.domain.builder';
+import { describe, expect,it } from 'vitest';
+
 import { DomainError } from '../../../shared/errors/domain-error';
+import { VehicleDomainBuilder } from '../test/vehicle.domain.builder';
+
+import { createVehicle, updateVehicle } from './vehicle';
 
 describe('createVehicle (domain)', () => {
   it('creates a vehicle and trims string fields', () => {

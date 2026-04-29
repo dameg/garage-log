@@ -8,5 +8,6 @@ export {
 export type {
   CreateVehicleInput,
   UpdateVehicleInput,
+  UpdateVehiclePayload,
   VehiclesListParams,
 } from './vehicle.contracts';

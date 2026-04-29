@@ -1,10 +1,11 @@
 import type { FastifyInstance } from 'fastify';
-import { createDocumentLogsServices } from '../../document-logs.factory';
-import { createDocumentLogHttpSchema } from '../validation/create-document-log.schema';
+
 import { vehicleIdParamsSchema } from '../../../../shared/http/params/vehicle-id.schema';
 import { parseBody, parseParams, parseQuery } from '../../../../shared/http/validation';
-import { listDocumentLogsQuerySchema } from '../validation/list-document-logs-query.schema';
+import { createDocumentLogsServices } from '../../document-logs.factory';
+import { createDocumentLogHttpSchema } from '../validation/create-document-log.schema';
 import { documentLogIdParamsSchema } from '../validation/document-log-id.schema';
+import { listDocumentLogsQuerySchema } from '../validation/list-document-logs-query.schema';
 import { updateDocumentLogHttpSchema } from '../validation/update-document-log.schema';
 
 export async function documentLogsRoutes(app: FastifyInstance) {
@@ -33,7 +34,11 @@ export async function documentLogsRoutes(app: FastifyInstance) {
     const query = parseQuery(listDocumentLogsQuerySchema, req.query);
     const params = parseParams(vehicleIdParamsSchema, req.params);
 
-    return listDocumentLogsUseCase.execute({ ...query, ...params, ownerId: req.user.sub });
+    return listDocumentLogsUseCase.execute({
+      ...query,
+      ...params,
+      ownerId: req.user.sub,
+    });
   });
 
   app.get('/:documentLogId', async (req) => {

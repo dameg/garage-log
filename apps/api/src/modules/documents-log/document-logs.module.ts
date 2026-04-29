@@ -1,6 +1,8 @@
 import type { FastifyInstance } from 'fastify';
+
 import { requireAuth } from '../../shared/auth/require-auth';
 import { createRateLimitServices } from '../../shared/rate-limit/rate-limit.factory';
+
 import { documentLogsRoutes } from './presentation/http/document-logs.routes';
 
 export async function documentLogsModule(app: FastifyInstance) {

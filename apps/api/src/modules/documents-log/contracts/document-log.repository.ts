@@ -1,10 +1,11 @@
-import { CursorResult } from '../../../shared/contracts/cursor-result';
+import type { CursorResult } from '../../../shared/contracts/cursor-result';
 import type { DocumentLog, UpdatableDocumentLogFields } from '../domain/document-log';
-import type { DocumentLogListQuery } from './document-log-list.query';
+
+import type { DocumentLogCursor, DocumentLogListQuery } from './document-log-list.query';
 
 export interface DocumentLogRepository {
   create(documentLog: DocumentLog): Promise<DocumentLog>;
-  list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog>>;
+  list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog, DocumentLogCursor>>;
   findByIdForOwnerAndVehicle(
     id: string,
     ownerId: string,

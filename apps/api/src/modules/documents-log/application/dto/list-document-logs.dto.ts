@@ -1,9 +1,7 @@
 export type ListDocumentLogsInput = {
   ownerId: string;
   vehicleId: string;
-  cursor?: {
-    createdAt: Date;
-    id: string;
-  };
+  createdAt?: Date;
+  id?: string;
   limit: number;
 };

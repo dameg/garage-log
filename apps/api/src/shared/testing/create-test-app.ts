@@ -1,7 +1,8 @@
 import { buildApp } from '../../app';
-import { registerAndGetCookie } from './register-and-get-cookie';
 import { createTestAppContainer } from '../di/test';
 import type { AppContainer } from '../di/types';
+
+import { registerAndGetCookie } from './register-and-get-cookie';
 
 export type TestAppHarness = {
   app: Awaited<ReturnType<typeof buildApp>>;

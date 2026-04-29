@@ -1,8 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { createTestApp } from '../testing/create-test-app';
+
 import { listVehicles } from '../../modules/vehicles/test/actions/vehicle.actions';
-import { SpyConsumeTokenBucketUseCase } from './test/spy-consume-token-bucket.usecase';
+import { createTestApp } from '../testing/create-test-app';
+
 import { SpyCheckSlidingWindowUseCase } from './test/spy-check-sliding-window.usecase';
+import { SpyConsumeTokenBucketUseCase } from './test/spy-consume-token-bucket.usecase';
 
 describe('Rate limit (integration)', () => {
   let testApp: Awaited<ReturnType<typeof createTestApp>>;

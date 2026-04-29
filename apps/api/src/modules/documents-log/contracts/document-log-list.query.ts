@@ -1,10 +1,11 @@
+export type DocumentLogCursor = {
+  createdAt: Date;
+  id: string;
+};
+
 export type DocumentLogListQuery = {
   ownerId: string;
   vehicleId: string;
-
-  cursor?: {
-    createdAt: Date;
-    id: string;
-  };
+  cursor?: DocumentLogCursor;
   limit: number;
 };

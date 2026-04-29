@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { CreateVehicleUseCase } from './create-vehicle.usecase';
 import { InMemoryVehicleRepository } from '../test/in-memory/in-memory-vehicle.repository';
+
+import { CreateVehicleUseCase } from './create-vehicle.usecase';
 
 describe('CreateVehicleUseCase', () => {
   it('creates vehicle for owner', async () => {

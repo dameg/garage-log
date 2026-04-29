@@ -1,16 +1,16 @@
-import { env } from '../config';
-import type { AppContainer } from './types';
-import { getPrisma } from '../db/prisma';
-import { PrismaVehicleRepository } from '../../modules/vehicles/infrastructure/prisma/prisma-vehicle.repository';
 import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
+import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
+import { PrismaVehicleRepository } from '../../modules/vehicles/infrastructure/prisma/prisma-vehicle.repository';
+import { env } from '../config';
+import { getPrisma } from '../db/prisma';
+import { CheckSlidingWindowUseCase } from '../rate-limit/application/check-sliding-window.usecase';
+import { ConsumeTokenBucketUseCase } from '../rate-limit/application/consume-token-bucket.usecase';
+import { RedisSlidingWindowRepository } from '../rate-limit/infrastructure/redis/redis-sliding-window.repository';
+import { RedisTokenBucketRepository } from '../rate-limit/infrastructure/redis/redis-token-bucket.repository';
 import { createRedisClient } from '../redis/redis';
 import { RedisService } from '../redis/redis.service';
 
-import { RedisTokenBucketRepository } from '../rate-limit/infrastructure/redis/redis-token-bucket.repository';
-import { RedisSlidingWindowRepository } from '../rate-limit/infrastructure/redis/redis-sliding-window.repository';
-import { ConsumeTokenBucketUseCase } from '../rate-limit/application/consume-token-bucket.usecase';
-import { CheckSlidingWindowUseCase } from '../rate-limit/application/check-sliding-window.usecase';
-import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
+import type { AppContainer } from './types';
 
 let prodDeps: AppContainer | null = null;
 

@@ -1,3 +1,5 @@
+import type { CursorPaginatedResult } from '@/shared/api';
+
 import type { DocumentLog } from '../model';
 
 export type CreateDocumentLogInput = {
@@ -12,3 +14,16 @@ export type CreateDocumentLogInput = {
 };
 
 export type UpdateDocumentLogPayload = Partial<CreateDocumentLogInput>;
+
+export type DocumentLogListCursor = {
+  createdAt: string;
+  id: string;
+};
+
+export type DocumentLogListParams = {
+  limit: number;
+  createdAt?: string;
+  id?: string;
+};
+
+export type DocumentLogListResponse = CursorPaginatedResult<DocumentLog, DocumentLogListCursor>;

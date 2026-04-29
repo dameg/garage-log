@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+
 import { LoginUserUseCase } from './application/login.usecase';
 import { RegisterUserUseCase } from './application/register.usecase';
 

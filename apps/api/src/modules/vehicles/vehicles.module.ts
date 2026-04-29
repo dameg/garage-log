@@ -1,7 +1,9 @@
 import type { FastifyInstance } from 'fastify';
+
 import { requireAuth } from '../../shared/auth/require-auth';
-import { vehiclesRoutes } from './presentation/http/vehicles.routes';
 import { createRateLimitServices } from '../../shared/rate-limit/rate-limit.factory';
+
+import { vehiclesRoutes } from './presentation/http/vehicles.routes';
 
 export async function vehiclesModule(app: FastifyInstance) {
   await app.register(

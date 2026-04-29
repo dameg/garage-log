@@ -1,7 +1,8 @@
 import type { FastifyRequest } from 'fastify';
-import { rateLimitKeys, rateLimitSubjects } from '../domain/rate-limit.keys';
-import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token-bucket.usecase.port';
+
 import { RateLimitExceededError } from '../../errors/rate-limit-error';
+import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token-bucket.usecase.port';
+import { rateLimitKeys, rateLimitSubjects } from '../domain/rate-limit.keys';
 
 type TokenBucketGuardOptions = {
   capacity: number;

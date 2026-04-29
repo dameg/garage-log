@@ -1,4 +1,4 @@
-export type CursorResult<T> = {
-  data: T[];
-  nextCursor: string | null;
+export type CursorResult<TData, TCursor = string> = {
+  data: TData[];
+  nextCursor: TCursor | null;
 };

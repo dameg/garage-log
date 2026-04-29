@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { rateLimitKeys, rateLimitSubjects } from './rate-limit.keys';
 
 describe('rateLimitKeys', () => {

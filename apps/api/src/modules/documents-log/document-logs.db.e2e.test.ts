@@ -1,11 +1,12 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+
 import { getPrisma } from '../../shared/db/prisma';
 import { createDbTestApp } from '../../shared/testing/create-db-test-app';
-import { resetDb } from '../../shared/testing/reset-db';
 import { registerAndGetCookie } from '../../shared/testing/register-and-get-cookie';
-import { VehicleHttpBuilder } from '../vehicles/test/vehicle.http.builder';
+import { resetDb } from '../../shared/testing/reset-db';
 import { createVehicle } from '../vehicles/test/actions/vehicle.actions';
-import { DocumentLogHttpBuilder } from './test/document-log.http.builder';
+import { VehicleHttpBuilder } from '../vehicles/test/vehicle.http.builder';
+
 import {
   createDocumentLog,
   deleteDocumentLog,
@@ -13,6 +14,7 @@ import {
   listDocumentLogs,
   updateDocumentLog,
 } from './test/actions/document-log.actions';
+import { DocumentLogHttpBuilder } from './test/document-log.http.builder';
 
 describe('Document logs (db e2e)', () => {
   const prisma = getPrisma();
@@ -82,9 +84,7 @@ describe('Document logs (db e2e)', () => {
 
     const list = listRes.json();
     expect(list.data).toHaveLength(1);
-    expect(list.total).toBe(1);
-    expect(list.page).toBe(1);
-    expect(list.limit).toBe(10);
+    expect(list.nextCursor).toBe(null);
     expect(list.data[0]).toEqual(
       expect.objectContaining({
         id: created.id,
@@ -93,6 +93,68 @@ describe('Document logs (db e2e)', () => {
         title: 'OC policy',
       }),
     );
+  });
+
+  it('returns document logs as a timeline with cursor pagination', async () => {
+    const user = await registerAndGetCookie(app, 'timeline@test.com');
+    const vehicle = await createVehicleForUser(user.cookie);
+
+    expect(
+      (
+        await createDocumentLog(
+          app,
+          user.cookie,
+          vehicle.id,
+          new DocumentLogHttpBuilder().withTitle('First entry').build(),
+        )
+      ).statusCode,
+    ).toBe(201);
+    expect(
+      (
+        await createDocumentLog(
+          app,
+          user.cookie,
+          vehicle.id,
+          new DocumentLogHttpBuilder().withTitle('Second entry').build(),
+        )
+      ).statusCode,
+    ).toBe(201);
+    expect(
+      (
+        await createDocumentLog(
+          app,
+          user.cookie,
+          vehicle.id,
+          new DocumentLogHttpBuilder().withTitle('Third entry').build(),
+        )
+      ).statusCode,
+    ).toBe(201);
+
+    const firstPageRes = await listDocumentLogs(app, user.cookie, vehicle.id, { limit: 2 });
+    expect(firstPageRes.statusCode).toBe(200);
+
+    const firstPage = firstPageRes.json();
+    expect(firstPage.data).toHaveLength(2);
+    expect(firstPage.nextCursor).toEqual(
+      expect.objectContaining({
+        createdAt: expect.any(String),
+        id: expect.any(String),
+      }),
+    );
+
+    const firstPageIds = new Set(firstPage.data.map((item: { id: string }) => item.id));
+
+    const secondPageRes = await listDocumentLogs(app, user.cookie, vehicle.id, {
+      limit: 2,
+      createdAt: firstPage.nextCursor.createdAt,
+      id: firstPage.nextCursor.id,
+    });
+    expect(secondPageRes.statusCode).toBe(200);
+
+    const secondPage = secondPageRes.json();
+    expect(secondPage.data).toHaveLength(1);
+    expect(secondPage.nextCursor).toBe(null);
+    expect(firstPageIds.has(secondPage.data[0].id)).toBe(false);
   });
 
   it('returns document log by id for owner', async () => {
@@ -277,7 +339,7 @@ describe('Document logs (db e2e)', () => {
 
     expect(listRes.statusCode).toBe(200);
     expect(listRes.json().data).toHaveLength(0);
-    expect(listRes.json().total).toBe(0);
+    expect(listRes.json().nextCursor).toBe(null);
   });
 
   it('returns 404 when another user tries to fetch document log by id', async () => {

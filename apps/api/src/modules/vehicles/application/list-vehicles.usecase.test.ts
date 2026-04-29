@@ -1,8 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { ListVehiclesUseCase } from './list-vehicles.usecase';
-import { SpyVehicleRepository } from '../test/in-memory/spy-vehicle.repository';
+import { describe, expect,it } from 'vitest';
+
 import { createVehicle } from '../domain/vehicle';
+import { SpyVehicleRepository } from '../test/in-memory/spy-vehicle.repository';
 import { VehicleDomainBuilder } from '../test/vehicle.domain.builder';
+
+import { ListVehiclesUseCase } from './list-vehicles.usecase';
 
 describe('ListVehiclesUseCase', () => {
   it('maps input into repository query', async () => {

@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+
 import type { CreateDocumentLogProps, DocumentLogType } from '../domain/document-log';
 
 export class DocumentLogDomainBuilder {

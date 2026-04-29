@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { documentLogTypes } from '../../domain/document-log';
 
 export const createDocumentLogHttpSchema = z.object({

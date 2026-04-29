@@ -1,9 +1,10 @@
 import type { FastifyInstance } from 'fastify';
-import { createTokenBucketGuard } from './presentation/token-bucket.guard';
+
 import {
   createSlidingWindowGuard,
   loginEmailIpSubjectFactory,
 } from './presentation/sliding-window.guard';
+import { createTokenBucketGuard } from './presentation/token-bucket.guard';
 
 export const apiRateLimitConfig = {
   capacity: 60,

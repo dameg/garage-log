@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 
-import { requireAuth } from '../../../../shared/auth/require-auth';
-import { createAuthServices } from '../../auth.factory';
-import { registerUserHttpSchema } from '../validation/register-user.schema';
-import { loginUserHttpSchema } from '../validation/login-user.schema';
 import { clearAuthCookie, setAuthCookie } from '../../../../shared/auth/auth-cookies';
+import { requireAuth } from '../../../../shared/auth/require-auth';
 import { UnauthorizedError } from '../../../../shared/errors/unauthorized-error';
 import { createRateLimitServices } from '../../../../shared/rate-limit/rate-limit.factory';
+import { createAuthServices } from '../../auth.factory';
+import { loginUserHttpSchema } from '../validation/login-user.schema';
+import { registerUserHttpSchema } from '../validation/register-user.schema';
 
 export async function authRoutes(app: FastifyInstance) {
   const { registerUserUseCase, loginUserUseCase } = createAuthServices(app);

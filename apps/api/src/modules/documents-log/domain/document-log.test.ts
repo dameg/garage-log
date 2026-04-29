@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { DomainError } from '../../../shared/errors/domain-error';
 import { DocumentLogDomainBuilder } from '../test/document-log.domain.builder';
+
 import { createDocumentLog, updateDocumentLog } from './document-log';
 
 describe('createDocumentLog (domain)', () => {

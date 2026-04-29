@@ -1,7 +1,9 @@
 import type { FastifyRequest } from 'fastify';
 import { describe, expect, it } from 'vitest';
+
 import { RateLimitExceededError } from '../../errors/rate-limit-error';
 import { SpyCheckSlidingWindowUseCase } from '../test/spy-check-sliding-window.usecase';
+
 import {
   createSlidingWindowGuard,
   loginEmailIpSubjectFactory,

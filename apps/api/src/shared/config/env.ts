@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { ConfigError } from '../errors/config-error';
 
 const EnvSchema = z.object({

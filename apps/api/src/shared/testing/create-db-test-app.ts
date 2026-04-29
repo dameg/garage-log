@@ -1,16 +1,17 @@
-import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
+import { buildApp } from '../../app';
 import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
+import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
 import { PrismaVehicleRepository } from '../../modules/vehicles/infrastructure/prisma/prisma-vehicle.repository';
+import { getPrisma } from '../db/prisma';
+import type { AppContainer } from '../di/types';
 import {
   AllowAllCheckSlidingWindowUseCase,
   AllowAllConsumeTokenBucketUseCase,
 } from '../rate-limit/test/allow-all-rate-limiters';
-import { buildApp } from '../../app';
-import { getPrisma } from '../db/prisma';
 import { RedisService } from '../redis/redis.service';
-import type { AppContainer } from '../di/types';
-import { registerAndGetCookie } from './register-and-get-cookie';
+
 import type { TestAppHarness } from './create-test-app';
+import { registerAndGetCookie } from './register-and-get-cookie';
 
 export async function createDbTestApp(
   overrides: Partial<AppContainer> = {},

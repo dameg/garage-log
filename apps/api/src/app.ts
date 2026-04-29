@@ -1,21 +1,22 @@
-import Fastify from 'fastify';
+import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
-import { env } from './shared/config';
+import jwt from '@fastify/jwt';
+import Fastify from 'fastify';
+import { ZodError } from 'zod';
+
+import { authModule } from './modules/auth/auth.module';
+import { documentLogsModule } from './modules/documents-log/document-logs.module';
 import { vehiclesModule } from './modules/vehicles/vehicles.module';
+import { env } from './shared/config';
+import { closePrisma } from './shared/db/prisma';
 import { diPlugin } from './shared/di/di.plugin';
 import { createProdDeps } from './shared/di/prod';
 import type { AppContainer } from './shared/di/types';
-import { ZodError } from 'zod';
-import cookie from '@fastify/cookie';
-import jwt from '@fastify/jwt';
-import { NotFoundError } from './shared/errors/not-found-error';
 import { ConflictError } from './shared/errors/conflict-error';
-import { authModule } from './modules/auth/auth.module';
-import { UnauthorizedError } from './shared/errors/unauthorized-error';
-import { closePrisma } from './shared/db/prisma';
-import { RateLimitExceededError } from './shared/errors/rate-limit-error';
 import { DomainError } from './shared/errors/domain-error';
-import { documentLogsModule } from './modules/documents-log/document-logs.module';
+import { NotFoundError } from './shared/errors/not-found-error';
+import { RateLimitExceededError } from './shared/errors/rate-limit-error';
+import { UnauthorizedError } from './shared/errors/unauthorized-error';
 
 export async function buildApp(deps?: AppContainer) {
   const app = Fastify({

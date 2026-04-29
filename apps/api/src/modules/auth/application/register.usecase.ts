@@ -1,9 +1,11 @@
+import * as bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
+
+import { ConflictError } from '../../../shared/errors/conflict-error';
 import { createUser, normalizeEmail, type User } from '../domain/user';
 import type { UserRepository } from '../domain/user.repository';
+
 import type { RegisterUserInput } from './dto/register.dto';
-import { randomUUID } from 'crypto';
-import * as bcrypt from 'bcrypt';
-import { ConflictError } from '../../../shared/errors/conflict-error';
 
 export class RegisterUserUseCase {
   constructor(private readonly repo: UserRepository) {}

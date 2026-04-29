@@ -1,17 +1,15 @@
-import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
-import type { DocumentLogListQuery } from '../../contracts/document-log-list.query';
+import type { CursorResult } from '../../../../shared/contracts/cursor-result';
 import type { DocumentLogRepository } from '../../contracts/document-log.repository';
+import type { DocumentLogCursor, DocumentLogListQuery } from '../../contracts/document-log-list.query';
 import type { DocumentLog } from '../../domain/document-log';
 
 export class SpyDocumentLogRepository implements DocumentLogRepository {
   public lastListQuery: DocumentLogListQuery | null = null;
 
   constructor(
-    private readonly result: PaginatedResult<DocumentLog> = {
+    private readonly result: CursorResult<DocumentLog, DocumentLogCursor> = {
       data: [],
-      total: 0,
-      page: 1,
-      limit: 10,
+      nextCursor: null,
     },
   ) {}
 
@@ -19,7 +17,7 @@ export class SpyDocumentLogRepository implements DocumentLogRepository {
     return documentLog;
   }
 
-  async list(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>> {
+  async list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog, DocumentLogCursor>> {
     this.lastListQuery = query;
     return this.result;
   }

@@ -5,28 +5,11 @@ export function sortDocumentLogs(
   documentLogs: DocumentLog[],
   query: DocumentLogListQuery,
 ): DocumentLog[] {
-  const { field, direction } = query.sort;
-
   return [...documentLogs].sort((a, b) => {
-    const aValue = a[field];
-    const bValue = b[field];
-
-    if (aValue === bValue) {
-      return 0;
+    if (a.createdAt.getTime() === b.createdAt.getTime()) {
+      return b.id.localeCompare(a.id);
     }
 
-    if (aValue == null) {
-      return direction === 'asc' ? -1 : 1;
-    }
-
-    if (bValue == null) {
-      return direction === 'asc' ? 1 : -1;
-    }
-
-    if (aValue < bValue) {
-      return direction === 'asc' ? -1 : 1;
-    }
-
-    return direction === 'asc' ? 1 : -1;
+    return b.createdAt.getTime() - a.createdAt.getTime();
   });
 }

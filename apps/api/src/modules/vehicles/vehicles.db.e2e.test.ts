@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
+import { afterAll, beforeAll, beforeEach,describe, expect, it } from 'vitest';
+
 import { getPrisma } from '../../shared/db/prisma';
 import { createDbTestApp } from '../../shared/testing/create-db-test-app';
-import { resetDb } from '../../shared/testing/reset-db';
 import { registerAndGetCookie } from '../../shared/testing/register-and-get-cookie';
-import { VehicleHttpBuilder } from './test/vehicle.http.builder';
+import { resetDb } from '../../shared/testing/reset-db';
+
 import {
   createVehicle,
   deleteVehicle,
@@ -11,6 +12,7 @@ import {
   listVehicles,
   updateVehicle,
 } from './test/actions/vehicle.actions';
+import { VehicleHttpBuilder } from './test/vehicle.http.builder';
 
 describe('Vehicles (db e2e)', () => {
   const prisma = getPrisma();

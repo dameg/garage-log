@@ -1,10 +1,11 @@
-import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
 import { faker } from '@faker-js/faker';
-import { randomUUID } from 'crypto';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
+import { Pool } from 'pg';
+
+import 'dotenv/config';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,

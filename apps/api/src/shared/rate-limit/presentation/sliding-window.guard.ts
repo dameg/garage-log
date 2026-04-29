@@ -1,7 +1,8 @@
 import type { FastifyRequest } from 'fastify';
-import { rateLimitKeys, rateLimitSubjects } from '../domain/rate-limit.keys';
-import type { CheckSlidingWindowUseCasePort } from '../application/check-sliding-window.usecase.port';
+
 import { RateLimitExceededError } from '../../errors/rate-limit-error';
+import type { CheckSlidingWindowUseCasePort } from '../application/check-sliding-window.usecase.port';
+import { rateLimitKeys, rateLimitSubjects } from '../domain/rate-limit.keys';
 
 type SlidingWindowGuardOptions = {
   limit: number;

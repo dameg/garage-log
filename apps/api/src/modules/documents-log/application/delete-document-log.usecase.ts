@@ -1,5 +1,5 @@
 import { NotFoundError } from '../../../shared/errors/not-found-error';
-import { DocumentLogRepository } from '../contracts/document-log.repository';
+import type { DocumentLogRepository } from '../contracts/document-log.repository';
 
 export class DeleteDocumentLogUseCase {
   constructor(private readonly repo: DocumentLogRepository) {}

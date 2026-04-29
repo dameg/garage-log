@@ -2,8 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { AppContainer } from '../../shared/di/types';
 import { createTestApp } from '../../shared/testing/create-test-app';
-import { DocumentLogHttpBuilder } from './test/document-log.http.builder';
-import { SpyDocumentLogRepository } from './test/in-memory/spy-document-log.repository';
+
 import {
   createDocumentLog,
   deleteDocumentLog,
@@ -11,6 +10,8 @@ import {
   listDocumentLogs,
   updateDocumentLog,
 } from './test/actions/document-log.actions';
+import { DocumentLogHttpBuilder } from './test/document-log.http.builder';
+import { SpyDocumentLogRepository } from './test/in-memory/spy-document-log.repository';
 
 describe('Document logs (integration - in memory)', () => {
   const vehicleId = 'vehicle-1';
@@ -46,9 +47,7 @@ describe('Document logs (integration - in memory)', () => {
     const list = listRes.json();
 
     expect(list.data).toHaveLength(1);
-    expect(list.total).toBe(1);
-    expect(list.page).toBe(1);
-    expect(list.limit).toBe(10);
+    expect(list.nextCursor).toBe(null);
     expect(list.data[0]).toEqual(
       expect.objectContaining({
         id: created.id,
@@ -59,146 +58,68 @@ describe('Document logs (integration - in memory)', () => {
     );
   });
 
-  it('filters document logs from the list query', async () => {
+  it('returns document logs as a timeline with cursor pagination', async () => {
     const user = await testApp.registerAndGetCookie();
 
-    const matchingCreateRes = await createDocumentLog(
+    const firstCreateRes = await createDocumentLog(
       app,
       user.cookie,
       vehicleId,
       new DocumentLogHttpBuilder()
-        .withTitle('OC policy 2025')
-        .withIssuer('PZU')
-        .withValidFrom('2025-01-01T00:00:00.000Z')
-        .withValidTo('2025-12-31T00:00:00.000Z')
-        .withIssuedAt('2024-12-15T00:00:00.000Z')
-        .withCost(1299)
+        .withTitle('First entry')
         .build(),
     );
-    expect(matchingCreateRes.statusCode).toBe(201);
+    expect(firstCreateRes.statusCode).toBe(201);
 
-    const missingCostCreateRes = await createDocumentLog(
+    const secondCreateRes = await createDocumentLog(
       app,
       user.cookie,
       vehicleId,
       new DocumentLogHttpBuilder()
-        .withType('inspection')
-        .withTitle('Technical inspection')
-        .withIssuer('District Station')
-        .withValidFrom('2025-02-01T00:00:00.000Z')
-        .withValidTo('2025-02-28T00:00:00.000Z')
-        .withIssuedAt(undefined)
-        .withCost(undefined)
-        .withNote(undefined)
+        .withTitle('Second entry')
         .build(),
     );
-    expect(missingCostCreateRes.statusCode).toBe(201);
+    expect(secondCreateRes.statusCode).toBe(201);
 
-    const differentInsuranceCreateRes = await createDocumentLog(
+    const thirdCreateRes = await createDocumentLog(
       app,
       user.cookie,
       vehicleId,
       new DocumentLogHttpBuilder()
-        .withTitle('Fleet insurance package')
-        .withIssuer('Warta')
-        .withValidFrom('2025-03-01T00:00:00.000Z')
-        .withValidTo('2026-02-28T00:00:00.000Z')
-        .withIssuedAt('2025-01-15T00:00:00.000Z')
-        .withCost(5000)
+        .withTitle('Third entry')
         .build(),
     );
-    expect(differentInsuranceCreateRes.statusCode).toBe(201);
+    expect(thirdCreateRes.statusCode).toBe(201);
 
-    const listRes = await listDocumentLogs(app, user.cookie, vehicleId, {
-      search: 'policy',
-      type: 'insurance',
-      issuer: 'PZU',
-      costFrom: 1000,
-      costTo: 1500,
-      hasCost: true,
-      issuedAtFrom: '2024-12-01T00:00:00.000Z',
-      issuedAtTo: '2024-12-31T00:00:00.000Z',
-      validFromFrom: '2025-01-01T00:00:00.000Z',
-      validFromTo: '2025-01-31T00:00:00.000Z',
-      validToFrom: '2025-12-01T00:00:00.000Z',
-      validToTo: '2025-12-31T00:00:00.000Z',
-      sortBy: 'validTo',
-      direction: 'asc',
-    });
+    const firstPageRes = await listDocumentLogs(app, user.cookie, vehicleId, { limit: 2 });
 
-    expect(listRes.statusCode).toBe(200);
+    expect(firstPageRes.statusCode).toBe(200);
 
-    const list = listRes.json();
+    const firstPage = firstPageRes.json();
 
-    expect(list.total).toBe(1);
-    expect(list.data).toHaveLength(1);
-    expect(list.data[0]).toEqual(
+    expect(firstPage.data).toHaveLength(2);
+    expect(firstPage.nextCursor).toEqual(
       expect.objectContaining({
-        title: 'OC policy 2025',
-        type: 'insurance',
-        issuer: 'PZU',
-        cost: 1299,
+        createdAt: expect.any(String),
+        id: expect.any(String),
       }),
     );
-  });
 
-  it('sorts and paginates document logs from the list query', async () => {
-    const user = await testApp.registerAndGetCookie();
+    const firstPageIds = new Set(firstPage.data.map((item: { id: string }) => item.id));
 
-    const decemberCreateRes = await createDocumentLog(
-      app,
-      user.cookie,
-      vehicleId,
-      new DocumentLogHttpBuilder()
-        .withTitle('December renewal')
-        .withValidTo('2025-12-31T00:00:00.000Z')
-        .build(),
-    );
-    expect(decemberCreateRes.statusCode).toBe(201);
-
-    const marchCreateRes = await createDocumentLog(
-      app,
-      user.cookie,
-      vehicleId,
-      new DocumentLogHttpBuilder()
-        .withTitle('March renewal')
-        .withValidTo('2025-03-31T00:00:00.000Z')
-        .build(),
-    );
-    expect(marchCreateRes.statusCode).toBe(201);
-
-    const juneCreateRes = await createDocumentLog(
-      app,
-      user.cookie,
-      vehicleId,
-      new DocumentLogHttpBuilder()
-        .withTitle('June renewal')
-        .withValidTo('2025-06-30T00:00:00.000Z')
-        .build(),
-    );
-    expect(juneCreateRes.statusCode).toBe(201);
-
-    const listRes = await listDocumentLogs(app, user.cookie, vehicleId, {
-      sortBy: 'validTo',
-      direction: 'asc',
-      page: 2,
-      limit: 1,
+    const secondPageRes = await listDocumentLogs(app, user.cookie, vehicleId, {
+      limit: 2,
+      createdAt: firstPage.nextCursor.createdAt,
+      id: firstPage.nextCursor.id,
     });
 
-    expect(listRes.statusCode).toBe(200);
+    expect(secondPageRes.statusCode).toBe(200);
 
-    const list = listRes.json();
+    const secondPage = secondPageRes.json();
 
-    expect(list.total).toBe(3);
-    expect(list.page).toBe(2);
-    expect(list.limit).toBe(1);
-    expect(list.data).toHaveLength(1);
-    expect(list.data[0]).toEqual(
-      expect.objectContaining({
-        title: 'June renewal',
-        validTo: '2025-06-30T00:00:00.000Z',
-      }),
-    );
+    expect(secondPage.data).toHaveLength(1);
+    expect(secondPage.nextCursor).toBe(null);
+    expect(firstPageIds.has(secondPage.data[0].id)).toBe(false);
   });
 
   it('creates, updates, fetches, and deletes a document log for the authenticated owner', async () => {
@@ -317,21 +238,8 @@ describe('Document logs (integration - in memory)', () => {
     const user = await testApp.registerAndGetCookie();
 
     const listRes = await listDocumentLogs(app, user.cookie, vehicleId, {
-      search: 'policy',
-      type: 'insurance',
-      issuer: 'PZU',
-      costFrom: 100,
-      costTo: 2000,
-      hasCost: true,
-      issuedAtFrom: '2024-01-01T00:00:00.000Z',
-      issuedAtTo: '2024-12-31T00:00:00.000Z',
-      validFromFrom: '2025-01-01T00:00:00.000Z',
-      validFromTo: '2025-06-30T00:00:00.000Z',
-      validToFrom: '2025-07-01T00:00:00.000Z',
-      validToTo: '2025-12-31T00:00:00.000Z',
-      sortBy: 'validTo',
-      direction: 'asc',
-      page: 2,
+      createdAt: '2025-01-01T00:00:00.000Z',
+      id: 'cursor-id',
       limit: 5,
     });
 
@@ -339,25 +247,10 @@ describe('Document logs (integration - in memory)', () => {
     expect(repo.lastListQuery).toEqual({
       ownerId: expect.any(String),
       vehicleId,
-      filters: {
-        search: 'policy',
-        type: 'insurance',
-        issuer: 'PZU',
-        costFrom: 100,
-        costTo: 2000,
-        hasCost: true,
-        issuedAtFrom: new Date('2024-01-01T00:00:00.000Z'),
-        issuedAtTo: new Date('2024-12-31T00:00:00.000Z'),
-        validFromFrom: new Date('2025-01-01T00:00:00.000Z'),
-        validFromTo: new Date('2025-06-30T00:00:00.000Z'),
-        validToFrom: new Date('2025-07-01T00:00:00.000Z'),
-        validToTo: new Date('2025-12-31T00:00:00.000Z'),
+      cursor: {
+        createdAt: new Date('2025-01-01T00:00:00.000Z'),
+        id: 'cursor-id',
       },
-      sort: {
-        field: 'validTo',
-        direction: 'asc',
-      },
-      page: 2,
       limit: 5,
     });
   });
@@ -417,12 +310,11 @@ describe('Document logs (integration - in memory)', () => {
     );
   });
 
-  it('returns 400 for invalid list query ranges', async () => {
+  it('returns 400 for invalid cursor', async () => {
     const user = await testApp.registerAndGetCookie();
 
     const res = await listDocumentLogs(app, user.cookie, vehicleId, {
-      costFrom: 2000,
-      costTo: 100,
+      id: 'cursor-id',
     });
 
     expect(res.statusCode).toBe(400);
@@ -432,8 +324,8 @@ describe('Document logs (integration - in memory)', () => {
         message: 'Validation error',
         issues: expect.arrayContaining([
           expect.objectContaining({
-            path: 'costFrom',
-            message: 'costFrom must be <= costTo',
+            path: 'createdAt',
+            message: 'createdAt and id must be provided together',
           }),
         ]),
       }),
@@ -511,7 +403,7 @@ describe('Document logs (integration - in memory)', () => {
     const list = listRes.json();
 
     expect(list.data).toHaveLength(0);
-    expect(list.total).toBe(0);
+    expect(list.nextCursor).toBe(null);
   });
 
   it('returns 401 when user is not authenticated', async () => {

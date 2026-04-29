@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
+
 import { NotFoundError } from '../../../shared/errors/not-found-error';
 import { createVehicle } from '../domain/vehicle';
-import { GetVehicleUseCase } from './get-vehicle.usecase';
-import { VehicleDomainBuilder } from '../test/vehicle.domain.builder';
 import { InMemoryVehicleRepository } from '../test/in-memory/in-memory-vehicle.repository';
+import { VehicleDomainBuilder } from '../test/vehicle.domain.builder';
+
+import { GetVehicleUseCase } from './get-vehicle.usecase';
 
 describe('GetVehicleUseCase', () => {
   it('returns vehicle for owner', async () => {

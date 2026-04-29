@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 
-type DocumentLogListQueryValue = string | number | boolean | Date | undefined;
+type DocumentLogListQueryValue = string | number | boolean | Date | undefined | null;
 
 function toQueryString(query?: Record<string, DocumentLogListQueryValue>) {
   if (!query) {

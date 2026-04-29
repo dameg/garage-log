@@ -1,4 +1,4 @@
-import {
+import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
 } from '../domain/sliding-window.repository';

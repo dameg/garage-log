@@ -1,9 +1,9 @@
+import type { RedisService } from '../../../redis/redis.service';
 import type {
   ConsumeTokenBucketParams,
   ConsumeTokenBucketResult,
   TokenBucketRepository,
 } from '../../domain/token-bucket.repository';
-import type { RedisService } from '../../../redis/redis.service';
 
 const CONSUME_TOKEN_BUCKET_LUA = `
 local key = KEYS[1]

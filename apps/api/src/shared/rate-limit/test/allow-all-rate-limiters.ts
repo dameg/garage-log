@@ -1,16 +1,13 @@
-import type {
-  ConsumeTokenBucketParams,
-  ConsumeTokenBucketResult,
-} from '../domain/token-bucket.repository';
-
+import type { CheckSlidingWindowUseCasePort } from '../application/check-sliding-window.usecase.port';
+import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token-bucket.usecase.port';
 import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
 } from '../domain/sliding-window.repository';
-
-import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token-bucket.usecase.port';
-
-import type { CheckSlidingWindowUseCasePort } from '../application/check-sliding-window.usecase.port';
+import type {
+  ConsumeTokenBucketParams,
+  ConsumeTokenBucketResult,
+} from '../domain/token-bucket.repository';
 
 export class AllowAllConsumeTokenBucketUseCase implements ConsumeTokenBucketUseCasePort {
   async execute(_: ConsumeTokenBucketParams): Promise<ConsumeTokenBucketResult> {

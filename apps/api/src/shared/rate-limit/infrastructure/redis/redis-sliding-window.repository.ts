@@ -1,9 +1,9 @@
+import type { RedisService } from '../../../redis/redis.service';
 import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
   SlidingWindowRepository,
 } from '../../domain/sliding-window.repository';
-import type { RedisService } from '../../../redis/redis.service';
 
 const HIT_SLIDING_WINDOW_LUA = `
     local key = KEYS[1]

@@ -1,24 +1,16 @@
 import { http } from '@/shared/api/httpClient';
 
-import type { DocumentLogResponse } from '../model';
+import type { DocumentLogListParams, DocumentLogListResponse } from './document-log.contracts';
 
-import type { CreateDocumentLogInput } from './document-log.contracts';
+export const getDocumentLogs = (vehicleId: string, params: DocumentLogListParams) => {
+  const searchParams = new URLSearchParams();
 
-export const getDocumentLogs = (vehicleId: string) => {
-  return http<DocumentLogResponse[]>(`/vehicles/${vehicleId}/document-logs`, {
+  if (params.createdAt) searchParams.set('createdAt', params.createdAt);
+  if (params.id) searchParams.set('id', params.id);
+
+  searchParams.set('limit', String(params.limit));
+
+  return http<DocumentLogListResponse>(`/vehicles/${vehicleId}/document-logs?${searchParams}`, {
     method: 'GET',
-  });
-};
-
-export const getDocumentLog = (vehicleId: string, documentLogId: string) => {
-  return http<DocumentLogResponse>(`/vehicles/${vehicleId}/document-logs/${documentLogId}`, {
-    method: 'GET',
-  });
-};
-
-export const createDocumentLog = (vehicleId: string, payload: CreateDocumentLogInput) => {
-  return http<DocumentLogResponse>(`/vehicles/${vehicleId}/document-logs`, {
-    method: 'POST',
-    body: JSON.stringify(payload),
   });
 };

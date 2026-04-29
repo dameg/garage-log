@@ -1,8 +1,8 @@
-import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
-import type { DocumentLogListQuery } from '../../contracts/document-log-list.query';
+import type { CursorResult } from '../../../../shared/contracts/cursor-result';
 import type { DocumentLogRepository } from '../../contracts/document-log.repository';
+import type { DocumentLogCursor, DocumentLogListQuery } from '../../contracts/document-log-list.query';
 import type { DocumentLog, UpdatableDocumentLogFields } from '../../domain/document-log';
-import { matchesDocumentLogFilters } from './matches-document-log-filters';
+
 import { sortDocumentLogs } from './sort-document-logs';
 
 export class InMemoryDocumentLogRepository implements DocumentLogRepository {
@@ -13,21 +13,28 @@ export class InMemoryDocumentLogRepository implements DocumentLogRepository {
     return documentLog;
   }
 
-  async list(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>> {
-    const filtered = this.data.filter((documentLog) =>
-      matchesDocumentLogFilters(documentLog, query),
+  async list(query: DocumentLogListQuery): Promise<CursorResult<DocumentLog, DocumentLogCursor>> {
+    const filtered = this.data.filter(
+      (documentLog) =>
+        documentLog.ownerId === query.ownerId && documentLog.vehicleId === query.vehicleId,
     );
 
     const sorted = sortDocumentLogs(filtered, query);
-    const total = sorted.length;
-    const start = (query.page - 1) * query.limit;
-    const end = start + query.limit;
+    const afterCursor = query.cursor
+      ? sorted.filter(
+          (documentLog) =>
+            documentLog.createdAt < query.cursor!.createdAt ||
+            (documentLog.createdAt.getTime() === query.cursor!.createdAt.getTime() &&
+              documentLog.id < query.cursor!.id),
+        )
+      : sorted;
+    const data = afterCursor.slice(0, query.limit);
+    const hasMore = afterCursor.length > query.limit;
+    const lastRow = data.at(-1);
 
     return {
-      data: sorted.slice(start, end),
-      total,
-      page: query.page,
-      limit: query.limit,
+      data,
+      nextCursor: hasMore && lastRow ? { createdAt: lastRow.createdAt, id: lastRow.id } : null,
     };
   }
 

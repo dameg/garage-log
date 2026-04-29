@@ -1,8 +1,8 @@
-import 'dotenv/config';
-
 import { env } from './shared/config';
-import { buildApp } from './app';
 import { closePrisma } from './shared/db/prisma';
+import { buildApp } from './app';
+
+import 'dotenv/config';
 
 async function start() {
   const app = await buildApp();
