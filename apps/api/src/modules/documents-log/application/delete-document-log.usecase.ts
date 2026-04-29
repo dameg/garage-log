@@ -7,11 +7,17 @@ export class DeleteDocumentLogUseCase {
   async execute({
     documentLogId,
     ownerId,
+    vehicleId,
   }: {
     documentLogId: string;
     ownerId: string;
+    vehicleId: string;
   }): Promise<void> {
-    const deleted = await this.repo.deleteByIdForOwner(documentLogId, ownerId);
+    const deleted = await this.repo.deleteByIdForOwnerAndVehicle(
+      documentLogId,
+      ownerId,
+      vehicleId,
+    );
 
     if (!deleted) {
       throw new NotFoundError('Document Log', documentLogId);

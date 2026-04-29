@@ -34,30 +34,47 @@ export class InMemoryDocumentLogRepository implements DocumentLogRepository {
     };
   }
 
-  async findByIdForOwner(id: string, ownerId: string): Promise<DocumentLog | null> {
+  async findByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+  ): Promise<DocumentLog | null> {
     return (
-      this.data.find((documentLog) => documentLog.id === id && documentLog.ownerId === ownerId) ||
-      null
+      this.data.find(
+        (documentLog) =>
+          documentLog.id === id &&
+          documentLog.ownerId === ownerId &&
+          documentLog.vehicleId === vehicleId,
+      ) || null
     );
   }
 
-  async deleteByIdForOwner(id: string, ownerId: string): Promise<boolean> {
+  async deleteByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+  ): Promise<boolean> {
     const previousLength = this.data.length;
 
     this.data = this.data.filter(
-      (documentLog) => !(documentLog.id === id && documentLog.ownerId === ownerId),
+      (documentLog) =>
+        !(documentLog.id === id && documentLog.ownerId === ownerId && documentLog.vehicleId === vehicleId),
     );
 
     return this.data.length < previousLength;
   }
 
-  async updateByIdForOwner(
+  async updateByIdForOwnerAndVehicle(
     id: string,
     ownerId: string,
+    vehicleId: string,
     patch: UpdatableDocumentLogFields,
   ): Promise<DocumentLog | null> {
     const index = this.data.findIndex(
-      (documentLog) => documentLog.id === id && documentLog.ownerId === ownerId,
+      (documentLog) =>
+        documentLog.id === id &&
+        documentLog.ownerId === ownerId &&
+        documentLog.vehicleId === vehicleId,
     );
 
     if (index === -1) {

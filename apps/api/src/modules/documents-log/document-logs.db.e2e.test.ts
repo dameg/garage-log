@@ -232,6 +232,34 @@ describe('Document logs (db e2e)', () => {
     expect(res.statusCode).toBe(404);
   });
 
+  it('returns 404 when document log belongs to another vehicle of the same owner', async () => {
+    const user = await registerAndGetCookie(app, 'same-owner@test.com');
+    const firstVehicle = await createVehicleForUser(user.cookie, '330i');
+    const secondVehicle = await createVehicleForUser(user.cookie, 'M3');
+
+    const createRes = await createDocumentLog(
+      app,
+      user.cookie,
+      firstVehicle.id,
+      new DocumentLogHttpBuilder().build(),
+    );
+    const created = createRes.json();
+
+    const getRes = await getDocumentLog(app, user.cookie, secondVehicle.id, created.id);
+    expect(getRes.statusCode).toBe(404);
+
+    const patchRes = await updateDocumentLog(app, user.cookie, secondVehicle.id, created.id, {
+      title: 'Should not update',
+    });
+    expect(patchRes.statusCode).toBe(404);
+
+    const deleteRes = await deleteDocumentLog(app, user.cookie, secondVehicle.id, created.id);
+    expect(deleteRes.statusCode).toBe(404);
+
+    const stillExistsRes = await getDocumentLog(app, user.cookie, firstVehicle.id, created.id);
+    expect(stillExistsRes.statusCode).toBe(200);
+  });
+
   it('does not show document logs of another user', async () => {
     const owner = await registerAndGetCookie(app, 'owner@test.com');
     const stranger = await registerAndGetCookie(app, 'stranger@test.com');

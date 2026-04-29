@@ -338,6 +338,7 @@ describe('Document logs (integration - in memory)', () => {
     expect(listRes.statusCode).toBe(200);
     expect(repo.lastListQuery).toEqual({
       ownerId: expect.any(String),
+      vehicleId,
       filters: {
         search: 'policy',
         type: 'insurance',
@@ -467,6 +468,34 @@ describe('Document logs (integration - in memory)', () => {
     );
 
     expect(res.statusCode).toBe(404);
+  });
+
+  it('returns 404 when document log belongs to another vehicle of the same owner', async () => {
+    const user = await testApp.registerAndGetCookie();
+    const correctVehicleId = 'vehicle-correct';
+    const wrongVehicleId = 'vehicle-wrong';
+
+    const createRes = await createDocumentLog(
+      app,
+      user.cookie,
+      correctVehicleId,
+      new DocumentLogHttpBuilder().build(),
+    );
+    const created = createRes.json();
+
+    const getRes = await getDocumentLog(app, user.cookie, wrongVehicleId, created.id);
+    expect(getRes.statusCode).toBe(404);
+
+    const patchRes = await updateDocumentLog(app, user.cookie, wrongVehicleId, created.id, {
+      title: 'Should not update',
+    });
+    expect(patchRes.statusCode).toBe(404);
+
+    const deleteRes = await deleteDocumentLog(app, user.cookie, wrongVehicleId, created.id);
+    expect(deleteRes.statusCode).toBe(404);
+
+    const stillExistsRes = await getDocumentLog(app, user.cookie, correctVehicleId, created.id);
+    expect(stillExistsRes.statusCode).toBe(200);
   });
 
   it('does not list document logs of another user', async () => {

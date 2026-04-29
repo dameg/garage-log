@@ -56,28 +56,37 @@ export class PrismaDocumentLogRepository implements DocumentLogRepository {
     };
   }
 
-  async findByIdForOwner(id: string, ownerId: string): Promise<DocumentLog | null> {
+  async findByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+  ): Promise<DocumentLog | null> {
     const row = await this.prisma.documentLog.findFirst({
-      where: { id, ownerId },
+      where: { id, ownerId, vehicleId },
     });
 
     return row ? toDomainDocumentLog(row) : null;
   }
 
-  async deleteByIdForOwner(id: string, ownerId: string): Promise<boolean> {
+  async deleteByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+  ): Promise<boolean> {
     const deleted = await this.prisma.documentLog.deleteMany({
-      where: { id, ownerId },
+      where: { id, ownerId, vehicleId },
     });
     return deleted.count > 0;
   }
 
-  async updateByIdForOwner(
+  async updateByIdForOwnerAndVehicle(
     id: string,
     ownerId: string,
+    vehicleId: string,
     data: UpdatableDocumentLogFields,
   ): Promise<DocumentLog | null> {
     const result = await this.prisma.documentLog.updateMany({
-      where: { id, ownerId },
+      where: { id, ownerId, vehicleId },
       data,
     });
 
@@ -86,7 +95,7 @@ export class PrismaDocumentLogRepository implements DocumentLogRepository {
     }
 
     const updated = await this.prisma.documentLog.findFirst({
-      where: { id, ownerId },
+      where: { id, ownerId, vehicleId },
     });
 
     return updated ? toDomainDocumentLog(updated) : null;

@@ -5,6 +5,7 @@ import { vehicleIdParamsSchema } from '../../../../shared/http/params/vehicle-id
 import { parseBody, parseParams, parseQuery } from '../../../../shared/http/validation';
 import { listDocumentLogsQuerySchema } from '../validation/list-document-logs-query.schema';
 import { documentLogIdParamsSchema } from '../validation/document-log-id.schema';
+import { updateDocumentLogHttpSchema } from '../validation/update-document-log.schema';
 
 export async function documentLogsRoutes(app: FastifyInstance) {
   const {
@@ -36,24 +37,36 @@ export async function documentLogsRoutes(app: FastifyInstance) {
   });
 
   app.get('/:documentLogId', async (req) => {
+    const vehicleParams = parseParams(vehicleIdParamsSchema, req.params);
     const params = parseParams(documentLogIdParamsSchema, req.params);
 
-    return getDocumentLogUseCase.execute({ ...params, ownerId: req.user.sub });
+    return getDocumentLogUseCase.execute({
+      ...vehicleParams,
+      ...params,
+      ownerId: req.user.sub,
+    });
   });
 
   app.delete('/:documentLogId', async (req, reply) => {
+    const vehicleParams = parseParams(vehicleIdParamsSchema, req.params);
     const params = parseParams(documentLogIdParamsSchema, req.params);
 
-    await deleteDocumentLogUseCase.execute({ ...params, ownerId: req.user.sub });
+    await deleteDocumentLogUseCase.execute({
+      ...vehicleParams,
+      ...params,
+      ownerId: req.user.sub,
+    });
 
     return reply.status(204).send();
   });
 
   app.patch('/:documentLogId', async (req, reply) => {
+    const vehicleParams = parseParams(vehicleIdParamsSchema, req.params);
     const params = parseParams(documentLogIdParamsSchema, req.params);
-    const body = parseBody(createDocumentLogHttpSchema.partial(), req.body);
+    const body = parseBody(updateDocumentLogHttpSchema, req.body);
 
     const updated = await updateDocumentLogUseCase.execute({
+      vehicleId: vehicleParams.vehicleId,
       documentLogId: params.documentLogId,
       ownerId: req.user.sub,
       patch: body,

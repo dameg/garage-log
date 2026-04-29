@@ -24,7 +24,11 @@ export class UpdateDocumentLogUseCase {
   constructor(private readonly repo: DocumentLogRepository) {}
 
   async execute(input: UpdateDocumentLogInput): Promise<DocumentLog> {
-    const existing = await this.repo.findByIdForOwner(input.documentLogId, input.ownerId);
+    const existing = await this.repo.findByIdForOwnerAndVehicle(
+      input.documentLogId,
+      input.ownerId,
+      input.vehicleId,
+    );
 
     if (!existing) {
       throw new NotFoundError('Document Log', input.documentLogId);
@@ -32,9 +36,10 @@ export class UpdateDocumentLogUseCase {
 
     const next = updateDocumentLog(existing, input.patch);
 
-    const updated = await this.repo.updateByIdForOwner(
+    const updated = await this.repo.updateByIdForOwnerAndVehicle(
       input.documentLogId,
       input.ownerId,
+      input.vehicleId,
       toUpdatableFields(next),
     );
 

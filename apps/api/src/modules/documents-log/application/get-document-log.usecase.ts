@@ -8,11 +8,17 @@ export class GetDocumentLogUseCase {
   async execute({
     documentLogId,
     ownerId,
+    vehicleId,
   }: {
     documentLogId: string;
     ownerId: string;
+    vehicleId: string;
   }): Promise<DocumentLog> {
-    const documentLog = await this.repo.findByIdForOwner(documentLogId, ownerId);
+    const documentLog = await this.repo.findByIdForOwnerAndVehicle(
+      documentLogId,
+      ownerId,
+      vehicleId,
+    );
     if (!documentLog) {
       throw new NotFoundError('Document log', documentLogId);
     }

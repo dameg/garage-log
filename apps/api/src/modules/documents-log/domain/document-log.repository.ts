@@ -5,11 +5,12 @@ import type { DocumentLogListQuery } from './document-log-list.query';
 export interface DocumentLogRepository {
   create(documentLog: DocumentLog): Promise<DocumentLog>;
   list(query: DocumentLogListQuery): Promise<PaginatedResult<DocumentLog>>;
-  findByIdForOwner(id: string, ownerId: string): Promise<DocumentLog | null>;
-  deleteByIdForOwner(id: string, ownerId: string): Promise<boolean>;
-  updateByIdForOwner(
+  findByIdForOwnerAndVehicle(id: string, ownerId: string, vehicleId: string): Promise<DocumentLog | null>;
+  deleteByIdForOwnerAndVehicle(id: string, ownerId: string, vehicleId: string): Promise<boolean>;
+  updateByIdForOwnerAndVehicle(
     id: string,
     ownerId: string,
+    vehicleId: string,
     patch: UpdatableDocumentLogFields,
   ): Promise<DocumentLog | null>;
 }

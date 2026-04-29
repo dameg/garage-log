@@ -24,15 +24,28 @@ export class SpyDocumentLogRepository implements DocumentLogRepository {
     return this.result;
   }
 
-  async findByIdForOwner(id: string, ownerId: string): Promise<DocumentLog | null> {
+  async findByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+  ): Promise<DocumentLog | null> {
     return null;
   }
 
-  async deleteByIdForOwner(id: string, ownerId: string): Promise<boolean> {
+  async deleteByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+  ): Promise<boolean> {
     return false;
   }
 
-  async updateByIdForOwner(id: string, ownerId: string, patch: any): Promise<DocumentLog | null> {
+  async updateByIdForOwnerAndVehicle(
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+    patch: any,
+  ): Promise<DocumentLog | null> {
     return null;
   }
 }
