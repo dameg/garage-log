@@ -9,7 +9,7 @@ export const DOCUMENT_LOGS_PAGE_SIZE = 5;
 export const documentLogQueries = {
   list: (vehicleId: string) =>
     infiniteQueryOptions({
-      queryKey: documentLogKeys.list(vehicleId, DOCUMENT_LOGS_PAGE_SIZE),
+      queryKey: documentLogKeys.list(vehicleId),
       initialPageParam: null as DocumentLogListCursor | null,
       queryFn: ({ pageParam }) =>
         getDocumentLogs(vehicleId, {
