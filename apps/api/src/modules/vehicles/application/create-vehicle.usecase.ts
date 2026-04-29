@@ -10,8 +10,8 @@ export class CreateVehicleUseCase {
 
   async execute(input: CreateVehicleInput): Promise<Vehicle> {
     const vehicle = createVehicle({
-      id: randomUUID(),
       ...input,
+      id: randomUUID(),
     });
 
     return this.repo.create(vehicle);
