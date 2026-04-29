@@ -1,8 +1,11 @@
+import { Container, Stack } from '@mantine/core';
+
 import { useRequiredParam } from '@/shared/lib/router';
 import { AppLoader, ErrorAlert, NotFound } from '@/shared/ui';
 
 import { useVehicle } from '@/entities/vehicle';
 
+import { DocumentLogsTimeline } from '@/widgets/vehicle/document-logs-timeline';
 import { VehicleDetail } from '@/widgets/vehicle/vehicle-detail';
 
 export function VehicleDetailPage() {
@@ -24,5 +27,12 @@ export function VehicleDetailPage() {
 
   if (!vehicle) return <NotFound />;
 
-  return <VehicleDetail vehicle={vehicle} />;
+  return (
+    <Container size="xl" py="lg">
+      <Stack gap="xl">
+        <VehicleDetail vehicle={vehicle} />
+        <DocumentLogsTimeline vehicleId={vehicleId} />
+      </Stack>
+    </Container>
+  );
 }

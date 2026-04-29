@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { type Vehicle,vehicleQueries } from '@/entities/vehicle';
+import { vehicleQueries } from '@/entities/vehicle';
 
-export const useVehicle = (id: Vehicle['id']) => {
+export const useVehicle = (id: string) => {
   return useQuery({ ...vehicleQueries.detail(id), enabled: !!id });
 };

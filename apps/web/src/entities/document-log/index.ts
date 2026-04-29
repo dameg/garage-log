@@ -1,0 +1,1 @@
+export { useDocumentLogs } from './model';

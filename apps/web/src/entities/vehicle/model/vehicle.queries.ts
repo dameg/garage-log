@@ -17,7 +17,7 @@ export const vehicleQueries = {
     queryOptions({
       queryKey: vehicleKeys.detail(id),
       queryFn: () => getVehicle(id),
-      staleTime: 0,
-      retry: 3,
+      staleTime: 5 * 60_000,
+      refetchOnWindowFocus: true,
     }),
 };

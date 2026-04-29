@@ -1,6 +1,6 @@
 import type { PaginationParams, SortParams } from '@/shared/types';
 
-import type { Vehicle, VehiclesSortBy } from '../model';
+import type { VehiclesSortBy } from '../model';
 
 export type CreateVehicleInput = {
   vin: string;
@@ -13,7 +13,7 @@ export type CreateVehicleInput = {
 export type UpdateVehiclePayload = Partial<CreateVehicleInput>;
 
 export type UpdateVehicleInput = {
-  vehicleId: Vehicle['id'];
+  vehicleId: string;
   payload: UpdateVehiclePayload;
 };
 

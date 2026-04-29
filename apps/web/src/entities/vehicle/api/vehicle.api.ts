@@ -1,7 +1,7 @@
 import type { PaginatedResult } from '@/shared/api';
 import { http } from '@/shared/api/httpClient';
 
-import type { Vehicle, VehicleResponse } from '../model';
+import type { VehicleResponse } from '../model';
 
 import type {
   CreateVehicleInput,
@@ -18,7 +18,7 @@ export function getVehicles(params: VehiclesListParams) {
   });
 }
 
-export async function getVehicle(vehicleId: Vehicle['id']) {
+export async function getVehicle(vehicleId: string) {
   return http<VehicleResponse>(`/vehicles/${vehicleId}`, {
     method: 'GET',
   });
@@ -38,7 +38,7 @@ export async function updateVehicle({ vehicleId, payload }: UpdateVehicleInput) 
   });
 }
 
-export async function deleteVehicle(id: Vehicle['id']) {
+export async function deleteVehicle(id: string) {
   return http<void>(`/vehicles/${id}`, {
     method: 'DELETE',
   });
