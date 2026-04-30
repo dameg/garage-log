@@ -11,14 +11,18 @@ import {
   Timeline,
   Title,
 } from '@mantine/core';
-import { IconArrowDown, IconFileCertificate, IconFileInvoice } from '@tabler/icons-react';
+import { IconArrowDown, IconFileCertificate } from '@tabler/icons-react';
 
 import { formatDate } from '@/shared/lib/format/date';
 import { formatCost } from '@/shared/lib/format/number';
-import { EmptyState } from '@/shared/ui/empty-state/EmptyState';
-import { ErrorAlert } from '@/shared/ui/error-alert/ErrorAlert';
+import { CompactLoader, EmptyState, ErrorAlert } from '@/shared/ui';
 
-import { useVehicleDocuments, type VehicleDocument } from '@/entities/vehicle';
+import {
+  getVehicleDocumentTypeIcon,
+  getVehicleDocumentTypeLabel,
+  useVehicleDocuments,
+  type VehicleDocument,
+} from '@/entities/vehicle';
 
 type Props = {
   vehicleId: string;
@@ -26,16 +30,6 @@ type Props = {
 
 type VehicleDocumentCardProps = {
   vehicleDocument: VehicleDocument;
-};
-
-const timelineBulletIcons = {
-  inspection: IconFileCertificate,
-  insurance: IconFileInvoice,
-};
-
-const documentTypeLabels: Record<VehicleDocument['type'], string> = {
-  inspection: 'Inspection',
-  insurance: 'Insurance',
 };
 
 function DetailRow({ label, value }: { label: string; value: string | null }) {
@@ -72,7 +66,7 @@ function VehicleDocumentCard({ vehicleDocument }: VehicleDocumentCardProps) {
           </Stack>
 
           <Badge variant="light" radius="sm">
-            {documentTypeLabels[vehicleDocument.type]}
+            {getVehicleDocumentTypeLabel(vehicleDocument.type)}
           </Badge>
         </Group>
 
@@ -127,11 +121,7 @@ export function VehicleDocumentsList({ vehicleId }: Props) {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   if (status === 'pending') {
-    return (
-      <Center py="xl">
-        <Loader size="md" />
-      </Center>
-    );
+    return <CompactLoader />;
   }
 
   if (status === 'error') {
@@ -156,7 +146,7 @@ export function VehicleDocumentsList({ vehicleId }: Props) {
   return (
     <Stack gap="lg">
       <Stack gap={4}>
-        <Title order={3}>Document timeline</Title>
+        <Title order={3}>Documents</Title>
         <Text c="dimmed">
           Insurance and inspection history displayed chronologically with automatic infinite
           loading.
@@ -165,7 +155,7 @@ export function VehicleDocumentsList({ vehicleId }: Props) {
 
       <Timeline active={vehicleDocuments.length} bulletSize={40} lineWidth={3}>
         {vehicleDocuments.map((vehicleDocument) => {
-          const BulletIcon = timelineBulletIcons[vehicleDocument.type];
+          const BulletIcon = getVehicleDocumentTypeIcon(vehicleDocument.type);
 
           return (
             <Timeline.Item
@@ -181,7 +171,7 @@ export function VehicleDocumentsList({ vehicleId }: Props) {
         {!hasNextPage && (
           <Timeline.Item bullet={<IconArrowDown size={18} stroke={1.8} />} title={null}>
             <Text size="sm" c="dimmed">
-              Timeline start
+              Start
             </Text>
           </Timeline.Item>
         )}

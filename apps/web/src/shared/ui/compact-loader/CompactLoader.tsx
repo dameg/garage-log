@@ -1,8 +1,8 @@
 import { Center, Loader } from '@mantine/core';
 
-export function AppLoader() {
+export function CompactLoader() {
   return (
-    <Center mih="100vh">
+    <Center mih="100px">
       <Loader />
     </Center>
   );

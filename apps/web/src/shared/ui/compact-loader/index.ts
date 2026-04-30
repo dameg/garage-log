@@ -1,0 +1,1 @@
+export { CompactLoader } from './CompactLoader';

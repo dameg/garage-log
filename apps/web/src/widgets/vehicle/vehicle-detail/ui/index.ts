@@ -1,2 +1,1 @@
-export { VehicleDetail } from './VehicleDetail';
-export { VehicleDocumentsList } from './VehicleDocumentsList';
+export { VehicleDetailWidget } from './VehicleDetailWidget';

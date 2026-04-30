@@ -17,6 +17,7 @@ export {
   getVehicles,
   updateVehicle,
 } from './api';
+export { getVehicleDocumentTypeLabel } from './lib';
 export type {
   Vehicle,
   VehicleDocument,
@@ -34,3 +35,4 @@ export {
   vehicleMutations,
   vehicleQueries,
 } from './model';
+export { getVehicleDocumentTypeIcon } from './ui';

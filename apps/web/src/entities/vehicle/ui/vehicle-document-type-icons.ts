@@ -7,6 +7,6 @@ const vehicleDocumentTypeIcons: Record<VehicleDocumentType, Icon> = {
   insurance: IconFileInvoice,
 };
 
-export function getVehicleDocumentIcon(type: VehicleDocumentType): Icon {
+export function getVehicleDocumentTypeIcon(type: VehicleDocumentType): Icon {
   return vehicleDocumentTypeIcons[type] ?? IconFile;
 }

@@ -1,37 +1,9 @@
-import { Container, Stack } from '@mantine/core';
-
 import { useRequiredParam } from '@/shared/lib/router';
-import { AppLoader, ErrorAlert, NotFound } from '@/shared/ui';
 
-import { useVehicle } from '@/entities/vehicle';
-
-import { VehicleDetail, VehicleDocumentsList } from '@/widgets/vehicle/vehicle-detail';
+import { VehicleDetailWidget } from '@/widgets/vehicle/vehicle-detail';
 
 export function VehicleDetailPage() {
   const vehicleId = useRequiredParam('id');
 
-  const { data: vehicle, isLoading, isError } = useVehicle(vehicleId);
-
-  if (isLoading) {
-    return <AppLoader />;
-  }
-
-  if (isError)
-    return (
-      <ErrorAlert
-        title="Unable to load vehicle"
-        message="An error occurred while loading your vehicle. Please try again later."
-      />
-    );
-
-  if (!vehicle) return <NotFound />;
-
-  return (
-    <Container size="xl" py="lg">
-      <Stack gap="xl">
-        <VehicleDetail vehicle={vehicle} />
-        <VehicleDocumentsList vehicleId={vehicleId} />
-      </Stack>
-    </Container>
-  );
+  return <VehicleDetailWidget vehicleId={vehicleId} />;
 }

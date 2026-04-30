@@ -1,1 +1,1 @@
-export { VehicleDetail, VehicleDocumentsList } from './ui';
+export { VehicleDetailWidget } from './ui';

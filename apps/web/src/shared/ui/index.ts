@@ -1,4 +1,5 @@
 export { AppLoader } from './app-loader';
+export { CompactLoader } from './compact-loader';
 export { EmptyState } from './empty-state';
 export { ErrorAlert } from './error-alert';
 export { NotFound } from './not-found';
