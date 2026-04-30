@@ -1,10 +1,36 @@
 export type {
+  CreateVehicleDocumentInput,
   CreateVehicleInput,
+  UpdateVehicleDocumentPayload,
   UpdateVehicleInput,
   UpdateVehiclePayload,
+  VehicleDocumentListCursor,
+  VehicleDocumentListParams,
+  VehicleDocumentListResponse,
   VehiclesListParams,
 } from './api';
-export { createVehicle, deleteVehicle, getVehicle, getVehicles, updateVehicle } from './api';
-export type { Vehicle, VehicleResponse, VehiclesSortBy } from './model';
-export { useVehicle } from './model';
-export { vehicleKeys, vehicleMutations, vehicleQueries } from './model';
+export {
+  createVehicle,
+  deleteVehicle,
+  getVehicle,
+  getVehicleDocuments,
+  getVehicles,
+  updateVehicle,
+} from './api';
+export type {
+  Vehicle,
+  VehicleDocument,
+  VehicleDocumentResponse,
+  VehicleDocumentType,
+  VehicleResponse,
+  VehiclesSortBy,
+} from './model';
+export {
+  useVehicle,
+  useVehicleDocuments,
+  vehicleDocumentKeys,
+  vehicleDocumentQueries,
+  vehicleKeys,
+  vehicleMutations,
+  vehicleQueries,
+} from './model';

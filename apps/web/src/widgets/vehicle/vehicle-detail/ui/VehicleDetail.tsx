@@ -10,7 +10,7 @@ type Props = {
 };
 
 export function VehicleDetail({ vehicle }: Props) {
-  const createdAt = new Date(vehicle.createdAt).toLocaleDateString('pl-PL', {
+  const createdAt = new Date(vehicle.createdAt).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

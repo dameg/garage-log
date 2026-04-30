@@ -1,1 +1,1 @@
-export { VehicleDetail } from './ui/VehicleDetail';
+export { VehicleDetail, VehicleDocumentsList } from './ui';

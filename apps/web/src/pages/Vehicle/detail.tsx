@@ -5,8 +5,7 @@ import { AppLoader, ErrorAlert, NotFound } from '@/shared/ui';
 
 import { useVehicle } from '@/entities/vehicle';
 
-import { VehicleDetail } from '@/widgets/vehicle/vehicle-detail';
-import { VehicleDocumentLogsTimeline } from '@/widgets/vehicle/vehicle-document-logs-timeline';
+import { VehicleDetail, VehicleDocumentsList } from '@/widgets/vehicle/vehicle-detail';
 
 export function VehicleDetailPage() {
   const vehicleId = useRequiredParam('id');
@@ -31,7 +30,7 @@ export function VehicleDetailPage() {
     <Container size="xl" py="lg">
       <Stack gap="xl">
         <VehicleDetail vehicle={vehicle} />
-        <VehicleDocumentLogsTimeline vehicleId={vehicleId} />
+        <VehicleDocumentsList vehicleId={vehicleId} />
       </Stack>
     </Container>
   );

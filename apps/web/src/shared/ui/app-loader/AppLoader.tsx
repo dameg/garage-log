@@ -4,6 +4,7 @@ export function AppLoader() {
   return (
     <Center mih="100vh">
       <Loader />
+      dasasd
     </Center>
   );
 }
