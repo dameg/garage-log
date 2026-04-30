@@ -1,15 +1,24 @@
 import { useEffect, useRef } from 'react';
-import { Badge, Card, Center, Group, Loader, SimpleGrid, Stack, Text, Timeline, Title } from '@mantine/core';
 import {
-  IconArrowDown,
-  IconFileCertificate,
-  IconFileInvoice,
-} from '@tabler/icons-react';
+  Badge,
+  Card,
+  Center,
+  Group,
+  Loader,
+  SimpleGrid,
+  Stack,
+  Text,
+  Timeline,
+  Title,
+} from '@mantine/core';
+import { IconArrowDown, IconFileCertificate, IconFileInvoice } from '@tabler/icons-react';
 
+import { formatDate } from '@/shared/lib/format/date';
+import { formatCost } from '@/shared/lib/format/number';
 import { EmptyState } from '@/shared/ui/empty-state/EmptyState';
 import { ErrorAlert } from '@/shared/ui/error-alert/ErrorAlert';
 
-import { useVehicleDocuments,type VehicleDocument } from '@/entities/vehicle';
+import { useVehicleDocuments, type VehicleDocument } from '@/entities/vehicle';
 
 type Props = {
   vehicleId: string;
@@ -28,25 +37,6 @@ const documentTypeLabels: Record<VehicleDocument['type'], string> = {
   inspection: 'Inspection',
   insurance: 'Insurance',
 };
-
-function formatDate(value: string | null) {
-  if (!value) return null;
-
-  return new Date(value).toLocaleDateString('pl-PL', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-}
-
-function formatCost(value: number | null) {
-  if (value == null) return null;
-
-  return value.toLocaleString('pl-PL', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
 
 function DetailRow({ label, value }: { label: string; value: string | null }) {
   if (!value) return null;
