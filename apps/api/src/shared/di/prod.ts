@@ -1,6 +1,6 @@
 import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
-import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
-import { PrismaVehicleRepository } from '../../modules/vehicles/infrastructure/prisma/prisma-vehicle.repository';
+import { PrismaDocumentLogRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-document.repository';
+import { PrismaVehicleRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-vehicle.repository';
 import { env } from '../config';
 import { getPrisma } from '../db/prisma';
 import { CheckSlidingWindowUseCase } from '../rate-limit/application/check-sliding-window.usecase';
@@ -30,9 +30,9 @@ export function createProdDeps(): AppContainer {
 
   prodDeps = {
     redisService,
-    vehiclesRepo: new PrismaVehicleRepository(prisma),
-    usersRepo: new PrismaUserRepository(prisma),
-    documentLogsRepo: new PrismaDocumentLogRepository(prisma),
+    vehicleRepository: new PrismaVehicleRepository(prisma),
+    userRepository: new PrismaUserRepository(prisma),
+    documentRepository: new PrismaDocumentLogRepository(prisma),
     consumeTokenBucketUseCase: new ConsumeTokenBucketUseCase(tokenBucketRepository),
     checkSlidingWindowUseCase: new CheckSlidingWindowUseCase(slidingWindowRepository),
   };

@@ -3,7 +3,7 @@ import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
   SlidingWindowRepository,
-} from '../../domain/sliding-window.repository';
+} from '../../contracts/sliding-window.repository';
 
 const HIT_SLIDING_WINDOW_LUA = `
     local key = KEYS[1]

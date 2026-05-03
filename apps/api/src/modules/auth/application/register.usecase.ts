@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 
 import { ConflictError } from '../../../shared/errors/conflict-error';
 import { createUser, normalizeEmail, type User } from '../domain/user';
-import type { UserRepository } from '../domain/user.repository';
+import type { UserRepository } from '../contracts/user.repository';
 
 import type { RegisterUserInput } from './dto/register.dto';
 

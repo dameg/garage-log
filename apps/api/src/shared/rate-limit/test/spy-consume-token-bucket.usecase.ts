@@ -2,7 +2,7 @@ import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token
 import type {
   ConsumeTokenBucketParams,
   ConsumeTokenBucketResult,
-} from '../domain/token-bucket.repository';
+} from '../contracts/token-bucket.repository';
 
 export class SpyConsumeTokenBucketUseCase implements ConsumeTokenBucketUseCasePort {
   lastParams: ConsumeTokenBucketParams | null = null;

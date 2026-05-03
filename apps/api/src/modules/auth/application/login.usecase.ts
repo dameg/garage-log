@@ -1,8 +1,8 @@
 import * as bcrypt from 'bcrypt';
 
 import { UnauthorizedError } from '../../../shared/errors/unauthorized-error';
+import type { UserRepository } from '../contracts/user.repository';
 import { normalizeEmail, type User } from '../domain/user';
-import type { UserRepository } from '../domain/user.repository';
 
 import type { LoginUserInput } from './dto/login.dto';
 

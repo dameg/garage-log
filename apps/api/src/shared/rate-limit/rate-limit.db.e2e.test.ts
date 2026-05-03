@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { buildApp } from '../../app';
-import { listVehicles } from '../../modules/vehicles/test/actions/vehicle.actions';
+import { listVehicles } from '../../modules/vehicle/test/actions/vehicle.actions';
 import { getPrisma } from '../db/prisma';
 import { registerAndGetCookie } from '../testing/register-and-get-cookie';
 import { resetDb } from '../testing/reset-db';

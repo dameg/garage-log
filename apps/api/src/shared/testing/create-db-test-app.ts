@@ -2,8 +2,8 @@ import type Redis from 'ioredis';
 
 import { buildApp } from '../../app';
 import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
-import { PrismaDocumentLogRepository } from '../../modules/documents-log/infrastructure/prisma/prisma-document-log.repository';
-import { PrismaVehicleRepository } from '../../modules/vehicles/infrastructure/prisma/prisma-vehicle.repository';
+import { PrismaDocumentLogRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-document.repository';
+import { PrismaVehicleRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-vehicle.repository';
 import { getPrisma } from '../db/prisma';
 import type { AppContainer } from '../di/types';
 import {
@@ -26,9 +26,9 @@ export async function createDbTestApp(
 
   const container: AppContainer = {
     redisService,
-    usersRepo: new PrismaUserRepository(prisma),
-    vehiclesRepo: new PrismaVehicleRepository(prisma),
-    documentLogsRepo: new PrismaDocumentLogRepository(prisma),
+    userRepository: new PrismaUserRepository(prisma),
+    vehicleRepository: new PrismaVehicleRepository(prisma),
+    documentRepository: new PrismaDocumentLogRepository(prisma),
     consumeTokenBucketUseCase: new AllowAllConsumeTokenBucketUseCase(),
     checkSlidingWindowUseCase: new AllowAllCheckSlidingWindowUseCase(),
     ...overrides,

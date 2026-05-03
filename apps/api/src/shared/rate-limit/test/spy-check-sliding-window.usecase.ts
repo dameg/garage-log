@@ -2,7 +2,7 @@ import type { CheckSlidingWindowUseCasePort } from '../application/check-sliding
 import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
-} from '../domain/sliding-window.repository';
+} from '../contracts/sliding-window.repository';
 
 export class SpyCheckSlidingWindowUseCase implements CheckSlidingWindowUseCasePort {
   lastParams: HitSlidingWindowParams | null = null;

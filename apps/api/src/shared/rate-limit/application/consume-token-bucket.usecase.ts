@@ -2,7 +2,7 @@ import type {
   ConsumeTokenBucketParams,
   ConsumeTokenBucketResult,
   TokenBucketRepository,
-} from '../domain/token-bucket.repository';
+} from '../contracts/token-bucket.repository';
 
 export class ConsumeTokenBucketUseCase {
   constructor(private readonly repo: TokenBucketRepository) {}

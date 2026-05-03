@@ -5,7 +5,14 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/api/vehicles/{{vehicleId}}/document-logs"
+  url: "{{baseUrl}}/api/vehicles/{{vehicleId}}/document-logs?id=47d1e80-fd75-4461-9a23-44a63a0dde8a&createdAt=2025-12-13T10:19:27.428Z"
+  params:
+    - name: id
+      value: 47d1e80-fd75-4461-9a23-44a63a0dde8a
+      type: query
+    - name: createdAt
+      value: 2025-12-13T10:19:27.428Z
+      type: query
   auth: inherit
 
 settings:

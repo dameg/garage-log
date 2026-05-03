@@ -1,5 +1,5 @@
+import type { UserRepository } from '../contracts/user.repository';
 import type { User } from '../domain/user';
-import type { UserRepository } from '../domain/user.repository';
 
 export class InMemoryUserRepository implements UserRepository {
   private data: User[] = [];

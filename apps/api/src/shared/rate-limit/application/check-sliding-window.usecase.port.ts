@@ -1,7 +1,7 @@
 import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
-} from '../domain/sliding-window.repository';
+} from '../contracts/sliding-window.repository';
 
 export type CheckSlidingWindowUseCasePort = {
   execute(params: HitSlidingWindowParams): Promise<HitSlidingWindowResult>;

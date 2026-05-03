@@ -2,7 +2,7 @@ import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
   SlidingWindowRepository,
-} from '../domain/sliding-window.repository';
+} from '../contracts/sliding-window.repository';
 
 export class CheckSlidingWindowUseCase {
   constructor(private readonly repo: SlidingWindowRepository) {}

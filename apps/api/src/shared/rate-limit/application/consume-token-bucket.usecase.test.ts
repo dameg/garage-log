@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { TokenBucketRepository } from '../domain/token-bucket.repository';
+import type { TokenBucketRepository } from '../contracts/token-bucket.repository';
 
 import { ConsumeTokenBucketUseCase } from './consume-token-bucket.usecase';
 

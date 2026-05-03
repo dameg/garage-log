@@ -3,11 +3,11 @@ import type { ConsumeTokenBucketUseCasePort } from '../application/consume-token
 import type {
   HitSlidingWindowParams,
   HitSlidingWindowResult,
-} from '../domain/sliding-window.repository';
+} from '../contracts/sliding-window.repository';
 import type {
   ConsumeTokenBucketParams,
   ConsumeTokenBucketResult,
-} from '../domain/token-bucket.repository';
+} from '../contracts/token-bucket.repository';
 
 export class AllowAllConsumeTokenBucketUseCase implements ConsumeTokenBucketUseCasePort {
   async execute(_: ConsumeTokenBucketParams): Promise<ConsumeTokenBucketResult> {

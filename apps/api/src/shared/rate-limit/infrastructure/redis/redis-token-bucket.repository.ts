@@ -3,7 +3,7 @@ import type {
   ConsumeTokenBucketParams,
   ConsumeTokenBucketResult,
   TokenBucketRepository,
-} from '../../domain/token-bucket.repository';
+} from '../../contracts/token-bucket.repository';
 
 const CONSUME_TOKEN_BUCKET_LUA = `
 local key = KEYS[1]

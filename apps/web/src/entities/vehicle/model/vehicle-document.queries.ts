@@ -1,10 +1,10 @@
 import { infiniteQueryOptions } from '@tanstack/react-query';
 
-import { getVehicleDocuments,type VehicleDocumentListCursor } from '../api';
+import { getVehicleDocuments, type VehicleDocumentListCursor } from '../api';
 
 import { vehicleDocumentKeys } from './vehicle-document.keys';
 
-export const VEHICLE_DOCUMENTS_PAGE_SIZE = 5;
+export const VEHICLE_DOCUMENTS_PAGE_SIZE = 3;
 
 export const vehicleDocumentQueries = {
   list: (vehicleId: string) =>

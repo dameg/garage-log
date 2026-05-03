@@ -8,13 +8,13 @@ type VehicleDocumentTypeBadgeProps = {
 };
 const vehicleDocumentTypeBadgeProps: Record<VehicleDocumentType, VehicleDocumentTypeBadgeProps> = {
   inspection: {
-    color: 'red',
+    color: 'violet',
     variant: 'light',
   },
 
   insurance: {
     color: 'green',
-    variant: 'filled',
+    variant: 'light',
   },
 };
 

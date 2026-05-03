@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { listVehicles } from '../../modules/vehicles/test/actions/vehicle.actions';
+import { listVehicles } from '../../modules/vehicle/test/actions/vehicle.actions';
 import { createTestApp } from '../testing/create-test-app';
 
 import { SpyCheckSlidingWindowUseCase } from './test/spy-check-sliding-window.usecase';

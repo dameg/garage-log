@@ -23,6 +23,7 @@ import {
   useVehicleDocuments,
   type VehicleDocument,
 } from '@/entities/vehicle';
+import { getVehicleDocumentTypeBadgeProps } from '@/entities/vehicle/ui';
 
 type Props = {
   vehicleId: string;
@@ -54,6 +55,8 @@ function VehicleDocumentCard({ vehicleDocument }: VehicleDocumentCardProps) {
   const createdAt = formatDate(vehicleDocument.createdAt);
   const cost = formatCost(vehicleDocument.cost);
 
+  const badgeProps = getVehicleDocumentTypeBadgeProps(vehicleDocument.type);
+
   return (
     <Card withBorder radius="md" padding="md">
       <Stack gap="md">
@@ -65,7 +68,7 @@ function VehicleDocumentCard({ vehicleDocument }: VehicleDocumentCardProps) {
             </Text>
           </Stack>
 
-          <Badge variant="light" radius="sm">
+          <Badge {...badgeProps} radius="sm">
             {getVehicleDocumentTypeLabel(vehicleDocument.type)}
           </Badge>
         </Group>
@@ -94,6 +97,7 @@ function VehicleDocumentCard({ vehicleDocument }: VehicleDocumentCardProps) {
 export function VehicleDocumentsList({ vehicleId }: Props) {
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useVehicleDocuments(vehicleId);
+  console.log(data);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const vehicleDocuments = data?.pages.flatMap((group) => group.data) ?? [];
 
@@ -110,7 +114,7 @@ export function VehicleDocumentsList({ vehicleId }: Props) {
       },
       {
         root: null,
-        rootMargin: '10px',
+        rootMargin: '100px',
         threshold: 0,
       },
     );

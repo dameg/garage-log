@@ -5,8 +5,7 @@ import Fastify from 'fastify';
 import { ZodError } from 'zod';
 
 import { authModule } from './modules/auth/auth.module';
-import { documentLogsModule } from './modules/documents-log/document-logs.module';
-import { vehiclesModule } from './modules/vehicles/vehicles.module';
+import { vehicleModule } from './modules/vehicle/vehicle.module';
 import { env } from './shared/config';
 import { closePrisma } from './shared/db/prisma';
 import { diPlugin } from './shared/di/di.plugin';
@@ -134,8 +133,7 @@ export async function buildApp(deps?: AppContainer) {
   await app.register(
     async (api) => {
       await api.register(authModule);
-      await api.register(vehiclesModule);
-      await api.register(documentLogsModule);
+      await api.register(vehicleModule);
     },
     { prefix: '/api' },
   );
