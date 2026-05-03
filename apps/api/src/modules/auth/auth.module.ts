@@ -1,20 +1,20 @@
 import type { FastifyInstance } from 'fastify';
 
-import { requireAuthGuard } from '../../shared/auth';
-import {
-  createSlidingWindowGuard,
-  loginEmailIpSubjectFactory,
-  loginRateLimitConfig,
-} from '../../shared/rate-limit';
-
 import { authRoutes } from './presentation/http/auth.routes';
 import { createAuthServices } from './auth.services';
+
+import { requireAuthGuard } from '@/shared/auth';
+import {
+  createSlidingWindowGuard,
+  loginEmailIpSubject,
+  loginRateLimitConfig,
+} from '@/shared/rate-limit';
 
 export async function authModule(app: FastifyInstance) {
   const authServices = createAuthServices({ repository: app.deps.userRepository });
   const loginRateLimit = createSlidingWindowGuard(app.deps.checkSlidingWindowUseCase, {
     ...loginRateLimitConfig,
-    subjectFactory: loginEmailIpSubjectFactory,
+    subjectFactory: loginEmailIpSubject,
   });
   const requireAuth = requireAuthGuard;
   await app.register(

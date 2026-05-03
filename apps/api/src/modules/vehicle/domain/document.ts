@@ -1,5 +1,5 @@
-import { normalizeOptionalString, normalizeRequiredString } from '../../../shared/domain';
-import { DomainError } from '../../../shared/errors';
+import { normalizeOptionalString, normalizeRequiredString } from '@/shared/domain';
+import { DomainError } from '@/shared/errors';
 
 export type DocumentId = string;
 
@@ -94,7 +94,7 @@ export function validateDocumentInvariant(document: Document) {
 }
 
 export function createDocument(props: CreateDocumentProps): Document {
-  const title = normalizeRequiredString('Document  title', props.title);
+  const title = normalizeRequiredString('Document title', props.title);
   const issuer = normalizeOptionalString(props.issuer);
   const validFrom = normalizeRequiredDate('validFrom', props.validFrom);
   const validTo = normalizeRequiredDate('validTo', props.validTo);
@@ -126,7 +126,7 @@ export function updateDocument(document: Document, patch: UpdateDocumentPatch) {
   const next: Document = { ...document, ...patch };
 
   if (patch.title !== undefined) {
-    next.title = normalizeRequiredString('Document  title', next.title);
+    next.title = normalizeRequiredString('Document title', next.title);
   }
 
   if (patch.issuer !== undefined) {

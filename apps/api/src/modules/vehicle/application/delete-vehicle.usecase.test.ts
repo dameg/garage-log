@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { NotFoundError } from '../../../shared/errors';
 import { createVehicle } from '../domain/vehicle';
 import { InMemoryVehicleRepository } from '../test/in-memory/in-memory-vehicle.repository';
 import { VehicleDomainBuilder } from '../test/vehicle.domain.builder';
 
 import { DeleteVehicleUseCase } from './delete-vehicle.usecase';
+
+import { NotFoundError } from '@/shared/errors';
 
 describe('DeleteVehicleUseCase', () => {
   it('deletes vehicle for owner', async () => {

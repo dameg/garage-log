@@ -1,7 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { createTestApp } from '../../shared/testing';
-
 import {
   createVehicle,
   deleteVehicle,
@@ -10,6 +8,8 @@ import {
   updateVehicle,
 } from './test/actions/vehicle.actions';
 import { VehicleHttpBuilder } from './test/vehicle.http.builder';
+
+import { createTestApp } from '@/shared/testing';
 
 describe('Vehicles (integration - in memory)', () => {
   let testApp: Awaited<ReturnType<typeof createTestApp>>;

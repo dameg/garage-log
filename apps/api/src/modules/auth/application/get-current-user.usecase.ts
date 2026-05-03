@@ -1,7 +1,8 @@
-import { UnauthorizedError } from '../../../shared/errors';
 import type { UserRepository } from '../contracts/user.repository';
 
 import type { CurrentUserInput } from './dto/current-user.dto';
+
+import { UnauthorizedError } from '@/shared/errors';
 
 export class GetCurrentUserUseCase {
   constructor(private readonly repo: UserRepository) {}

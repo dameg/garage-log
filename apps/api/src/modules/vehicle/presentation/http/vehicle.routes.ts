@@ -1,11 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 
-import { parseBody, parseParams, parseQuery, vehicleIdParamsSchema } from '../../../../shared/http';
 import { createVehicleHttpSchema } from '../validation/create-vehicle.schema';
 import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
 import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
 
 import type { VehicleRoutesOptions } from './vehicle.routes.types';
+
+import { parseBody, parseParams, parseQuery, vehicleIdParamsSchema } from '@/shared/http';
 
 export async function vehicleRoutes(app: FastifyInstance, { services }: VehicleRoutesOptions) {
   app.post('/', async (req, reply) => {

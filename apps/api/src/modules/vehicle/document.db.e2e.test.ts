@@ -1,8 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import { getPrisma } from '../../shared/db';
-import { createDbTestApp, registerAndGetCookie, resetDb } from '../../shared/testing';
-
 import {
   createDocument,
   deleteDocument,
@@ -13,6 +10,9 @@ import {
 import { createVehicle } from './test/actions/vehicle.actions';
 import { DocumentHttpBuilder } from './test/document.http.builder';
 import { VehicleHttpBuilder } from './test/vehicle.http.builder';
+
+import { getPrisma } from '@/shared/db';
+import { createDbTestApp, registerAndGetCookie, resetDb } from '@/shared/testing';
 
 describe('Documents (db e2e)', () => {
   const prisma = getPrisma();

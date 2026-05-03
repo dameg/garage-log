@@ -1,5 +1,6 @@
-import { NotFoundError } from '../../../shared/errors';
 import type { DocumentRepository } from '../contracts/document.repository';
+
+import { NotFoundError } from '@/shared/errors';
 
 export class DeleteDocumentUseCase {
   constructor(private readonly repo: DocumentRepository) {}

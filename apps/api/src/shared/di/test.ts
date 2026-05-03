@@ -1,8 +1,5 @@
 import type Redis from 'ioredis';
 
-import { InMemoryUserRepository } from '../../modules/auth/infrastructure/in-memery-user.repository';
-import { InMemoryDocumentRepository } from '../../modules/vehicle/test/in-memory/in-memory-document.repository';
-import { InMemoryVehicleRepository } from '../../modules/vehicle/test/in-memory/in-memory-vehicle.repository';
 import {
   AllowAllCheckSlidingWindowUseCase,
   AllowAllConsumeTokenBucketUseCase,
@@ -10,6 +7,10 @@ import {
 import { RedisService } from '../redis/redis.service';
 
 import type { AppContainer } from './types';
+
+import { InMemoryUserRepository } from '@/modules/auth/infrastructure/in-memory-user.repository';
+import { InMemoryDocumentRepository } from '@/modules/vehicle/test/in-memory/in-memory-document.repository';
+import { InMemoryVehicleRepository } from '@/modules/vehicle/test/in-memory/in-memory-vehicle.repository';
 
 export function createTestAppContainer(): AppContainer {
   const redisService = new RedisService({

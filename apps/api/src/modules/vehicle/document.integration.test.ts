@@ -1,8 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import type { AppContainer } from '../../shared/di';
-import { createTestApp } from '../../shared/testing';
-
 import {
   createDocument,
   deleteDocument,
@@ -12,6 +9,9 @@ import {
 } from './test/actions/document.actions';
 import { DocumentHttpBuilder } from './test/document.http.builder';
 import { SpyDocumentRepository } from './test/in-memory/spy-document.repository';
+
+import type { AppContainer } from '@/shared/di';
+import { createTestApp } from '@/shared/testing';
 
 describe('Documents (integration - in memory)', () => {
   const vehicleId = 'vehicle-1';

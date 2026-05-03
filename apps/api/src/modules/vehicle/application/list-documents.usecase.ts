@@ -1,9 +1,10 @@
-import type { CursorResult } from '../../../shared/contracts';
 import type { DocumentRepository } from '../contracts/document.repository';
 import type { DocumentCursor, DocumentsListQuery } from '../contracts/document-list.query';
 import type { Document } from '../domain/document';
 
 import type { ListDocumentsInput } from './dto/list-documents.dto';
+
+import type { CursorResult } from '@/shared/contracts';
 
 export class ListDocumentsUseCase {
   constructor(private readonly repo: DocumentRepository) {}

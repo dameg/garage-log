@@ -6,7 +6,7 @@ import { SpyCheckSlidingWindowUseCase } from '../test/spy-check-sliding-window.u
 
 import {
   createSlidingWindowGuard,
-  loginEmailIpSubjectFactory,
+  loginEmailIpSubject,
 } from './sliding-window.guard';
 
 describe('createSlidingWindowGuard', () => {
@@ -62,10 +62,10 @@ describe('createSlidingWindowGuard', () => {
   });
 });
 
-describe('loginEmailIpSubjectFactory', () => {
+describe('loginEmailIpSubject', () => {
   it('returns a lowercased login subject when the email exists in the body', () => {
     expect(
-      loginEmailIpSubjectFactory({
+      loginEmailIpSubject({
         body: { email: 'USER@Example.COM' },
         ip: '127.0.0.1',
       } as FastifyRequest),
@@ -74,7 +74,7 @@ describe('loginEmailIpSubjectFactory', () => {
 
   it('returns null when the body has no email', () => {
     expect(
-      loginEmailIpSubjectFactory({
+      loginEmailIpSubject({
         body: {},
         ip: '127.0.0.1',
       } as FastifyRequest),

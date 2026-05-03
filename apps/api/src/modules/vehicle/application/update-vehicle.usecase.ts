@@ -1,8 +1,9 @@
-import { NotFoundError } from '../../../shared/errors';
 import type { VehicleRepository } from '../contracts/vehicle.repository';
 import { type UpdatableVehicleFields, updateVehicle, type Vehicle } from '../domain/vehicle';
 
 import type { UpdateVehicleInput } from './dto/update-vehicle.dto';
+
+import { NotFoundError } from '@/shared/errors';
 
 function toUpdatableFields(vehicle: Vehicle): UpdatableVehicleFields {
   return {

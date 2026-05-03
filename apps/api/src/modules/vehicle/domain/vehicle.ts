@@ -1,5 +1,5 @@
-import { normalizeRequiredString } from '../../../shared/domain';
-import { DomainError } from '../../../shared/errors';
+import { normalizeRequiredString } from '@/shared/domain';
+import { DomainError } from '@/shared/errors';
 
 export type VehicleId = string;
 

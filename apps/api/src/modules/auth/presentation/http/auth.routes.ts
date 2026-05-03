@@ -1,11 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 
-import { clearAuthCookie, setAuthCookie } from '../../../../shared/auth';
-import { parseBody } from '../../../../shared/http';
 import { loginHttpSchema } from '../validation/login.schema';
 import { registerHttpSchema } from '../validation/register.schema';
 
 import type { AuthRoutesOptions } from './auth.routes.types';
+
+import { clearAuthCookie, setAuthCookie } from '@/shared/auth';
+import { parseBody } from '@/shared/http';
 
 export async function authRoutes(app: FastifyInstance, { services, guards }: AuthRoutesOptions) {
   const { loginUseCase, registerUseCase, getCurrentUserUseCase } = services;

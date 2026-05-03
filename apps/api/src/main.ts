@@ -1,5 +1,6 @@
-import { env } from './shared/config';
 import { buildApp } from './app';
+
+import { env } from '@/shared/config';
 
 async function start() {
   const app = await buildApp();

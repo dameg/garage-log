@@ -1,12 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 
-import { requireAuthGuard } from '../../shared/auth';
-import { apiRateLimitConfig, createTokenBucketGuard } from '../../shared/rate-limit';
-
 import { documentRoutes } from './presentation/http/document.routes';
 import { vehicleRoutes } from './presentation/http/vehicle.routes';
 import { createDocumentServices } from './document.services';
 import { createVehicleServices } from './vehicle.services';
+
+import { requireAuthGuard } from '@/shared/auth';
+import { apiRateLimitConfig, createTokenBucketGuard } from '@/shared/rate-limit';
 
 export async function vehicleModule(app: FastifyInstance) {
   const vehicleServices = createVehicleServices({ repository: app.deps.vehicleRepository });

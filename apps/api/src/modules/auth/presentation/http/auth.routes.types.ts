@@ -1,6 +1,7 @@
-import type { requireAuthGuard } from '../../../../shared/auth';
-import type { createSlidingWindowGuard } from '../../../../shared/rate-limit';
 import type { createAuthServices } from '../../auth.services';
+
+import type { requireAuthGuard } from '@/shared/auth';
+import type { createSlidingWindowGuard } from '@/shared/rate-limit';
 
 type AuthGuards = {
   loginRateLimit: ReturnType<typeof createSlidingWindowGuard>;

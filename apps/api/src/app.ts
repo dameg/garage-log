@@ -4,19 +4,19 @@ import jwt from '@fastify/jwt';
 import Fastify from 'fastify';
 import { ZodError } from 'zod';
 
-import { authModule } from './modules/auth/auth.module';
-import { vehicleModule } from './modules/vehicle/vehicle.module';
-import { env } from './shared/config';
-import { closePrisma } from './shared/db';
-import type { AppContainer } from './shared/di';
-import { createProdDeps, diPlugin } from './shared/di';
+import { authModule } from '@/modules/auth/auth.module';
+import { vehicleModule } from '@/modules/vehicle/vehicle.module';
+import { env } from '@/shared/config';
+import { closePrisma } from '@/shared/db';
+import type { AppContainer } from '@/shared/di';
+import { createProdDeps, diPlugin } from '@/shared/di';
 import {
   ConflictError,
   DomainError,
   NotFoundError,
   RateLimitExceededError,
   UnauthorizedError,
-} from './shared/errors';
+} from '@/shared/errors';
 
 export async function buildApp(deps?: AppContainer) {
   const app = Fastify({

@@ -1,9 +1,5 @@
 import type Redis from 'ioredis';
 
-import { buildApp } from '../../app';
-import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
-import { PrismaDocumentRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-document.repository';
-import { PrismaVehicleRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-vehicle.repository';
 import { getPrisma } from '../db/prisma';
 import type { AppContainer } from '../di/types';
 import {
@@ -14,6 +10,11 @@ import { RedisService } from '../redis/redis.service';
 
 import type { TestAppHarness } from './create-test-app';
 import { registerAndGetCookie } from './register-and-get-cookie';
+
+import { buildApp } from '@/app';
+import { PrismaUserRepository } from '@/modules/auth/infrastructure/prisma/prisma-user.repository';
+import { PrismaDocumentRepository } from '@/modules/vehicle/infrastructure/prisma/prisma-document.repository';
+import { PrismaVehicleRepository } from '@/modules/vehicle/infrastructure/prisma/prisma-vehicle.repository';
 
 export async function createDbTestApp(
   overrides: Partial<AppContainer> = {},

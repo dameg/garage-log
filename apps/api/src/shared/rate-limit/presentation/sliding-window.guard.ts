@@ -31,7 +31,7 @@ export function createSlidingWindowGuard(
   };
 }
 
-export function loginEmailIpSubjectFactory(req: FastifyRequest): string | null {
+export function loginEmailIpSubject(req: FastifyRequest): string | null {
   const body = req.body as { email?: string } | undefined;
   if (!body?.email) return null;
 

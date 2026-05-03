@@ -1,10 +1,11 @@
-import type { PaginatedResult } from '../../../../shared/contracts';
 import type { VehicleRepository } from '../../contracts/vehicle.repository';
 import type { VehicleListQuery } from '../../contracts/vehicle-list.query';
 import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';
 
 import { matchesVehicleFilters } from './matches-vehicle-filters';
 import { sortVehicles } from './sort-vehicles';
+
+import type { PaginatedResult } from '@/shared/contracts';
 
 export class InMemoryVehicleRepository implements VehicleRepository {
   private data: Vehicle[] = [];

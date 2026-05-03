@@ -1,9 +1,10 @@
-import type { CursorResult } from '../../../../shared/contracts';
 import type { DocumentRepository } from '../../contracts/document.repository';
 import type { DocumentCursor, DocumentsListQuery } from '../../contracts/document-list.query';
 import type { Document, UpdatableDocumentFields } from '../../domain/document';
 
 import { sortDocuments } from './sort-document';
+
+import type { CursorResult } from '@/shared/contracts';
 
 export class InMemoryDocumentRepository implements DocumentRepository {
   private data: Document[] = [];

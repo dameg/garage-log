@@ -1,7 +1,8 @@
-import type { CursorResult } from '../../../../shared/contracts';
 import type { DocumentRepository } from '../../contracts/document.repository';
 import type { DocumentCursor, DocumentsListQuery } from '../../contracts/document-list.query';
 import type { Document, UpdatableDocumentFields } from '../../domain/document';
+
+import type { CursorResult } from '@/shared/contracts';
 
 export class SpyDocumentRepository implements DocumentRepository {
   public lastListQuery: DocumentsListQuery | null = null;

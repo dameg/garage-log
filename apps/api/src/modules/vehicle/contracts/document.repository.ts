@@ -1,7 +1,8 @@
-import type { CursorResult } from '../../../shared/contracts';
 import type { Document, UpdatableDocumentFields } from '../domain/document';
 
 import type { DocumentCursor, DocumentsListQuery } from './document-list.query';
+
+import type { CursorResult } from '@/shared/contracts';
 
 export interface DocumentRepository {
   create(Document: Document): Promise<Document>;

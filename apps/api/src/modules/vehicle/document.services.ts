@@ -1,6 +1,6 @@
 import { CreateDocumentUseCase } from './application/create-document.usecase';
 import { DeleteDocumentUseCase } from './application/delete-document.usecase';
-import { GetDocumentUseCase } from './application/get-vehicle-document.usecase';
+import { GetDocumentUseCase } from './application/get-document.usecase';
 import { ListDocumentsUseCase } from './application/list-documents.usecase';
 import { UpdateDocumentUseCase } from './application/update-document.usecase';
 import type { DocumentRepository } from './contracts/document.repository';

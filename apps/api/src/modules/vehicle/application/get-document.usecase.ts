@@ -1,6 +1,7 @@
-import { NotFoundError } from '../../../shared/errors';
 import type { DocumentRepository } from '../contracts/document.repository';
 import type { Document } from '../domain/document';
+
+import { NotFoundError } from '@/shared/errors';
 
 export class GetDocumentUseCase {
   constructor(private readonly repo: DocumentRepository) {}
@@ -16,7 +17,7 @@ export class GetDocumentUseCase {
   }): Promise<Document> {
     const document = await this.repo.findByIdForOwnerAndVehicle(documentId, ownerId, vehicleId);
     if (!document) {
-      throw new NotFoundError('Document log', documentId);
+      throw new NotFoundError('Document', documentId);
     }
 
     return document;

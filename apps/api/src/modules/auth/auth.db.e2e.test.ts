@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, beforeEach,describe, expect, it } from 'vitest';
 
-import { getPrisma } from '../../shared/db';
-import { createDbTestApp, resetDb } from '../../shared/testing';
+import { getPrisma } from '@/shared/db';
+import { createDbTestApp, resetDb } from '@/shared/testing';
 
 describe('Auth (db e2e)', () => {
   const prisma = getPrisma();

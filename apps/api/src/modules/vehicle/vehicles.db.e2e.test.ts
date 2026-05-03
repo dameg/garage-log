@@ -1,8 +1,5 @@
 import { afterAll, beforeAll, beforeEach,describe, expect, it } from 'vitest';
 
-import { getPrisma } from '../../shared/db';
-import { createDbTestApp, registerAndGetCookie, resetDb } from '../../shared/testing';
-
 import {
   createVehicle,
   deleteVehicle,
@@ -11,6 +8,9 @@ import {
   updateVehicle,
 } from './test/actions/vehicle.actions';
 import { VehicleHttpBuilder } from './test/vehicle.http.builder';
+
+import { getPrisma } from '@/shared/db';
+import { createDbTestApp, registerAndGetCookie, resetDb } from '@/shared/testing';
 
 describe('Vehicles (db e2e)', () => {
   const prisma = getPrisma();

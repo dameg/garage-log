@@ -1,5 +1,6 @@
-import type { SortDirection } from '../../../../shared/contracts';
 import type { VehicleSortField } from '../../contracts/vehicle-list.query';
+
+import type { SortDirection } from '@/shared/contracts';
 
 export type ListVehiclesInput = {
   ownerId: string;

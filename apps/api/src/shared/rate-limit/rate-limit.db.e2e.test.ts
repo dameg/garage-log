@@ -1,10 +1,11 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import { buildApp } from '../../app';
-import { listVehicles } from '../../modules/vehicle/test/actions/vehicle.actions';
 import { getPrisma } from '../db/prisma';
 import { registerAndGetCookie } from '../testing/register-and-get-cookie';
 import { resetDb } from '../testing/reset-db';
+
+import { buildApp } from '@/app';
+import { listVehicles } from '@/modules/vehicle/test/actions/vehicle.actions';
 
 describe('Rate limit (db e2e)', () => {
   const prisma = getPrisma();

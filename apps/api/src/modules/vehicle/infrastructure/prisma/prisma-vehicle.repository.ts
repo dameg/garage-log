@@ -1,12 +1,13 @@
 import type { PrismaClient } from '@prisma/client';
 
-import type { PaginatedResult } from '../../../../shared/contracts';
 import type { VehicleRepository } from '../../contracts/vehicle.repository';
 import type { VehicleListQuery } from '../../contracts/vehicle-list.query';
 import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';
 
 import { buildVehicleWhere } from './mappers/build-vehicle-where';
 import { toDomainVehicle } from './mappers/to-domain-vehicle';
+
+import type { PaginatedResult } from '@/shared/contracts';
 
 export class PrismaVehicleRepository implements VehicleRepository {
   constructor(private readonly prisma: PrismaClient) {}

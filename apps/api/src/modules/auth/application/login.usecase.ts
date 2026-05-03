@@ -1,10 +1,11 @@
 import * as bcrypt from 'bcrypt';
 
-import { UnauthorizedError } from '../../../shared/errors';
 import type { UserRepository } from '../contracts/user.repository';
 import { normalizeEmail, type User } from '../domain/user';
 
 import type { LoginUserInput } from './dto/login.dto';
+
+import { UnauthorizedError } from '@/shared/errors';
 
 export class LoginUserUseCase {
   constructor(private readonly repo: UserRepository) {}
