@@ -1,9 +1,9 @@
-import type { requireAuthGuard } from '../../../../shared/auth/require-auth.guard';
-import type { createTokenBucketGuard } from '../../../../shared/rate-limit/presentation/token-bucket.guard';
+import type { requireAuthGuard } from '../../../../shared/auth';
+import type { createSlidingWindowGuard } from '../../../../shared/rate-limit';
 import type { createAuthServices } from '../../auth.services';
 
 type AuthGuards = {
-  loginRateLimit: ReturnType<typeof createTokenBucketGuard>;
+  loginRateLimit: ReturnType<typeof createSlidingWindowGuard>;
   requireAuth: typeof requireAuthGuard;
 };
 

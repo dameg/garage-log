@@ -1,4 +1,4 @@
-import type { SortDirection } from '../../../../shared/contracts/sort-direction';
+import type { SortDirection } from '../../../../shared/contracts';
 import type { VehicleSortField } from '../../contracts/vehicle-list.query';
 
 export type ListVehiclesInput = {

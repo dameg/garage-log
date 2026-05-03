@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
-import { clearAuthCookie, setAuthCookie } from '../../../../shared/auth/auth-cookies';
-import { parseBody } from '../../../../shared/http/validation';
+import { clearAuthCookie, setAuthCookie } from '../../../../shared/auth';
+import { parseBody } from '../../../../shared/http';
 import { loginHttpSchema } from '../validation/login.schema';
 import { registerHttpSchema } from '../validation/register.schema';
 
@@ -34,11 +34,6 @@ export async function authRoutes(app: FastifyInstance, { services, guards }: Aut
     '/login',
     {
       preHandler: [loginRateLimit],
-      config: {
-        rateLimit: {
-          type: 'auth',
-        },
-      },
     },
     async (req, reply) => {
       const body = parseBody(loginHttpSchema, req.body);

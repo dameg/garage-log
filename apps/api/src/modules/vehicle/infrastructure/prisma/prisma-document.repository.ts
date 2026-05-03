@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
 
-import type { CursorResult } from '../../../../shared/contracts/cursor-result';
+import type { CursorResult } from '../../../../shared/contracts';
 import type { DocumentRepository } from '../../contracts/document.repository';
 import type { DocumentCursor, DocumentsListQuery } from '../../contracts/document-list.query';
 import type { Document, UpdatableDocumentFields } from '../../domain/document';

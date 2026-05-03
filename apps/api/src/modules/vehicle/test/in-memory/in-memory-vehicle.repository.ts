@@ -1,4 +1,4 @@
-import type { PaginatedResult } from '../../../../shared/contracts/paginated-result';
+import type { PaginatedResult } from '../../../../shared/contracts';
 import type { VehicleRepository } from '../../contracts/vehicle.repository';
 import type { VehicleListQuery } from '../../contracts/vehicle-list.query';
 import type { UpdatableVehicleFields, Vehicle } from '../../domain/vehicle';

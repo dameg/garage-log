@@ -1,4 +1,4 @@
-import { normalizeRequiredString } from '../../../shared/domain/normalize-required-string';
+import { normalizeRequiredString } from '../../../shared/domain';
 
 export type UserId = string;
 

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import type { AppContainer } from '../../shared/di/types';
-import { createTestApp } from '../../shared/testing/create-test-app';
+import type { AppContainer } from '../../shared/di';
+import { createTestApp } from '../../shared/testing';
 
 import {
   createDocument,

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { createTestApp } from '../../shared/testing/create-test-app';
+import { createTestApp } from '../../shared/testing';
 
 import {
   createVehicle,

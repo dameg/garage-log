@@ -1,9 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
-import { getPrisma } from '../../shared/db/prisma';
-import { createDbTestApp } from '../../shared/testing/create-db-test-app';
-import { registerAndGetCookie } from '../../shared/testing/register-and-get-cookie';
-import { resetDb } from '../../shared/testing/reset-db';
+import { getPrisma } from '../../shared/db';
+import { createDbTestApp, registerAndGetCookie, resetDb } from '../../shared/testing';
 
 import {
   createDocument,

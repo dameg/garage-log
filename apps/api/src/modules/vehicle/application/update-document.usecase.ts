@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../../shared/errors/not-found-error';
+import { NotFoundError } from '../../../shared/errors';
 import type { DocumentRepository } from '../contracts/document.repository';
 import { type Document, type UpdatableDocumentFields, updateDocument } from '../domain/document';
 

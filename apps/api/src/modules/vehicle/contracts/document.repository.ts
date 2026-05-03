@@ -1,4 +1,4 @@
-import type { CursorResult } from '../../../shared/contracts/cursor-result';
+import type { CursorResult } from '../../../shared/contracts';
 import type { Document, UpdatableDocumentFields } from '../domain/document';
 
 import type { DocumentCursor, DocumentsListQuery } from './document-list.query';

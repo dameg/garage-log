@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../../shared/errors/not-found-error';
+import { NotFoundError } from '../../../shared/errors';
 import type { VehicleRepository } from '../contracts/vehicle.repository';
 
 export class DeleteVehicleUseCase {

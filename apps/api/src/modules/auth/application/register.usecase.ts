@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 
-import { ConflictError } from '../../../shared/errors/conflict-error';
-import { createUser, normalizeEmail, type User } from '../domain/user';
+import { ConflictError } from '../../../shared/errors';
 import type { UserRepository } from '../contracts/user.repository';
+import { createUser, normalizeEmail, type User } from '../domain/user';
 
 import type { RegisterUserInput } from './dto/register.dto';
 

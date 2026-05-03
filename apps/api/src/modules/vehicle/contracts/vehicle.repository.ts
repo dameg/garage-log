@@ -1,4 +1,4 @@
-import type { PaginatedResult } from '../../../shared/contracts/paginated-result';
+import type { PaginatedResult } from '../../../shared/contracts';
 import type { UpdateVehiclePatch, Vehicle } from '../domain/vehicle';
 
 import type { VehicleListQuery } from './vehicle-list.query';

@@ -1,8 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
-import { requireAuthGuard } from '../../shared/auth/require-auth.guard';
-import { createTokenBucketGuard } from '../../shared/rate-limit/presentation/token-bucket.guard';
-import { apiRateLimitConfig } from '../../shared/rate-limit/rate-limit.config';
+import { requireAuthGuard } from '../../shared/auth';
+import { apiRateLimitConfig, createTokenBucketGuard } from '../../shared/rate-limit';
 
 import { documentRoutes } from './presentation/http/document.routes';
 import { vehicleRoutes } from './presentation/http/vehicle.routes';

@@ -1,4 +1,4 @@
-import { NotFoundError } from '../../../shared/errors/not-found-error';
+import { NotFoundError } from '../../../shared/errors';
 import type { VehicleRepository } from '../contracts/vehicle.repository';
 import { type UpdatableVehicleFields, updateVehicle, type Vehicle } from '../domain/vehicle';
 

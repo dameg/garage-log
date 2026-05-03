@@ -24,11 +24,11 @@ describe('Rate limit (db e2e)', () => {
     await prisma.$disconnect();
   });
 
-  it('rate-limits repeated failed login attempts from the same unauthenticated ip', async () => {
+  it('rate-limits repeated failed login attempts', async () => {
     const email = `login-rate-limit-${Date.now()}@test.com`;
     const remoteAddress = '10.0.0.1';
 
-    for (let attempt = 0; attempt < 60; attempt++) {
+    for (let attempt = 0; attempt < 5; attempt++) {
       const res = await app.inject({
         method: 'POST',
         remoteAddress,
@@ -61,12 +61,12 @@ describe('Rate limit (db e2e)', () => {
     );
   });
 
-  it('shares login rate limits across emails for the same unauthenticated ip', async () => {
+  it('keeps login rate limits isolated per email and ip subject', async () => {
     const limitedEmail = `limited-${Date.now()}@test.com`;
     const freshEmail = `fresh-${Date.now()}@test.com`;
     const remoteAddress = '10.0.0.2';
 
-    for (let attempt = 0; attempt < 60; attempt++) {
+    for (let attempt = 0; attempt < 5; attempt++) {
       const res = await app.inject({
         method: 'POST',
         remoteAddress,
@@ -100,7 +100,7 @@ describe('Rate limit (db e2e)', () => {
     });
 
     expect(limitedRes.statusCode).toBe(429);
-    expect(freshRes.statusCode).toBe(429);
+    expect(freshRes.statusCode).toBe(401);
   });
 
   it('keeps token bucket limits isolated per authenticated user', async () => {

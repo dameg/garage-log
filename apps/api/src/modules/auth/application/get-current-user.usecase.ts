@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '../../../shared/errors/unauthorized-error';
+import { UnauthorizedError } from '../../../shared/errors';
 import type { UserRepository } from '../contracts/user.repository';
 
 import type { CurrentUserInput } from './dto/current-user.dto';

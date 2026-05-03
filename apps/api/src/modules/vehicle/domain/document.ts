@@ -1,6 +1,5 @@
-import { normalizeOptionalString } from '../../../shared/domain/normalize-optional-string';
-import { normalizeRequiredString } from '../../../shared/domain/normalize-required-string';
-import { DomainError } from '../../../shared/errors/domain-error';
+import { normalizeOptionalString, normalizeRequiredString } from '../../../shared/domain';
+import { DomainError } from '../../../shared/errors';
 
 export type DocumentId = string;
 

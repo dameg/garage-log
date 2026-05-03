@@ -1,7 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 
-import { vehicleIdParamsSchema } from '../../../../shared/http/params/vehicle-id.schema';
-import { parseBody, parseParams, parseQuery } from '../../../../shared/http/validation';
+import { parseBody, parseParams, parseQuery, vehicleIdParamsSchema } from '../../../../shared/http';
 import { createVehicleHttpSchema } from '../validation/create-vehicle.schema';
 import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
 import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
