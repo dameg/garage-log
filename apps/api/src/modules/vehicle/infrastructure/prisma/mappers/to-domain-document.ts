@@ -1,8 +1,8 @@
-import type { DocumentLog as PrismaDocument } from '@prisma/client';
+import type { Document } from '@prisma/client';
 
-import type { Document } from '../../../domain/document';
+import type { Document as DomainDocument } from '../../../domain/document';
 
-export function toDomainDocument(row: PrismaDocument): Document {
+export function toDomainDocument(row: Document): DomainDocument {
   return {
     id: row.id,
     ownerId: row.ownerId,

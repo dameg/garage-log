@@ -1,5 +1,5 @@
 import { PrismaUserRepository } from '../../modules/auth/infrastructure/prisma/prisma-user.repository';
-import { PrismaDocumentLogRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-document.repository';
+import { PrismaDocumentRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-document.repository';
 import { PrismaVehicleRepository } from '../../modules/vehicle/infrastructure/prisma/prisma-vehicle.repository';
 import { env } from '../config';
 import { getPrisma } from '../db/prisma';
@@ -32,7 +32,7 @@ export function createProdDeps(): AppContainer {
     redisService,
     vehicleRepository: new PrismaVehicleRepository(prisma),
     userRepository: new PrismaUserRepository(prisma),
-    documentRepository: new PrismaDocumentLogRepository(prisma),
+    documentRepository: new PrismaDocumentRepository(prisma),
     consumeTokenBucketUseCase: new ConsumeTokenBucketUseCase(tokenBucketRepository),
     checkSlidingWindowUseCase: new CheckSlidingWindowUseCase(slidingWindowRepository),
   };

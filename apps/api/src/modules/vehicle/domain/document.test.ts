@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { DomainError } from '../../../shared/errors/domain-error';
-import { DocumentDomainBuilder } from '../../documents-/test/document-.domain.builder';
+import { DocumentDomainBuilder } from '../test/document.domain.builder';
 
 import { createDocument, updateDocument } from './document';
 

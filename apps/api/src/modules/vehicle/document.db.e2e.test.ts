@@ -6,17 +6,17 @@ import { registerAndGetCookie } from '../../shared/testing/register-and-get-cook
 import { resetDb } from '../../shared/testing/reset-db';
 
 import {
-  createDocumentLog,
-  deleteDocumentLog,
-  getDocumentLog,
-  listDocumentLogs,
-  updateDocumentLog,
+  createDocument,
+  deleteDocument,
+  getDocument,
+  listDocuments,
+  updateDocument,
 } from './test/actions/document.actions';
 import { createVehicle } from './test/actions/vehicle.actions';
-import { DocumentLogHttpBuilder } from './test/document-log.http.builder';
+import { DocumentHttpBuilder } from './test/document.http.builder';
 import { VehicleHttpBuilder } from './test/vehicle.http.builder';
 
-describe('Document logs (db e2e)', () => {
+describe('Documents (db e2e)', () => {
   const prisma = getPrisma();
   let testApp: Awaited<ReturnType<typeof createDbTestApp>>;
   let app: Awaited<ReturnType<typeof createDbTestApp>>['app'];
@@ -47,15 +47,15 @@ describe('Document logs (db e2e)', () => {
     return createVehicleRes.json();
   }
 
-  it('creates and lists document logs only for authenticated owner', async () => {
+  it('creates and lists documents only for authenticated owner', async () => {
     const user = await registerAndGetCookie(app, 'user1@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       user.cookie,
       vehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
 
     expect(createRes.statusCode).toBe(201);
@@ -78,7 +78,7 @@ describe('Document logs (db e2e)', () => {
     expect(created.validTo).toBe('2025-12-31T00:00:00.000Z');
     expect(created.issuedAt).toBe('2024-12-15T00:00:00.000Z');
 
-    const listRes = await listDocumentLogs(app, user.cookie, vehicle.id);
+    const listRes = await listDocuments(app, user.cookie, vehicle.id);
 
     expect(listRes.statusCode).toBe(200);
 
@@ -95,42 +95,42 @@ describe('Document logs (db e2e)', () => {
     );
   });
 
-  it('returns document logs as a timeline with cursor pagination', async () => {
+  it('returns documents as a timeline with cursor pagination', async () => {
     const user = await registerAndGetCookie(app, 'timeline@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
     expect(
       (
-        await createDocumentLog(
+        await createDocument(
           app,
           user.cookie,
           vehicle.id,
-          new DocumentLogHttpBuilder().withTitle('First entry').build(),
+          new DocumentHttpBuilder().withTitle('First entry').build(),
         )
       ).statusCode,
     ).toBe(201);
     expect(
       (
-        await createDocumentLog(
+        await createDocument(
           app,
           user.cookie,
           vehicle.id,
-          new DocumentLogHttpBuilder().withTitle('Second entry').build(),
+          new DocumentHttpBuilder().withTitle('Second entry').build(),
         )
       ).statusCode,
     ).toBe(201);
     expect(
       (
-        await createDocumentLog(
+        await createDocument(
           app,
           user.cookie,
           vehicle.id,
-          new DocumentLogHttpBuilder().withTitle('Third entry').build(),
+          new DocumentHttpBuilder().withTitle('Third entry').build(),
         )
       ).statusCode,
     ).toBe(201);
 
-    const firstPageRes = await listDocumentLogs(app, user.cookie, vehicle.id, { limit: 2 });
+    const firstPageRes = await listDocuments(app, user.cookie, vehicle.id, { limit: 2 });
     expect(firstPageRes.statusCode).toBe(200);
 
     const firstPage = firstPageRes.json();
@@ -144,7 +144,7 @@ describe('Document logs (db e2e)', () => {
 
     const firstPageIds = new Set(firstPage.data.map((item: { id: string }) => item.id));
 
-    const secondPageRes = await listDocumentLogs(app, user.cookie, vehicle.id, {
+    const secondPageRes = await listDocuments(app, user.cookie, vehicle.id, {
       limit: 2,
       createdAt: firstPage.nextCursor.createdAt,
       id: firstPage.nextCursor.id,
@@ -157,19 +157,19 @@ describe('Document logs (db e2e)', () => {
     expect(firstPageIds.has(secondPage.data[0].id)).toBe(false);
   });
 
-  it('returns document log by id for owner', async () => {
+  it('returns document by id for owner', async () => {
     const user = await registerAndGetCookie(app, 'user2@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       user.cookie,
       vehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const getRes = await getDocumentLog(app, user.cookie, vehicle.id, created.id);
+    const getRes = await getDocument(app, user.cookie, vehicle.id, created.id);
 
     expect(getRes.statusCode).toBe(200);
     expect(getRes.json()).toEqual(
@@ -182,19 +182,19 @@ describe('Document logs (db e2e)', () => {
     );
   });
 
-  it('updates document log for owner', async () => {
+  it('updates document for owner', async () => {
     const user = await registerAndGetCookie(app, 'user3@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       user.cookie,
       vehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const patchRes = await updateDocumentLog(app, user.cookie, vehicle.id, created.id, {
+    const patchRes = await updateDocument(app, user.cookie, vehicle.id, created.id, {
       title: '  Extended policy  ',
       issuer: '   ',
       note: '   ',
@@ -215,23 +215,23 @@ describe('Document logs (db e2e)', () => {
     );
   });
 
-  it('deletes document log for owner', async () => {
+  it('deletes document for owner', async () => {
     const user = await registerAndGetCookie(app, 'user4@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       user.cookie,
       vehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const deleteRes = await deleteDocumentLog(app, user.cookie, vehicle.id, created.id);
+    const deleteRes = await deleteDocument(app, user.cookie, vehicle.id, created.id);
 
     expect(deleteRes.statusCode).toBe(204);
 
-    const getRes = await getDocumentLog(app, user.cookie, vehicle.id, created.id);
+    const getRes = await getDocument(app, user.cookie, vehicle.id, created.id);
     expect(getRes.statusCode).toBe(404);
   });
 
@@ -239,11 +239,11 @@ describe('Document logs (db e2e)', () => {
     const user = await registerAndGetCookie(app, 'user5@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
-    const res = await createDocumentLog(
+    const res = await createDocument(
       app,
       user.cookie,
       vehicle.id,
-      new DocumentLogHttpBuilder().withTitle('').build(),
+      new DocumentHttpBuilder().withTitle('').build(),
     );
 
     expect(res.statusCode).toBe(400);
@@ -253,15 +253,15 @@ describe('Document logs (db e2e)', () => {
     const user = await registerAndGetCookie(app, 'user6@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       user.cookie,
       vehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const res = await updateDocumentLog(app, user.cookie, vehicle.id, created.id, {
+    const res = await updateDocument(app, user.cookie, vehicle.id, created.id, {
       cost: 'abc',
     });
 
@@ -274,17 +274,17 @@ describe('Document logs (db e2e)', () => {
 
     const res = await app.inject({
       method: 'GET',
-      url: `/api/vehicles/${vehicle.id}/document-logs`,
+      url: `/api/vehicles/${vehicle.id}/documents`,
     });
 
     expect(res.statusCode).toBe(401);
   });
 
-  it('returns 404 when document log does not exist', async () => {
+  it('returns 404 when document does not exist', async () => {
     const user = await registerAndGetCookie(app, 'user8@test.com');
     const vehicle = await createVehicleForUser(user.cookie);
 
-    const res = await getDocumentLog(
+    const res = await getDocument(
       app,
       user.cookie,
       vehicle.id,
@@ -294,106 +294,106 @@ describe('Document logs (db e2e)', () => {
     expect(res.statusCode).toBe(404);
   });
 
-  it('returns 404 when document log belongs to another vehicle of the same owner', async () => {
+  it('returns 404 when document belongs to another vehicle of the same owner', async () => {
     const user = await registerAndGetCookie(app, 'same-owner@test.com');
     const firstVehicle = await createVehicleForUser(user.cookie, '330i');
     const secondVehicle = await createVehicleForUser(user.cookie, 'M3');
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       user.cookie,
       firstVehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const getRes = await getDocumentLog(app, user.cookie, secondVehicle.id, created.id);
+    const getRes = await getDocument(app, user.cookie, secondVehicle.id, created.id);
     expect(getRes.statusCode).toBe(404);
 
-    const patchRes = await updateDocumentLog(app, user.cookie, secondVehicle.id, created.id, {
+    const patchRes = await updateDocument(app, user.cookie, secondVehicle.id, created.id, {
       title: 'Should not update',
     });
     expect(patchRes.statusCode).toBe(404);
 
-    const deleteRes = await deleteDocumentLog(app, user.cookie, secondVehicle.id, created.id);
+    const deleteRes = await deleteDocument(app, user.cookie, secondVehicle.id, created.id);
     expect(deleteRes.statusCode).toBe(404);
 
-    const stillExistsRes = await getDocumentLog(app, user.cookie, firstVehicle.id, created.id);
+    const stillExistsRes = await getDocument(app, user.cookie, firstVehicle.id, created.id);
     expect(stillExistsRes.statusCode).toBe(200);
   });
 
-  it('does not show document logs of another user', async () => {
+  it('does not show documents of another user', async () => {
     const owner = await registerAndGetCookie(app, 'owner@test.com');
     const stranger = await registerAndGetCookie(app, 'stranger@test.com');
     const ownerVehicle = await createVehicleForUser(owner.cookie, '340i');
     const strangerVehicle = await createVehicleForUser(stranger.cookie, 'A4');
 
-    await createDocumentLog(
+    await createDocument(
       app,
       owner.cookie,
       ownerVehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
 
-    const listRes = await listDocumentLogs(app, stranger.cookie, strangerVehicle.id);
+    const listRes = await listDocuments(app, stranger.cookie, strangerVehicle.id);
 
     expect(listRes.statusCode).toBe(200);
     expect(listRes.json().data).toHaveLength(0);
     expect(listRes.json().nextCursor).toBe(null);
   });
 
-  it('returns 404 when another user tries to fetch document log by id', async () => {
+  it('returns 404 when another user tries to fetch document by id', async () => {
     const owner = await registerAndGetCookie(app, 'owner2@test.com');
     const stranger = await registerAndGetCookie(app, 'stranger2@test.com');
     const ownerVehicle = await createVehicleForUser(owner.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       owner.cookie,
       ownerVehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const getRes = await getDocumentLog(app, stranger.cookie, ownerVehicle.id, created.id);
+    const getRes = await getDocument(app, stranger.cookie, ownerVehicle.id, created.id);
 
     expect(getRes.statusCode).toBe(404);
   });
 
-  it('returns 404 when another user tries to update document log', async () => {
+  it('returns 404 when another user tries to update document', async () => {
     const owner = await registerAndGetCookie(app, 'owner3@test.com');
     const stranger = await registerAndGetCookie(app, 'stranger3@test.com');
     const ownerVehicle = await createVehicleForUser(owner.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       owner.cookie,
       ownerVehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const patchRes = await updateDocumentLog(app, stranger.cookie, ownerVehicle.id, created.id, {
+    const patchRes = await updateDocument(app, stranger.cookie, ownerVehicle.id, created.id, {
       title: 'Hacked title',
     });
 
     expect(patchRes.statusCode).toBe(404);
   });
 
-  it('returns 404 when another user tries to delete document log', async () => {
+  it('returns 404 when another user tries to delete document', async () => {
     const owner = await registerAndGetCookie(app, 'owner4@test.com');
     const stranger = await registerAndGetCookie(app, 'stranger4@test.com');
     const ownerVehicle = await createVehicleForUser(owner.cookie);
 
-    const createRes = await createDocumentLog(
+    const createRes = await createDocument(
       app,
       owner.cookie,
       ownerVehicle.id,
-      new DocumentLogHttpBuilder().build(),
+      new DocumentHttpBuilder().build(),
     );
     const created = createRes.json();
 
-    const deleteRes = await deleteDocumentLog(app, stranger.cookie, ownerVehicle.id, created.id);
+    const deleteRes = await deleteDocument(app, stranger.cookie, ownerVehicle.id, created.id);
 
     expect(deleteRes.statusCode).toBe(404);
   });

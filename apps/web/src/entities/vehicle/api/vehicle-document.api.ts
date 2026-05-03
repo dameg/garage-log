@@ -13,7 +13,7 @@ export const getVehicleDocuments = (vehicleId: string, params: VehicleDocumentLi
 
   searchParams.set('limit', String(params.limit));
 
-  return http<VehicleDocumentListResponse>(`/vehicles/${vehicleId}/document-logs?${searchParams}`, {
+  return http<VehicleDocumentListResponse>(`/vehicles/${vehicleId}/documents?${searchParams}`, {
     method: 'GET',
   });
 };

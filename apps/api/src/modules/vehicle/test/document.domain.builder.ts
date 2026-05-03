@@ -1,9 +1,9 @@
 import { randomUUID } from 'node:crypto';
 
-import type { CreateDocumentLogProps, DocumentLogType } from '../domain/document';
+import type { CreateDocumentProps, DocumentType } from '../domain/document';
 
-export class DocumentLogDomainBuilder {
-  private data: CreateDocumentLogProps = {
+export class DocumentDomainBuilder {
+  private data: CreateDocumentProps = {
     id: randomUUID(),
     vehicleId: randomUUID(),
     ownerId: randomUUID(),
@@ -33,7 +33,7 @@ export class DocumentLogDomainBuilder {
     return this;
   }
 
-  withType(type: DocumentLogType) {
+  withType(type: DocumentType) {
     this.data.type = type;
     return this;
   }

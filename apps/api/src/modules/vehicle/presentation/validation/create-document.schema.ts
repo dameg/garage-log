@@ -13,4 +13,4 @@ export const createDocumentHttpSchema = z.object({
   note: z.string().optional(),
 });
 
-export type CreateDocumentLogBody = z.infer<typeof createDocumentHttpSchema>;
+export type CreateDocumentBody = z.infer<typeof createDocumentHttpSchema>;

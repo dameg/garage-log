@@ -13,8 +13,8 @@ const pool = new Pool({
 
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
-const DOCUMENT_LOGS_PER_VEHICLE = 30;
-const DOCUMENT_LOG_BATCH_SIZE = 5000;
+const DOCUMENTS_PER_VEHICLE = 50;
+const DOCUMENT_BATCH_SIZE = 5000;
 
 function randomPastDateWithinYears(yearsBack) {
   return faker.date.between({
@@ -29,8 +29,7 @@ function addDays(date, days) {
   return next;
 }
 
-function buildDocumentLog(vehicle, index) {
-  const type = index % 2 === 0 ? 'insurance' : 'inspection';
+function buildDocument(vehicle, type) {
   const validFrom = randomPastDateWithinYears(3);
   const validTo = addDays(validFrom, faker.number.int({ min: 30, max: 730 }));
   const issuedAt = faker.datatype.boolean({ probability: 0.85 })
@@ -135,35 +134,36 @@ async function main() {
 
   console.log(`🚗 Vehicles created: ${vehicles.length}`);
 
-  // ---------- document logs ----------
+  // ---------- documents ----------
 
-  let createdDocumentLogs = 0;
+  let createdDocuments = 0;
   let batch = [];
 
   for (const vehicle of vehicles) {
-    for (let i = 0; i < DOCUMENT_LOGS_PER_VEHICLE; i++) {
-      batch.push(buildDocumentLog(vehicle, i));
+    for (let i = 0; i < DOCUMENTS_PER_VEHICLE; i++) {
+      const type = i % 2 === 0 ? 'insurance' : 'inspection';
+      batch.push(buildDocument(vehicle, type));
+    }
 
-      if (batch.length === DOCUMENT_LOG_BATCH_SIZE) {
-        await prisma.documentLog.createMany({
-          data: batch,
-        });
+    if (batch.length >= DOCUMENT_BATCH_SIZE) {
+      await prisma.document.createMany({
+        data: batch,
+      });
 
-        createdDocumentLogs += batch.length;
-        batch = [];
-      }
+      createdDocuments += batch.length;
+      batch = [];
     }
   }
 
   if (batch.length > 0) {
-    await prisma.documentLog.createMany({
+    await prisma.document.createMany({
       data: batch,
     });
 
-    createdDocumentLogs += batch.length;
+    createdDocuments += batch.length;
   }
 
-  console.log(`📄 Document logs created: ${createdDocumentLogs}`);
+  console.log(`📄 Documents created: ${createdDocuments}`);
 
   console.log('✅ Seeding done');
 }

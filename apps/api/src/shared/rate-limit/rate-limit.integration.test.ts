@@ -3,7 +3,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { listVehicles } from '../../modules/vehicle/test/actions/vehicle.actions';
 import { createTestApp } from '../testing/create-test-app';
 
-import { SpyCheckSlidingWindowUseCase } from './test/spy-check-sliding-window.usecase';
 import { SpyConsumeTokenBucketUseCase } from './test/spy-consume-token-bucket.usecase';
 
 describe('Rate limit (integration)', () => {
@@ -37,11 +36,11 @@ describe('Rate limit (integration)', () => {
     });
   });
 
-  it('returns 429 and Retry-After for login when sliding window denies', async () => {
+  it('returns 429 and Retry-After for login when token bucket denies', async () => {
     testApp = await createTestApp({
-      checkSlidingWindowUseCase: new SpyCheckSlidingWindowUseCase({
+      consumeTokenBucketUseCase: new SpyConsumeTokenBucketUseCase({
         allowed: false,
-        count: 5,
+        remaining: 0,
         retryAfterSec: 11,
       }),
     });

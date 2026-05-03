@@ -7,31 +7,31 @@ import type { Document, UpdatableDocumentFields } from '../../domain/document';
 
 import { toDomainDocument } from './mappers/to-domain-document';
 
-export class PrismaDocumentLogRepository implements DocumentRepository {
+export class PrismaDocumentRepository implements DocumentRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async create(documentLog: Document): Promise<Document> {
-    const created = await this.prisma.documentLog.create({
+  async create(document: Document): Promise<Document> {
+    const created = await this.prisma.document.create({
       data: {
-        id: documentLog.id,
-        vehicleId: documentLog.vehicleId,
-        ownerId: documentLog.ownerId,
-        type: documentLog.type,
-        title: documentLog.title,
-        issuer: documentLog.issuer,
-        validFrom: documentLog.validFrom,
-        validTo: documentLog.validTo,
-        issuedAt: documentLog.issuedAt,
-        cost: documentLog.cost,
-        note: documentLog.note,
-        createdAt: documentLog.createdAt,
+        id: document.id,
+        vehicleId: document.vehicleId,
+        ownerId: document.ownerId,
+        type: document.type,
+        title: document.title,
+        issuer: document.issuer,
+        validFrom: document.validFrom,
+        validTo: document.validTo,
+        issuedAt: document.issuedAt,
+        cost: document.cost,
+        note: document.note,
+        createdAt: document.createdAt,
       },
     });
     return toDomainDocument(created);
   }
 
   async list(query: DocumentsListQuery): Promise<CursorResult<Document, DocumentCursor>> {
-    const rows = await this.prisma.documentLog.findMany({
+    const rows = await this.prisma.document.findMany({
       where: {
         ...(query.ownerId && { ownerId: query.ownerId }),
         ...(query.vehicleId && { vehicleId: query.vehicleId }),
@@ -71,7 +71,7 @@ export class PrismaDocumentLogRepository implements DocumentRepository {
     ownerId: string,
     vehicleId: string,
   ): Promise<Document | null> {
-    const row = await this.prisma.documentLog.findFirst({
+    const row = await this.prisma.document.findFirst({
       where: { id, ownerId, vehicleId },
     });
 
@@ -83,7 +83,7 @@ export class PrismaDocumentLogRepository implements DocumentRepository {
     ownerId: string,
     vehicleId: string,
   ): Promise<boolean> {
-    const deleted = await this.prisma.documentLog.deleteMany({
+    const deleted = await this.prisma.document.deleteMany({
       where: { id, ownerId, vehicleId },
     });
     return deleted.count > 0;
@@ -95,7 +95,7 @@ export class PrismaDocumentLogRepository implements DocumentRepository {
     vehicleId: string,
     data: UpdatableDocumentFields,
   ): Promise<Document | null> {
-    const result = await this.prisma.documentLog.updateMany({
+    const result = await this.prisma.document.updateMany({
       where: { id, ownerId, vehicleId },
       data,
     });
@@ -104,7 +104,7 @@ export class PrismaDocumentLogRepository implements DocumentRepository {
       return null;
     }
 
-    const updated = await this.prisma.documentLog.findFirst({
+    const updated = await this.prisma.document.findFirst({
       where: { id, ownerId, vehicleId },
     });
 

@@ -1,7 +1,7 @@
-import type { CreateDocumentLogBody } from '../presentation/validation/create-document-log.schema';
+import type { CreateDocumentBody } from '../presentation/validation/create-document.schema';
 
-type DocumentLogHttpPayload = Omit<
-  CreateDocumentLogBody,
+type DocumentHttpPayload = Omit<
+  CreateDocumentBody,
   'validFrom' | 'validTo' | 'issuedAt'
 > & {
   validFrom: string;
@@ -9,8 +9,8 @@ type DocumentLogHttpPayload = Omit<
   issuedAt?: string;
 };
 
-export class DocumentLogHttpBuilder {
-  private data: DocumentLogHttpPayload = {
+export class DocumentHttpBuilder {
+  private data: DocumentHttpPayload = {
     type: 'insurance',
     title: 'OC policy',
     issuer: 'PZU',
@@ -21,7 +21,7 @@ export class DocumentLogHttpBuilder {
     note: 'Annual renewal',
   };
 
-  withType(type: DocumentLogHttpPayload['type']) {
+  withType(type: DocumentHttpPayload['type']) {
     this.data.type = type;
     return this;
   }

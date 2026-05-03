@@ -1,10 +1,10 @@
 import type { CursorResult } from '../../../../shared/contracts/cursor-result';
 import type { DocumentRepository } from '../../contracts/document.repository';
-import type { DocumentCursor, DocumentListQuery } from '../../contracts/document--list.query';
+import type { DocumentCursor, DocumentsListQuery } from '../../contracts/document-list.query';
 import type { Document, UpdatableDocumentFields } from '../../domain/document';
 
 export class SpyDocumentRepository implements DocumentRepository {
-  public lastListQuery: DocumentListQuery | null = null;
+  public lastListQuery: DocumentsListQuery | null = null;
 
   constructor(
     private readonly result: CursorResult<Document, DocumentCursor> = {
@@ -17,7 +17,7 @@ export class SpyDocumentRepository implements DocumentRepository {
     return document;
   }
 
-  async list(query: DocumentListQuery): Promise<CursorResult<Document, DocumentCursor>> {
+  async list(query: DocumentsListQuery): Promise<CursorResult<Document, DocumentCursor>> {
     this.lastListQuery = query;
     return this.result;
   }

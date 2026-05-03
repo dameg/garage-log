@@ -1,7 +1,7 @@
 import type { CursorResult } from '../../../../shared/contracts/cursor-result';
-import type { DocumentCursor, DocumentListQuery } from '../../contracts/document-list.query';
+import type { DocumentCursor, DocumentsListQuery } from '../../contracts/document-list.query';
 import type { Document, UpdatableDocumentFields } from '../../domain/document';
-import type { DocumentRepository } from '../contracts/document.repository';
+import type { DocumentRepository } from '../../contracts/document.repository';
 
 import { sortDocuments } from './sort-document';
 
@@ -13,7 +13,7 @@ export class InMemoryDocumentRepository implements DocumentRepository {
     return document;
   }
 
-  async list(query: DocumentListQuery): Promise<CursorResult<Document, DocumentCursor>> {
+  async list(query: DocumentsListQuery): Promise<CursorResult<Document, DocumentCursor>> {
     const filtered = this.data.filter(
       (document) => document.ownerId === query.ownerId && document.vehicleId === query.vehicleId,
     );

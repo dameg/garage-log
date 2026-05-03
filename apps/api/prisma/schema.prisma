@@ -24,7 +24,7 @@ model Vehicle {
   ownerId      String
   owner        User          @relation(fields: [ownerId], references: [id])
 
-  documentLogs DocumentLog[]
+  documents    Document[]
 
   @@index([ownerId])
 }
@@ -36,17 +36,17 @@ model User {
   createdAt    DateTime      @default(now())
 
   vehicles     Vehicle[]
-  documentLogs DocumentLog[]
+  documents    Document[]
 }
 
-enum DocumentLogType {
+enum DocumentType {
   insurance
   inspection
 }
 
-model DocumentLog {
+model Document {
   id        String           @id
-  type      DocumentLogType
+  type      DocumentType
   title     String
   issuer    String?
   validFrom DateTime

@@ -30,7 +30,7 @@ export async function createDocument(
 ) {
   return app.inject({
     method: 'POST',
-    url: `/api/vehicles/${vehicleId}/document-s`,
+    url: `/api/vehicles/${vehicleId}/documents`,
     headers: { cookie },
     payload,
   });
@@ -44,7 +44,7 @@ export async function listDocuments(
 ) {
   return app.inject({
     method: 'GET',
-    url: `/api/vehicles/${vehicleId}/document-s${toQueryString(query)}`,
+    url: `/api/vehicles/${vehicleId}/documents${toQueryString(query)}`,
     headers: { cookie },
   });
 }
@@ -57,7 +57,7 @@ export async function getDocument(
 ) {
   return app.inject({
     method: 'GET',
-    url: `/api/vehicles/${vehicleId}/document-s/${documentId}`,
+    url: `/api/vehicles/${vehicleId}/documents/${documentId}`,
     headers: { cookie },
   });
 }
@@ -71,7 +71,7 @@ export async function updateDocument(
 ) {
   return app.inject({
     method: 'PATCH',
-    url: `/api/vehicles/${vehicleId}/document-s/${documentId}`,
+    url: `/api/vehicles/${vehicleId}/documents/${documentId}`,
     headers: { cookie },
     payload,
   });
@@ -85,7 +85,7 @@ export async function deleteDocument(
 ) {
   return app.inject({
     method: 'DELETE',
-    url: `/api/vehicles/${vehicleId}/document-s/${documentId}`,
+    url: `/api/vehicles/${vehicleId}/documents/${documentId}`,
     headers: { cookie },
   });
 }
