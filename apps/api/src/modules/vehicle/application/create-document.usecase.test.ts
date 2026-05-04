@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 
-import { DocumentDomainBuilder } from '../test/document.domain.builder';
 import { InMemoryDocumentRepository } from '../test/in-memory/in-memory-document.repository';
 
 import { CreateDocumentUseCase } from './create-document.usecase';
