@@ -1,13 +1,20 @@
 import { PrismaPg } from '@prisma/adapter-pg';
+import type { Prisma } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 
 import { env } from '../config';
 import type { Env } from '../config/env';
 import { requireDatabaseUrl } from '../config/env';
 
-let prismaSingleton: PrismaClient | null = null;
+const prismaOptions = {
+  log: [{ emit: 'event', level: 'query' }],
+} satisfies Prisma.PrismaClientOptions;
 
-export function getPrisma(overrides?: Env): PrismaClient {
+type AppPrismaClient = PrismaClient<typeof prismaOptions>;
+
+let prismaSingleton: AppPrismaClient | null = null;
+
+export function getPrisma(overrides?: Env): AppPrismaClient {
   if (prismaSingleton) return prismaSingleton;
 
   const effectiveEnv = overrides ?? env;
@@ -16,7 +23,17 @@ export function getPrisma(overrides?: Env): PrismaClient {
     connectionString: requireDatabaseUrl(effectiveEnv),
   });
 
-  prismaSingleton = new PrismaClient({ adapter });
+  prismaSingleton = new PrismaClient({
+    adapter,
+    ...prismaOptions,
+  });
+
+  prismaSingleton.$on('query', (e) => {
+    console.log('🟣 Prisma Query:', e.query);
+    console.log('🟡 Params:', e.params);
+    console.log('⏱ Duration:', e.duration, 'ms');
+  });
+
   return prismaSingleton;
 }
 

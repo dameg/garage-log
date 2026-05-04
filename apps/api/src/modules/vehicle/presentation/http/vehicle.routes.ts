@@ -1,11 +1,13 @@
 import type { FastifyInstance } from 'fastify';
 
+import { vehicleCache } from '../../cache/vehicle.cache';
 import { createVehicleHttpSchema } from '../validation/create-vehicle.schema';
 import { listVehiclesQuerySchema } from '../validation/list-vehicles-query.schema';
 import { updateVehicleHttpSchema } from '../validation/update-vehicle.schema';
 
 import type { VehicleRoutesOptions } from './vehicle.routes.types';
 
+import { hashCacheParams } from '@/shared/cache';
 import { parseBody, parseParams, parseQuery, vehicleIdParamsSchema } from '@/shared/http';
 
 export async function vehicleRoutes(app: FastifyInstance, { services }: VehicleRoutesOptions) {
@@ -20,11 +22,34 @@ export async function vehicleRoutes(app: FastifyInstance, { services }: VehicleR
     return reply.code(201).send(created);
   });
 
-  app.get('/', async (req) => {
-    const query = parseQuery(listVehiclesQuerySchema, req.query);
+  app.get(
+    '/',
+    {
+      config: {
+        cache: {
+          ttlSeconds: 60,
+          key: (req) => {
+            const query = parseQuery(listVehiclesQuerySchema, req.query);
 
-    return services.listVehiclesUseCase.execute({ ...query, ownerId: req.user.sub });
-  });
+            const paramsHash = hashCacheParams({
+              ...query,
+              ownerId: req.user.sub,
+            });
+
+            console.log('CACHE KEY INPUT:', req.query); // 👈 tutaj
+            console.log('CACHE HASH:', hashCacheParams(paramsHash)); // 👈 i tut
+
+            return vehicleCache.list(req.user.sub, paramsHash);
+          },
+        },
+      },
+    },
+    async (req) => {
+      const query = parseQuery(listVehiclesQuerySchema, req.query);
+
+      return services.listVehiclesUseCase.execute({ ...query, ownerId: req.user.sub });
+    },
+  );
 
   app.get('/:vehicleId', async (req) => {
     const params = parseParams(vehicleIdParamsSchema, req.params);

@@ -6,6 +6,7 @@ import { createDocumentServices } from './document.services';
 import { createVehicleServices } from './vehicle.services';
 
 import { requireAuthGuard } from '@/shared/auth';
+import { createCacheReadHook, createCacheWriteHook } from '@/shared/cache';
 import { apiRateLimitConfig, createTokenBucketGuard } from '@/shared/rate-limit';
 
 export async function vehicleModule(app: FastifyInstance) {
@@ -15,12 +16,18 @@ export async function vehicleModule(app: FastifyInstance) {
     app.deps.consumeTokenBucketUseCase,
     apiRateLimitConfig,
   );
+  const cacheRead = createCacheReadHook(app.deps.redisService);
+  const cacheWrite = createCacheWriteHook(app.deps.redisService);
+
   const requireAuth = requireAuthGuard;
 
   await app.register(
     async function vehicleApi(api) {
       api.addHook('preHandler', requireAuth);
       api.addHook('preHandler', apiRateLimit);
+      api.addHook('preHandler', cacheRead);
+      api.addHook('onSend', cacheWrite);
+
       await api.register(vehicleRoutes, {
         services: vehicleServices,
       });
