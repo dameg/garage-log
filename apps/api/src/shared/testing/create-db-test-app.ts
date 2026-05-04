@@ -4,9 +4,9 @@ import {
   AllowAllCheckSlidingWindowUseCase,
   AllowAllConsumeTokenBucketUseCase,
 } from '../rate-limit/test/allow-all-rate-limiters';
-import { createInMemoryRedisService } from './in-memory-redis';
 
 import type { TestAppHarness } from './create-test-app';
+import { createInMemoryRedisService } from './in-memory-redis';
 import { registerAndGetCookie } from './register-and-get-cookie';
 
 import { buildApp } from '@/app';
