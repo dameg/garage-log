@@ -145,6 +145,102 @@ describe('Auth (db e2e)', () => {
     expect(res.statusCode).toBe(401);
   });
 
+  it('returns 401 for /me with invalid token', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: {
+        cookie: 'access_token=invalid-token',
+      },
+    });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.json()).toEqual({
+      error: 'Unauthorized',
+      message: 'Authentication required',
+    });
+  });
+
+  it('returns 401 for /me when token user no longer exists', async () => {
+    const register = await app.inject({
+      method: 'POST',
+      url: '/api/auth/register',
+      payload: {
+        email: 'deleted-user@test.com',
+        password: 'password123',
+      },
+    });
+
+    const body = register.json();
+    const cookie = register.cookies.find((c) => c.name === 'access_token');
+
+    await prisma.user.delete({
+      where: {
+        id: body.user.id,
+      },
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/api/auth/me',
+      headers: {
+        cookie: `${cookie!.name}=${cookie!.value}`,
+      },
+    });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.json()).toEqual({
+      error: 'Unauthorized',
+      message: 'Unauthorized',
+    });
+  });
+
+  it('returns 400 for invalid register payload', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/auth/register',
+      payload: {
+        email: 'not-an-email',
+        password: '123',
+      },
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.json()).toEqual(
+      expect.objectContaining({
+        error: 'Bad Request',
+        message: 'Validation error',
+        issues: expect.arrayContaining([
+          expect.objectContaining({ path: 'email' }),
+          expect.objectContaining({ path: 'password' }),
+        ]),
+      }),
+    );
+  });
+
+  it('returns 400 for invalid login payload', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      payload: {
+        email: 'not-an-email',
+        password: '123',
+      },
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.json()).toEqual(
+      expect.objectContaining({
+        error: 'Bad Request',
+        message: 'Validation error',
+        issues: expect.arrayContaining([
+          expect.objectContaining({ path: 'email' }),
+          expect.objectContaining({ path: 'password' }),
+        ]),
+      }),
+    );
+  });
+
   it('logs user out', async () => {
     const register = await app.inject({
       method: 'POST',

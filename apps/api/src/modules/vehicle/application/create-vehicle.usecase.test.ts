@@ -26,5 +26,7 @@ describe('CreateVehicleUseCase', () => {
     expect(result.year).toBe(2002);
     expect(result.mileage).toBe(250000);
     expect(result.createdAt).toBeInstanceOf(Date);
+
+    await expect(repo.findByIdForOwner(result.id, 'user-1')).resolves.toEqual(result);
   });
 });

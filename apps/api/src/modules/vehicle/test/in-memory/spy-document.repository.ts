@@ -6,45 +6,65 @@ import type { CursorResult } from '@/shared/contracts';
 
 export class SpyDocumentRepository implements DocumentRepository {
   public lastListQuery: DocumentsListQuery | null = null;
+  public lastCreatedDocument: Document | null = null;
+  public lastFindArgs: { id: string; ownerId: string; vehicleId: string } | null = null;
+  public lastDeleteArgs: { id: string; ownerId: string; vehicleId: string } | null = null;
+  public lastUpdateArgs:
+    | {
+        id: string;
+        ownerId: string;
+        vehicleId: string;
+        patch: UpdatableDocumentFields;
+      }
+    | null = null;
 
   constructor(
-    private readonly result: CursorResult<Document, DocumentCursor> = {
-      data: [],
-      nextCursor: null,
-    },
+    private readonly options: {
+      listResult?: CursorResult<Document, DocumentCursor>;
+      foundDocument?: Document | null;
+      deleteResult?: boolean;
+      updateResult?: Document | null;
+    } = {},
   ) {}
 
   async create(document: Document): Promise<Document> {
+    this.lastCreatedDocument = document;
     return document;
   }
 
   async list(query: DocumentsListQuery): Promise<CursorResult<Document, DocumentCursor>> {
     this.lastListQuery = query;
-    return this.result;
+    return this.options.listResult ?? {
+      data: [],
+      nextCursor: null,
+    };
   }
 
   async findByIdForOwnerAndVehicle(
-    _id: string,
-    _ownerId: string,
-    _vehicleId: string,
+    id: string,
+    ownerId: string,
+    vehicleId: string,
   ): Promise<Document | null> {
-    return null;
+    this.lastFindArgs = { id, ownerId, vehicleId };
+    return this.options.foundDocument ?? null;
   }
 
   async deleteByIdForOwnerAndVehicle(
-    _id: string,
-    _ownerId: string,
-    _vehicleId: string,
+    id: string,
+    ownerId: string,
+    vehicleId: string,
   ): Promise<boolean> {
-    return false;
+    this.lastDeleteArgs = { id, ownerId, vehicleId };
+    return this.options.deleteResult ?? false;
   }
 
   async updateByIdForOwnerAndVehicle(
-    _id: string,
-    _ownerId: string,
-    _vehicleId: string,
-    _patch: UpdatableDocumentFields,
+    id: string,
+    ownerId: string,
+    vehicleId: string,
+    patch: UpdatableDocumentFields,
   ): Promise<Document | null> {
-    return null;
+    this.lastUpdateArgs = { id, ownerId, vehicleId, patch };
+    return this.options.updateResult ?? null;
   }
 }
