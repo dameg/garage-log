@@ -42,7 +42,7 @@ export class UpdateDocumentUseCase {
     );
 
     if (!updated) {
-      throw new NotFoundError('Document ', input.documentId);
+      throw new NotFoundError('Document', input.documentId);
     }
 
     return updated;

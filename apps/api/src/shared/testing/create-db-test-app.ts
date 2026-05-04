@@ -1,12 +1,10 @@
-import type Redis from 'ioredis';
-
 import { getPrisma } from '../db/prisma';
 import type { AppContainer } from '../di/types';
 import {
   AllowAllCheckSlidingWindowUseCase,
   AllowAllConsumeTokenBucketUseCase,
 } from '../rate-limit/test/allow-all-rate-limiters';
-import { RedisService } from '../redis/redis.service';
+import { createInMemoryRedisService } from './in-memory-redis';
 
 import type { TestAppHarness } from './create-test-app';
 import { registerAndGetCookie } from './register-and-get-cookie';
@@ -20,10 +18,7 @@ export async function createDbTestApp(
   overrides: Partial<AppContainer> = {},
 ): Promise<TestAppHarness> {
   const prisma = getPrisma();
-  const redisService = new RedisService({
-    ping: async () => 'PONG',
-    quit: async () => 'OK',
-  } as unknown as Redis);
+  const redisService = createInMemoryRedisService();
 
   const container: AppContainer = {
     redisService,

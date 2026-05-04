@@ -76,6 +76,37 @@ describe('Vehicles (integration - in memory)', () => {
     );
   });
 
+  it('caches vehicle list between identical requests', async () => {
+    const user = await testApp.registerAndGetCookie();
+
+    await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
+
+    const firstListRes = await listVehicles(app, user.cookie);
+    const secondListRes = await listVehicles(app, user.cookie);
+
+    expect(firstListRes.statusCode).toBe(200);
+    expect(firstListRes.headers['x-cache']).toBe('MISS');
+    expect(secondListRes.statusCode).toBe(200);
+    expect(secondListRes.headers['x-cache']).toBe('HIT');
+    expect(secondListRes.json()).toEqual(firstListRes.json());
+  });
+
+  it('caches vehicle detail between identical requests', async () => {
+    const user = await testApp.registerAndGetCookie();
+
+    const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
+    const created = createRes.json();
+
+    const firstGetRes = await getVehicle(app, user.cookie, created.id);
+    const secondGetRes = await getVehicle(app, user.cookie, created.id);
+
+    expect(firstGetRes.statusCode).toBe(200);
+    expect(firstGetRes.headers['x-cache']).toBe('MISS');
+    expect(secondGetRes.statusCode).toBe(200);
+    expect(secondGetRes.headers['x-cache']).toBe('HIT');
+    expect(secondGetRes.json()).toEqual(firstGetRes.json());
+  });
+
   it('updates vehicle', async () => {
     const user = await testApp.registerAndGetCookie();
 
@@ -94,6 +125,35 @@ describe('Vehicles (integration - in memory)', () => {
         id: created.id,
         mileage: 260000,
         vin: '4ALGYGW1H1YP26659',
+      }),
+    );
+  });
+
+  it('invalidates cached vehicle detail after update', async () => {
+    const user = await testApp.registerAndGetCookie();
+
+    const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
+    const created = createRes.json();
+
+    await getVehicle(app, user.cookie, created.id);
+    const cachedGetRes = await getVehicle(app, user.cookie, created.id);
+
+    expect(cachedGetRes.headers['x-cache']).toBe('HIT');
+
+    const patchRes = await updateVehicle(app, user.cookie, created.id, {
+      mileage: 260000,
+    });
+
+    expect(patchRes.statusCode).toBe(200);
+
+    const refreshedGetRes = await getVehicle(app, user.cookie, created.id);
+
+    expect(refreshedGetRes.statusCode).toBe(200);
+    expect(refreshedGetRes.headers['x-cache']).toBe('MISS');
+    expect(refreshedGetRes.json()).toEqual(
+      expect.objectContaining({
+        id: created.id,
+        mileage: 260000,
       }),
     );
   });
@@ -125,6 +185,52 @@ describe('Vehicles (integration - in memory)', () => {
 
     const getRes = await getVehicle(app, user.cookie, created.id);
     expect(getRes.statusCode).toBe(404);
+  });
+
+  it('invalidates cached vehicle detail after delete', async () => {
+    const user = await testApp.registerAndGetCookie();
+
+    const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
+    const created = createRes.json();
+
+    await getVehicle(app, user.cookie, created.id);
+    const cachedGetRes = await getVehicle(app, user.cookie, created.id);
+
+    expect(cachedGetRes.headers['x-cache']).toBe('HIT');
+
+    const deleteRes = await deleteVehicle(app, user.cookie, created.id);
+
+    expect(deleteRes.statusCode).toBe(204);
+
+    const getRes = await getVehicle(app, user.cookie, created.id);
+
+    expect(getRes.statusCode).toBe(404);
+    expect(getRes.headers['x-cache']).toBe('MISS');
+  });
+
+  it('invalidates cached list after create', async () => {
+    const user = await testApp.registerAndGetCookie();
+
+    const firstListRes = await listVehicles(app, user.cookie);
+    const cachedListRes = await listVehicles(app, user.cookie);
+
+    expect(firstListRes.statusCode).toBe(200);
+    expect(cachedListRes.headers['x-cache']).toBe('HIT');
+
+    const createRes = await createVehicle(app, user.cookie, new VehicleHttpBuilder().build());
+
+    expect(createRes.statusCode).toBe(201);
+
+    const refreshedListRes = await listVehicles(app, user.cookie);
+
+    expect(refreshedListRes.statusCode).toBe(200);
+    expect(refreshedListRes.headers['x-cache']).toBe('MISS');
+    expect(refreshedListRes.json()).toEqual(
+      expect.objectContaining({
+        total: 1,
+        data: [expect.objectContaining({ id: createRes.json().id })],
+      }),
+    );
   });
 
   it('returns 404 when another user tries to delete vehicle', async () => {
@@ -223,6 +329,11 @@ describe('Vehicles (integration - in memory)', () => {
     const createRes = await createVehicle(app, owner.cookie, new VehicleHttpBuilder().build());
 
     const created = createRes.json();
+
+    const ownerGetRes = await getVehicle(app, owner.cookie, created.id);
+
+    expect(ownerGetRes.statusCode).toBe(200);
+    expect(ownerGetRes.headers['x-cache']).toBe('MISS');
 
     const getRes = await getVehicle(app, stranger.cookie, created.id);
 

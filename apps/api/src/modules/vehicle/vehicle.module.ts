@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 
+import { VehicleCacheInvalidator } from './cache/vehicle-cache-invalidator';
 import { documentRoutes } from './presentation/http/document.routes';
 import { vehicleRoutes } from './presentation/http/vehicle.routes';
 import { createDocumentServices } from './document.services';
@@ -18,7 +19,7 @@ export async function vehicleModule(app: FastifyInstance) {
   );
   const cacheRead = createCacheReadHook(app.deps.redisService);
   const cacheWrite = createCacheWriteHook(app.deps.redisService);
-
+  const cacheInvalidator = new VehicleCacheInvalidator(app.deps.redisService);
   const requireAuth = requireAuthGuard;
 
   await app.register(
@@ -30,6 +31,7 @@ export async function vehicleModule(app: FastifyInstance) {
 
       await api.register(vehicleRoutes, {
         services: vehicleServices,
+        cacheInvalidator,
       });
 
       await api.register(documentRoutes, {
